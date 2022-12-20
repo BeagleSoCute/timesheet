@@ -6,7 +6,6 @@ export const getMyData = async () => {
     const res = await getUserData();
     setItem("token", res.payload);
     console.log("res from getUserData is ", res);
-    console.log("");
   } catch (error) {
     console.log("error", error);
   }
