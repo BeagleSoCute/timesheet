@@ -2,14 +2,12 @@ import { loginApi } from "apis/auth.api";
 import { setItem } from "services/localStorage.service";
 
 export const login = async (data) => {
-  const {
-    payload: { token },
-    success,
-  } = await loginApi(data);
-  setItem("token", token);
-  if (success) {
-    return true;
-  } else {
-    return false;
+  let authRes
+  try{
+     authRes = await loginApi(data);
+  }catch(err){
+    return {success:false};
   }
+  setItem("token", authRes.payload.token);
+  return {success:true};
 };

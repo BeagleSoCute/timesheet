@@ -4,7 +4,12 @@ import appReducer from "reducers/app.reducer";
 export const AppContext = createContext({
   loading: false,
   isAuth: false,
+  user: {}, 
+  userLists:[],
   setLoading: () => {},
+  setAuth: () => {},
+  setUser: () => {},
+  setUserLists: () => {}
 });
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }) => {
@@ -25,12 +30,12 @@ export const AppProvider = ({ children }) => {
       setUser: (data) => {
         dispatch({ type: TYPES.SET_USER, payload:data });
       },
-      setUsers: (data) => {
+      setUserLists: (data) => {
         dispatch({ type: TYPES.SET_USER_LISTS, payload:data });
       },
 
     };
-  }, [loading, isAuth, dispatch]);
+  }, [loading, isAuth,user,userLists, dispatch]);
   return (
     <AppContext.Provider value={appContextValue}>
       {children}

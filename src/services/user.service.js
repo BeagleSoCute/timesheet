@@ -1,14 +1,8 @@
-import { getUserData } from "apis/user.api";
-import { setItem } from "services/localStorage.service";
+import { getUserApi } from "apis/user.api";
 
 export const getMyData = async () => {
-  try {
-    const res = await getUserData();
-    setItem("token", res.payload);
-    console.log("res from getUserData is ", res);
-  } catch (error) {
-    console.log("error", error);
-  }
+    const res = await getUserApi();
+    return {success:res.success,userData:res.payload}
 };
 
 export const getAllUsers = async () => {

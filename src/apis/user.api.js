@@ -1,3 +1,3 @@
 import { apiInstance } from "configs/axios.config";
 
-export const getUserData = () => apiInstance.get("/user/myData");
+export const getUserApi = () => apiInstance.get("/user/myData");
