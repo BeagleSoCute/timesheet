@@ -7,7 +7,7 @@ const AuthLayout = ({ children }) => {
   const { isAuth, setAuth, setLoading, setUser } = useContext(AppContext);
   const token = isHasTokenInStorage();
   useEffect(() => {
-    const checAuth = async () => {
+    const checkAuth = async () => {
       setLoading(true);
       if (token && !isAuth) {
         const { success, userData } = await getMyData(token);
@@ -20,14 +20,10 @@ const AuthLayout = ({ children }) => {
         }
       }
     };
-    checAuth();
+    checkAuth();
   }, []);
 
-  return (
-    <div>
-        {children}
-    </div>
-  )
+  return <div>{children}</div>;
 };
 
 export default AuthLayout;

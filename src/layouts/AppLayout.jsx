@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Layout, Menu, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
+import { displayNotification } from "services/notification.service";
 const { Header } = Layout;
 const items = [
   { key: 1, name: "Home", path: "/" },
@@ -11,8 +12,19 @@ const items = [
   { key: 4, name: "Register", path: "/register" },
 ];
 const AppLayout = ({ children }) => {
-  const { loading } = useContext(AppContext);
+  const { loading, notificationData, setNotificationData } = useContext(AppContext);
   const navigate = useNavigate();
+  useEffect(() => {
+    console.log("useEffect in appplayout", notificationData.isShowed);
+    const notiCheck = async() => {
+      if (notificationData.isShowed) {
+        displayNotification(notificationData);
+        setNotificationData({type:'', header:'', description:'', isShowed: false});
+
+      }
+    };
+    notiCheck();
+  }, [notificationData,setNotificationData]);
   const handleOnClick = (selected) => {
     const result = items.find((item) => item.key === parseInt(selected.key));
     navigate(result.path);
