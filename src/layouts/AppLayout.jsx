@@ -4,21 +4,22 @@ import { Layout, Menu, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import { displayNotification } from "services/notification.service";
-import { getItem } from "services/localStorage.service";
 const { Header } = Layout;
 
 const AppLayout = ({ children }) => {
-  const { loading, notificationData, isAuth, setNotificationData } =
+  const { loading, isAuth, notificationData, setNotificationData } =
     useContext(AppContext);
   const [items, setItem] = useState([
     { key: 1, name: "Home", path: "/", isShowed: true },
     { key: 2, name: "Dashboard", path: "/dashboard", isShowed: true },
     { key: 3, name: "Login", path: "/login", isShowed: true },
     { key: 4, name: "Register", path: "/register", isShowed: true },
-    { key: 4, name: "Logout", path: "/logout", isShowed: false },
+    { key: 5, name: "Profile", path: "/profile", isShowed: false },
+    { key: 6, name: "Logout", path: "/logout", isShowed: false },
   ]);
   const navigate = useNavigate();
   useEffect(() => {
+    console.log("useEffect1 in AppLayout (Noti)");
     const notiCheck = async () => {
       if (notificationData.isShowed) {
         displayNotification(notificationData);
@@ -31,20 +32,33 @@ const AppLayout = ({ children }) => {
       }
     };
     notiCheck();
-  }, [notificationData, setNotificationData]);
+    // eslint-disable-next-line
+  }, [notificationData]);
   useEffect(() => {
+    console.log("useEffect2 in AppLayout (change menu)");
+    let result;
     const checkAuth = () => {
-      const token = getItem("token");
-      if (token && isAuth) {
-        const result = items.map((item) =>
+      if (isAuth === true) {
+        result = items.map((item) =>
           item.name === "Login" || item.name === "Register"
-            ? {...item, isShowed: false}
-            : item.name ==='Logout'? {...item, isShowed:true} : item
+            ? { ...item, isShowed: false }
+            : item.name === "Logout" || item.name === "Profile"
+            ? { ...item, isShowed: true }
+            : item
         );
-        setItem(result);
+      } else {
+        result = items.map((item) =>
+          item.name === "Login" || item.name === "Register"
+            ? { ...item, isShowed: true }
+            : item.name === "Logout" || item.name === "Profile"
+            ? { ...item, isShowed: false }
+            : item
+        );
       }
+      setItem(result);
     };
     checkAuth();
+    // eslint-disable-next-line
   }, [isAuth]);
   const handleOnClick = (selected) => {
     const result = items.find((item) => item.key === parseInt(selected.key));
@@ -73,7 +87,7 @@ const AppLayout = ({ children }) => {
       <div className="content">
         {loading ? (
           <div className="spin">
-            <Spin size="large"></Spin>
+            <Spin size="large">{loading}</Spin>
           </div>
         ) : (
           <>{children}</>

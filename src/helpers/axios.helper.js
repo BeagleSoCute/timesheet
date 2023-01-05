@@ -7,7 +7,6 @@ export const transformAxiosResponse = (response) => {
 };
 
 export const transformErrorResponse = (errResponse) => {
-  //   console.log("transformErrorResponse", errResponse);
   const { response, message } = errResponse;
   let payload;
   payload = response ? response.data.payload : {};

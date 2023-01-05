@@ -1,8 +1,7 @@
-import {getItem} from "services/localStorage.service"
+import cookies from "js-cookie";
 
-export const isHasTokenInStorage = () => {
-    const accessToken = getItem('token');
-    if(accessToken){
-     return accessToken;
-    }
-   }
+export const checkIsAuth = () => {
+  const isAuth = cookies.get("isAuth");
+  const bool = isAuth ? JSON.parse(isAuth) : false;
+  return bool;
+};

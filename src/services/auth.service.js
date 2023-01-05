@@ -1,10 +1,19 @@
-import axios from "axios";
-export const setAuthToken = (token) => {
-  if (token) {
-    axios.defaults.headers.common["x-auth-token"] = token;
-  } else {
-    delete axios.defaults.headers.common["x-auth-token"];
+import { loginApi, logoutApi } from "apis/auth.api";
+
+export const login = async (data) => {
+  try {
+    await loginApi(data);
+  } catch (err) {
+    return { success: false };
   }
+  return { success: true };
 };
 
-
+export const logout = async () => {
+  const { success } = await logoutApi();
+  if (success) {
+    return true;
+  } else {
+    return false;
+  }
+};

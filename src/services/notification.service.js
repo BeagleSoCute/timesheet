@@ -8,9 +8,13 @@ export const displayNotification = ({
   const displayResult = {
     message: header,
     description: description,
-    duration: 4
+    duration: 4,
   };
   return type === "error"
     ? notification.error(displayResult)
-    : notification.success(displayResult);
+    : type === "success"
+    ? notification.success(displayResult)
+    : type === "warning"
+    ? notification.warning(displayResult)
+    : notification.info(displayResult);
 };
