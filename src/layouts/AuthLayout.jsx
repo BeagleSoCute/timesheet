@@ -4,13 +4,9 @@ import { AppContext } from "contexts/app.context";
 import { getMyData } from "services/user.service";
 
 const AuthLayout = ({ children }) => {
-  const { setLoading, setUser, setAuth, setNotificationData } =
+  const { setLoading, setUser, setAuth } =
     useContext(AppContext);
   useEffect(() => {
-    console.log(
-      `useEffect in AuthLayout (Used when a user reload a page
-      and they already have loged in into the system)`
-    );
     const checkAuth = async () => {
       setLoading(true);
       const resCheckAuth = checkIsAuth(); //NOTE check cookies

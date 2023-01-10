@@ -10,7 +10,6 @@ const defaultValue = {
   loading: false,
   isAuth: false,
   user: {},
-  notificationData: { isShowed: false, type: "", header: "", description: "" },
   users: [],
 };
 

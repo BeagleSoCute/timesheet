@@ -1,3 +1,4 @@
+
 export const transformAxiosResponse = (response) => {
   const { data: payload } = response;
   return {
@@ -6,10 +7,10 @@ export const transformAxiosResponse = (response) => {
   };
 };
 
-export const transformErrorResponse = (errResponse) => {
+export const transformErrorResponse = async (errResponse) => {
   const { response, message } = errResponse;
   let payload;
-  payload = response ? response.data.payload : {};
+  payload = response ? response.data : {};
   return {
     payload,
     status: response.status,
@@ -17,3 +18,5 @@ export const transformErrorResponse = (errResponse) => {
     success: false,
   };
 };
+
+

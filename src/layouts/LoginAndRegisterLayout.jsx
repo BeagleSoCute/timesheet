@@ -1,22 +1,22 @@
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { Row, Col } from "antd";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { AppContext } from "contexts/app.context";
+import { notification } from "helpers/notification.helper";
+import { checkIsAuth } from "helpers/auth.helper";
 
 const LoginAndRegisterLayout = ({ children }) => {
   const navigate = useNavigate();
-  const { isAuth, setNotificationData } = useContext(AppContext);
+  const isAuth = checkIsAuth();
   useEffect(() => {
     const init = () => {
       if (isAuth) {
-        setNotificationData({
-            type: "warning",
-            header: "Warning",
-            description: "You already have loged in into the system!",
-            isShowed: true,
-          });
-          navigate("/dashboard");
+        notification({
+          type: "warning",
+          message: "Warning",
+          description: "You already have loged in into the system!",
+        });
+        navigate("/dashboard");
       }
     };
     init();

@@ -2,8 +2,8 @@ import { registerApi } from "apis/auth.api";
 
 export const register = async (data) => {
   try {
-    await registerApi(data);
-    return true;
+    const {success} = await registerApi(data);
+    return success;
   } catch (err) {
     return false;
   }

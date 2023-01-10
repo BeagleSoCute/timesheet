@@ -10,33 +10,19 @@ import { checkIsAuth } from "helpers/auth.helper";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setLoading, setUser, setNotificationData, setAuth } =
-    useContext(AppContext);
+  const { setLoading, setUser, setAuth } = useContext(AppContext);
   const handleOnFinish = async (values) => {
     setLoading(true);
-    const authRes = await login(values);
+    const isLoginSuccess = await login(values);
     const userRes = await getMyData();
-    if (authRes.success && userRes.success) {
+    if (isLoginSuccess && userRes.success) {
       const resCheckAuth = checkIsAuth();
-      setNotificationData({
-        type: "success",
-        header: "Success",
-        description: "Login success",
-        isShowed: true,
-      });
       setAuth(resCheckAuth);
       setUser(userRes.userData);
       setLoading(false);
       navigate("/dashboard");
-    } else {
-      setNotificationData({
-        type: "error",
-        header: "Fail",
-        description: "Login fails",
-        isShowed: true,
-      });
-      setLoading(false);
     }
+    setLoading(false);
   };
   return (
     <StyledDiv className="login">

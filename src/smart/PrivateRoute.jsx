@@ -1,19 +1,17 @@
-import { useEffect, useContext, Fragment } from "react";
+import { useEffect, Fragment } from "react";
 import { checkIsAuth } from "helpers/auth.helper";
-import { AppContext } from "contexts/app.context";
 import { Navigate } from "react-router-dom";
+import { notification } from "helpers/notification.helper";
 
 const PrivateRoute = ({ children }) => {
-  const { setNotificationData } = useContext(AppContext);
   const isAuth = checkIsAuth(); //NOTE check cookies
   useEffect(() => {
     const init = () => {
       if (!isAuth) {
-        setNotificationData({
+        notification({
           type: "warning",
-          header: "Warning",
-          description: "Please login into the system first!",
-          isShowed: true,
+          message: "Warning",
+          description: "You already have loged in into the system!",
         });
         return;
       }

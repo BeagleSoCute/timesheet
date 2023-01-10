@@ -12,11 +12,12 @@ const Register = () => {
   const handleOnFinish = async (values) => {
     setLoading(true);
     const { email, name, password } = values;
-    await register({ email, name, password });
-    setLoading(false);
+   const isSuccess = await register({ email, name, password });
+   setLoading(false);
+   if(isSuccess){
     navigate("/login");
+   }
   };
-
   return (
     <StyledDiv className="register">
       <LoginAndRegisterLayout>

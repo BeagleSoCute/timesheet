@@ -3,19 +3,20 @@ import { logout } from "services/auth.service";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import { checkIsAuth } from "helpers/auth.helper";
+import { notification } from "helpers/notification.helper";
 
 const Logout = () => {
   const navigate = useNavigate();
-  const { isAuth, setLoading, setNotificationData, setAuth } =
+  const resCheckAuth = checkIsAuth();
+
+  const { setLoading } =
     useContext(AppContext);
   useEffect(() => {
-    console.log("useEffect in logout");
     const init = async () => {
-      if (!isAuth) {
-        setNotificationData({
-          isShowed: true,
+      if (!resCheckAuth) {
+        notification({
           type: "warning",
-          header: "Warning",
+          message: "Warning",
           description:
             "You are not logging in, please login into the system first.",
         });
@@ -25,22 +26,7 @@ const Logout = () => {
       setLoading(true);
       const success = await logout();
       if (success) {
-        const resCheckAuth = checkIsAuth();
-        setAuth(resCheckAuth);
-        setNotificationData({
-          isShowed: true,
-          type: "success",
-          header: "Success",
-          description: "Logout Success",
-        });
         navigate("/login");
-      } else {
-        setNotificationData({
-          isShowed: true,
-          type: "error",
-          header: "Error",
-          description: "Login Fail",
-        });
       }
       setLoading(false);
     };
