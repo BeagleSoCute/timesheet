@@ -5,6 +5,7 @@ import RegisterForm from "components/register/RegisterForm";
 import { register } from "services/register.service";
 import { AppContext } from "contexts/app.context";
 import { useNavigate } from "react-router-dom";
+import { notification } from "helpers/notification.helper";
 
 const Register = () => {
   const navigate = useNavigate();
@@ -12,11 +13,13 @@ const Register = () => {
   const handleOnFinish = async (values) => {
     setLoading(true);
     const { email, name, password } = values;
-   const isSuccess = await register({ email, name, password });
-   setLoading(false);
-   if(isSuccess){
-    navigate("/login");
-   }
+    const isSuccess = await register({ email, name, password });
+    setLoading(false);
+    if (isSuccess) {
+      navigate("/login");
+    } else {
+      notification({ type: "error", message: "Register fail!" });
+    }
   };
   return (
     <StyledDiv className="register">

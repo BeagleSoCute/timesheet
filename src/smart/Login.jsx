@@ -6,7 +6,6 @@ import { login } from "services/auth.service";
 import { getMyData } from "services/user.service";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
-import { checkIsAuth } from "helpers/auth.helper";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,7 +15,6 @@ const Login = () => {
     const isLoginSuccess = await login(values);
     const userRes = await getMyData();
     if (isLoginSuccess && userRes.success) {
-      const resCheckAuth = checkIsAuth();
       setUser(userRes.userData);
       setLoading(false);
       navigate("/dashboard");
