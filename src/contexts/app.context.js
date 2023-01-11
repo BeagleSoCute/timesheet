@@ -7,7 +7,6 @@ export const AppContext = createContext({
   user: {},
   userLists: [],
   setLoading: () => {},
-  setAuth: () => {},
   setUser: () => {},
   setUserLists: () => {},
 });
@@ -23,9 +22,6 @@ export const AppProvider = ({ children }) => {
       userLists,
       setLoading: (data) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
-      },
-      setAuth: (data) => {
-        dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
       setUser: (data) => {
         dispatch({ type: TYPES.SET_USER, payload: data });

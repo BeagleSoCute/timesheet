@@ -10,14 +10,13 @@ import { checkIsAuth } from "helpers/auth.helper";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setLoading, setUser, setAuth } = useContext(AppContext);
+  const { setLoading, setUser } = useContext(AppContext);
   const handleOnFinish = async (values) => {
     setLoading(true);
     const isLoginSuccess = await login(values);
     const userRes = await getMyData();
     if (isLoginSuccess && userRes.success) {
       const resCheckAuth = checkIsAuth();
-      setAuth(resCheckAuth);
       setUser(userRes.userData);
       setLoading(false);
       navigate("/dashboard");

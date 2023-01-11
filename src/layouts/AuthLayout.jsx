@@ -4,13 +4,12 @@ import { AppContext } from "contexts/app.context";
 import { getMyData } from "services/user.service";
 
 const AuthLayout = ({ children }) => {
-  const { setLoading, setUser, setAuth } =
+  const { setLoading, setUser } =
     useContext(AppContext);
   useEffect(() => {
     const checkAuth = async () => {
       setLoading(true);
       const resCheckAuth = checkIsAuth(); //NOTE check cookies
-      setAuth(resCheckAuth);
       if (resCheckAuth) {
         const { success, userData } = await getMyData();
         if (success) {
