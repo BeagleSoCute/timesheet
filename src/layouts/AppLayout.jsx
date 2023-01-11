@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import styled from "styled-components";
 import { Layout, Menu, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -14,32 +14,22 @@ const authenMenu = [
   { key: 4, label: "Logout", path: "/logout" },
 ];
 const notAuthenMenu = [
-  { key: 1, label: "Home", path: "/" },
-  { key: 2, label: "Dashboard", path: "/dashboard" },
-  { key: 3, label: "Login", path: "/login" },
-  { key: 4, label: "Register", path: "/register" },
+  { key: 5, label: "Home", path: "/" },
+  { key: 6, label: "Dashboard", path: "/dashboard" },
+  { key: 7, label: "Login", path: "/login" },
+  { key: 8, label: "Register", path: "/register" },
 ];
 
 const AppLayout = ({ children }) => {
   const { loading } = useContext(AppContext);
   const isAuth = checkIsAuth();
-  const [menus, setMenus] = useState([]);
   const navigate = useNavigate();
   const handleOnClick = (selected) => {
+    const menus = isAuth ? authenMenu : notAuthenMenu;
     const result = menus.find((menu) => menu.key === parseInt(selected.key));
     navigate(result.path);
   };
 
-  useEffect(() => {
-    const init = () => {
-      if (!isAuth) {
-        setMenus(notAuthenMenu);
-        return;
-      }
-      setMenus(authenMenu);
-    };
-    init();
-  }, [menus]);
   return (
     <StyledLayout className="app-layout">
       <Header>
@@ -49,7 +39,7 @@ const AppLayout = ({ children }) => {
           mode="horizontal"
           defaultSelectedKeys={["0"]}
           onClick={handleOnClick}
-          items={menus}
+          items={isAuth ? authenMenu : notAuthenMenu}
         />
       </Header>
       <div className="content">
