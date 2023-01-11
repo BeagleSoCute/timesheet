@@ -6,7 +6,6 @@ export const login = async (data) => {
     notification({ type: "success", message: "Login Success" });
     return true;
   } else {
-    notification({ type: "error", message: "Login fail!" });
     return false;
   }
 };

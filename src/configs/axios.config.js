@@ -32,7 +32,7 @@ const onResponseRejected = async (error) => {
         type: "warning",
         message: "Please login into the system again.",
       });
-      return window.location.replace("/login");
+      // return window.location.replace("/login");
     }
   }
   return transformErrorResponse(error);

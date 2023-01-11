@@ -13,11 +13,13 @@ const Login = () => {
   const handleOnFinish = async (values) => {
     setLoading(true);
     const isLoginSuccess = await login(values);
-    const userRes = await getMyData();
-    if (isLoginSuccess && userRes.success) {
-      setUser(userRes.userData);
-      setLoading(false);
-      navigate("/dashboard");
+    if (isLoginSuccess) {
+      const userRes = await getMyData();
+      if (userRes.success) {
+        setUser(userRes.userData);
+        setLoading(false);
+        navigate("/dashboard");
+      }
     }
     setLoading(false);
   };

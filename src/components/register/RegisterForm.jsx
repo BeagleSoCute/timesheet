@@ -58,7 +58,7 @@ const RegisterForm = ({ onFinish }) => {
           label="Confirm Password"
           name="confirmPassword"
           rules={[
-            { required: true, message: "Please confirm yout password!" },
+            { required: true, message: "Please confirm your password!" },
             validatorConfirmPassword,
           ]}
         >
