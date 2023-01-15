@@ -10,12 +10,19 @@ export const transformAxiosResponse = (response) => {
 
 export const transformErrorResponse = async (errResponse) => {
   const { response, message } = errResponse;
-  let payload;
-  console.log('response', response)
+  let payload, errorMessage;
+  console.log("response", response);
   payload = response ? response.data : {};
-  console.log('payload',payload.error.msg)
-  const errorMessage = payload.error.msg
-   notification({ type: "error", message: errorMessage});
+  if (response.status === 500 || response.status === 400) {
+    notification({
+      type: "error",
+      message: "Server error, please contact the admin",
+    });
+  } else {
+    errorMessage = payload.error?.msg;
+    notification({ type: "error", message: errorMessage });
+  }
+
   return {
     payload,
     status: response.status,

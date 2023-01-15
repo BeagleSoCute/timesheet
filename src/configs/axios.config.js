@@ -22,7 +22,8 @@ const onResponseFulfilled = (response) => {
 };
 
 const onResponseRejected = async (error) => {
-  if (error.response && error.response.status === 401) {
+  const statusError = error.response.status;
+  if (error.response && statusError === 401) {
     const originalRequest = error.config;
     const { success, status } = await refreshToken();
     if (success) {
@@ -32,7 +33,7 @@ const onResponseRejected = async (error) => {
         type: "warning",
         message: "Please login into the system again.",
       });
-      // return window.location.replace("/login");
+      return;
     }
   }
   return transformErrorResponse(error);

@@ -11,6 +11,7 @@ const Login = () => {
   const navigate = useNavigate();
   const { setLoading, setUser } = useContext(AppContext);
   const handleOnFinish = async (values) => {
+    console.log('values', values)
     setLoading(true);
     const isLoginSuccess = await login(values);
     if (isLoginSuccess) {
