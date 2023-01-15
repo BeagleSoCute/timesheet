@@ -11,7 +11,7 @@ const PrivateRoute = ({ children }) => {
         notification({
           type: "warning",
           message: "Warning",
-          description: "You already have loged in into the system!",
+          description: "Please login into the system!",
         });
         return;
       }

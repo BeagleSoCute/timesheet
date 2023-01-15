@@ -1,4 +1,4 @@
-import { getUserApi } from "apis/user.api";
+import { getUserApi, getAllUsersApi } from "apis/user.api";
 
 export const getMyData = async () => {
   const res = await getUserApi();
@@ -6,7 +6,6 @@ export const getMyData = async () => {
 };
 
 export const getAllUsers = async () => {
-  // console.log("getUsers work");
-  // const res = await getUsers();
-  // console.log("results are ", res);
+const res = await getAllUsersApi(); 
+return {success: res.success, allUsersData: res.payload}
 };

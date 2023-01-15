@@ -1,6 +1,8 @@
-import react from "react";
+import { useEffect } from "react";
 
 const Profile = () => {
+  useEffect(() => {
+  }, []);
   return <div>Profile Page</div>;
 };
 

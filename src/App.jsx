@@ -1,5 +1,4 @@
 import AppLayout from "layouts/AppLayout";
-import AuthLayout from "layouts/AuthLayout";
 import Login from "smart/Login";
 import Register from "smart/Register";
 import Dashboard from "smart/Dashboard";
@@ -14,7 +13,6 @@ const App = () => {
   return (
     <AppProvider>
       <div className="App">
-        <AuthLayout>
           <AppLayout>
             <Routes>
               <Route path="/login" element={<Login />} />
@@ -28,12 +26,9 @@ const App = () => {
                     <Profile />
                   </PrivateRoute>
                 }
-              />
-
-              {/* <PrivateRoute path="/profile" element={<Profile />} /> */}
+              />\
             </Routes>
           </AppLayout>
-        </AuthLayout>
       </div>
     </AppProvider>
   );
