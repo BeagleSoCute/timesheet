@@ -13,7 +13,7 @@ export const transformErrorResponse = async (errResponse) => {
   let payload, errorMessage;
   console.log("response", response);
   payload = response ? response.data : {};
-  if (response.status === 500 || response.status === 400) {
+  if (response.status === 500 ) {
     notification({
       type: "error",
       message: "Server error, please contact the admin",

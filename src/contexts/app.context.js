@@ -18,6 +18,7 @@ export const AppProvider = ({ children }) => {
   const { loading, isAuth, user, userLists } = reducerStates;
 
   useEffect(() => {
+    console.log('AppContext UseEffect')
     dispatch({ type: TYPES.SET_LOADING, payload: true });
     const resCheckAuth = checkIsAuth();
     const init = async () => {

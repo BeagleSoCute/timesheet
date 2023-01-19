@@ -4,6 +4,7 @@ import { Layout, Menu, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import { checkIsAuth } from "helpers/auth.helper";
+import { Outlet } from "react-router-dom";
 
 const { Header } = Layout;
 
@@ -48,7 +49,7 @@ const AppLayout = ({ children }) => {
             <Spin size="large">{loading}</Spin>
           </div>
         ) : (
-          <>{children}</>
+          <><Outlet /></>
         )}
       </div>
     </StyledLayout>

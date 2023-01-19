@@ -8,19 +8,20 @@ import { checkIsAuth } from "helpers/auth.helper";
 const LoginAndRegisterLayout = ({ children }) => {
   const navigate = useNavigate();
   const isAuth = checkIsAuth();
-  useEffect(() => {
-    const init = () => {
-      if (isAuth) {
-        notification({
-          type: "warning",
-          message: "Warning",
-          description: "You already have loged in into the system!",
-        });
-        navigate("/dashboard");
-      }
-    };
-    init();
-  }, []);
+  // useEffect(() => {
+  //   console.log('useEffect in login layout work')
+  //   const init = () => {
+  //     if (isAuth) {
+  //       notification({
+  //         type: "warning",
+  //         message: "Warning",
+  //         description: "You already have loged in into the system!",
+  //       });
+  //       navigate("/dashboard");
+  //     }
+  //   };
+  //   init();
+  // }, []);
   return (
     <StyledDiv className="login-and-register-layout">
       <Row>
