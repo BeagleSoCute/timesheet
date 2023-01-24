@@ -21,7 +21,7 @@ const notAuthenMenu = [
   { key: 8, label: "Register", path: "/register" },
 ];
 
-const AppLayout = ({ children }) => {
+const AppLayout = () => {
   const { loading } = useContext(AppContext);
   const isAuth = checkIsAuth();
   const navigate = useNavigate();

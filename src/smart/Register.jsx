@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import LoginAndRegisterLayout from "layouts/LoginAndRegisterLayout";
 import RegisterForm from "components/register/RegisterForm";
 import { register } from "services/register.service";
 import { AppContext } from "contexts/app.context";
@@ -20,9 +19,7 @@ const Register = () => {
   };
   return (
     <StyledDiv className="register">
-      <LoginAndRegisterLayout>
         <RegisterForm onFinish={handleOnFinish} />
-      </LoginAndRegisterLayout>
     </StyledDiv>
   );
 };

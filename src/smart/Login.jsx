@@ -1,6 +1,5 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import LoginAndRegisterLayout from "layouts/LoginAndRegisterLayout";
 import LoginForm from "components/login/LoginForm";
 import { login } from "services/auth.service";
 import { getMyData } from "services/user.service";
@@ -11,14 +10,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { setLoading, setUser } = useContext(AppContext);
   const handleOnFinish = async (values) => {
-    console.log('values', values)
     setLoading(true);
     const isLoginSuccess = await login(values);
     if (isLoginSuccess) {
       const userRes = await getMyData();
       if (userRes.success) {
         setUser(userRes.userData);
-        setLoading(false);
         navigate("/dashboard");
       }
     }
@@ -26,9 +23,7 @@ const Login = () => {
   };
   return (
     <StyledDiv className="login">
-      <LoginAndRegisterLayout>
-        <LoginForm onFinish={handleOnFinish} />
-      </LoginAndRegisterLayout>
+      <LoginForm onFinish={handleOnFinish} />
     </StyledDiv>
   );
 };

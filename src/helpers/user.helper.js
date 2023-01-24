@@ -7,6 +7,7 @@ export const transformAllUsersDataToTable = (data) => {
 export const convertEachUserData = (data, index) => {
   return {
     key: index, 
+    id: data._id,
     name: data.name, 
     email: data.email
   };

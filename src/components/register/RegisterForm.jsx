@@ -12,7 +12,6 @@ const defaultProps = {
 const validatorConfirmPassword = ({ getFieldValue }) => ({
   validator(_, value) {
     if (!value || getFieldValue("password") === value) {
-      console.log("not error");
       return Promise.resolve();
     }
     return Promise.reject("Password and confirm password do not match");

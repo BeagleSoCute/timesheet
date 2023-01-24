@@ -1,33 +1,14 @@
-import { useEffect } from "react";
 import { Row, Col } from "antd";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
-import { notification } from "helpers/notification.helper";
-import { checkIsAuth } from "helpers/auth.helper";
+import { Outlet } from "react-router-dom";
 
-const LoginAndRegisterLayout = ({ children }) => {
-  const navigate = useNavigate();
-  const isAuth = checkIsAuth();
-  // useEffect(() => {
-  //   console.log('useEffect in login layout work')
-  //   const init = () => {
-  //     if (isAuth) {
-  //       notification({
-  //         type: "warning",
-  //         message: "Warning",
-  //         description: "You already have loged in into the system!",
-  //       });
-  //       navigate("/dashboard");
-  //     }
-  //   };
-  //   init();
-  // }, []);
+const LoginAndRegisterLayout = () => {
   return (
     <StyledDiv className="login-and-register-layout">
       <Row>
         <Col span={8} />
         <Col className="form-warpper" span={8}>
-          {children}
+          <Outlet />
         </Col>
         <Col span={8} />
       </Row>

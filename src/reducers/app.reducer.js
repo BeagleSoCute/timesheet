@@ -23,7 +23,7 @@ const reducer = (state, action) => {
     case TYPES.SET_USER:
       return { ...state, user: payload };
     case TYPES.SET_USER_LISTS:
-      return { ...state, user: payload };
+      return { ...state, users: payload };
     case TYPES.SET_NOTIFICATION:
       return { ...state, notificationData: payload };
     default:

@@ -11,7 +11,6 @@ export const transformAxiosResponse = (response) => {
 export const transformErrorResponse = async (errResponse) => {
   const { response, message } = errResponse;
   let payload, errorMessage;
-  console.log("response", response);
   payload = response ? response.data : {};
   if (response.status === 500 ) {
     notification({
