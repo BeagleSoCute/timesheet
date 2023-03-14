@@ -1,47 +1,42 @@
 import { createContext, useMemo, useReducer, useEffect } from "react";
 import appReducer from "reducers/app.reducer";
-import { checkIsAuth } from "helpers/auth.helper";
-import { getMyData } from "services/user.service";
+import { useNavigate } from "react-router-dom";
+import { notification } from "helpers/notification.helper";
 export const AppContext = createContext({
   loading: false,
   isAuth: false,
-  user: {},
+  timesheetData: {},
   setLoading: () => {},
-  setUser: () => {},
+  setAuth: () => {},
 });
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [reducerStates, dispatch] = useReducer(reducer, defaultValue);
-  const { loading, isAuth, user } = reducerStates;
+  const { loading, isAuth, timesheetData } = reducerStates;
   useEffect(() => {
-    dispatch({ type: TYPES.SET_LOADING, payload: true });
-    const resCheckAuth = checkIsAuth();
     const init = async () => {
-      const { success, userData } = await getMyData();
-      if (success) {
-        dispatch({ type: TYPES.SET_USER, payload: userData });
+      if (!isAuth) {
+        navigate("/");
+        notification({ type: "warning", message: "Please sign in first!" });
       }
     };
-    if (resCheckAuth) {
-      init();
-    }
-    dispatch({ type: TYPES.SET_LOADING, payload: false });
-  }, []);
+    init();
+  }, [isAuth]);
 
- 
   const appContextValue = useMemo(() => {
     return {
       loading,
       isAuth,
-      user,
+      timesheetData,
       setLoading: (data) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
-      setUser: (data) => {
-        dispatch({ type: TYPES.SET_USER, payload: data });
+      setAuth: (data) => {
+        dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
     };
-  }, [loading, isAuth, user, dispatch]);
+  }, [loading, isAuth, timesheetData, dispatch]);
   return (
     <AppContext.Provider value={appContextValue}>
       {children}

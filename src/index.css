@@ -11,3 +11,10 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.ant-col.ant-form-item-label {
+  white-space: normal;
+  text-align: start;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

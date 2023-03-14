@@ -3,34 +3,15 @@ import styled from "styled-components";
 import { Layout, Menu, Spin } from "antd";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
-import { checkIsAuth } from "helpers/auth.helper";
 import { Outlet } from "react-router-dom";
-
 const { Header } = Layout;
-
-const authenMenu = [
-  { key: 1, label: "Home", path: "/" },
-  { key: 2, label: "Dashboard", path: "/dashboard" },
-  { key: 3, label: "Profile", path: "/profile" },
-  { key: 4, label: "Logout", path: "/logout" },
-];
-const notAuthenMenu = [
-  { key: 5, label: "Home", path: "/" },
-  { key: 6, label: "Dashboard", path: "/dashboard" },
-  { key: 7, label: "Login", path: "/login" },
-  { key: 8, label: "Register", path: "/register" },
-];
-
+const menuItems = [{ key: 1, label: "Home", path: "/" }];
 const AppLayout = () => {
   const { loading } = useContext(AppContext);
-  const isAuth = checkIsAuth();
   const navigate = useNavigate();
   const handleOnClick = (selected) => {
-    const menus = isAuth ? authenMenu : notAuthenMenu;
-    const result = menus.find((menu) => menu.key === parseInt(selected.key));
-    navigate(result.path);
+    navigate(selected);
   };
-
   return (
     <StyledLayout className="app-layout">
       <Header>
@@ -40,16 +21,18 @@ const AppLayout = () => {
           mode="horizontal"
           defaultSelectedKeys={["0"]}
           onClick={handleOnClick}
-          items={isAuth ? authenMenu : notAuthenMenu}
+          items={menuItems}
         />
       </Header>
-      <div className="content">
+      <div className="container mx-auto my-10 w-6/12 p-16 bg-white border-solid border-4 border-gray-300">
         {loading ? (
           <div className="spin">
             <Spin size="large">{loading}</Spin>
           </div>
         ) : (
-          <><Outlet /></>
+          <>
+            <Outlet className="" />
+          </>
         )}
       </div>
     </StyledLayout>
@@ -58,11 +41,7 @@ const AppLayout = () => {
 
 const StyledLayout = styled(Layout)`
   &.app-layout {
-    height: 100vh;
-    .content {
-      height: 100%;
-      padding: 20px;
-    }
+    /* height: 100vh; */
     .spin {
       display: flex;
       justify-content: center;
@@ -70,12 +49,6 @@ const StyledLayout = styled(Layout)`
     }
     .ant-spin {
       margin: auto;
-    }
-    .header {
-      background: #282a3a;
-      .link {
-        color: white;
-      }
     }
   }
 `;
