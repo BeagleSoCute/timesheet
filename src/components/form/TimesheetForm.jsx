@@ -29,7 +29,7 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 10,
+      span: 14,
     },
   },
   wrapperCol: {
@@ -37,13 +37,12 @@ const formItemLayout = {
       span: 24,
     },
     sm: {
-      span: 12,
+      span: 10,
     },
   },
 };
 
 const TimesheetForm = ({ data, onOpenModal }) => {
-  console.log("data", data);
   const [form] = Form.useForm();
   const handleOnFinish = (value) => {
     const result = {
@@ -87,18 +86,10 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item
-          label="Start Date"
-          name="startDate"
-          rules={[{ required: true, message: "Please input your start date!" }]}
-        >
+        <Form.Item label="Start Date" name="startDate">
           <DatePicker allowClear={false} inputReadOnly format={dateFormat} />
         </Form.Item>
-        <Form.Item
-          label="Start Time"
-          name="startTime"
-          rules={[{ required: true, message: "Please input your start time!" }]}
-        >
+        <Form.Item label="Start Time" name="startTime">
           <TimePicker
             allowClear={false}
             showNow={false}
@@ -106,11 +97,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
             format={timeFormat}
           />
         </Form.Item>
-        <Form.Item
-          label="Finish Date"
-          name="finishDate"
-          rules={[{ required: true, message: "Please input your start date!" }]}
-        >
+        <Form.Item label="Finish Date" name="finishDate">
           <DatePicker allowClear={false} inputReadOnly format={dateFormat} />
         </Form.Item>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Button, Modal } from "antd";
-
+import { Modal } from "antd";
+import TimesheetAllocation from "components/form/TimesheetAllocationForm";
 const propTypes = {
   isOpenModal: PropTypes.bool,
   onClose: PropTypes.func,
@@ -24,14 +24,11 @@ const TimesheetModal = ({ isOpenModal, onOk, onClose }) => {
         onCancel={() => onClose()}
         width={1000}
       >
-        <p>some contents...</p>
-        <p>some contents...</p>
-        <p>some contents...</p>
+        <TimesheetAllocation />
       </Modal>
     </div>
   );
 };
-
 TimesheetModal.propTypes = propTypes;
 TimesheetModal.defaultProps = defaultProps;
 

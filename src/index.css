@@ -15,6 +15,18 @@ code {
   white-space: normal;
   text-align: start;
 }
+.ant-form-item-control-input-content,.ant-form-item-explain-error{
+  text-align: right;
+
+ 
+  
+}
+
+.ant-form-item-control-input-content span{
+  text-align: start;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -2,13 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
-import { NumericInput } from "helpers/common.helper";
 
 import {
   Button,
   DatePicker,
   Form,
-  Input,
   InputNumber,
   TimePicker,
   Select,
@@ -77,18 +75,10 @@ const SignInForm = ({ onFinish }) => {
           <InputNumber controls={false} />
         </Form.Item>
 
-        <Form.Item
-          label="Start Date"
-          name="startDate"
-          rules={[{ required: true, message: "Please input your start date!" }]}
-        >
+        <Form.Item label="Start Date" name="startDate">
           <DatePicker inputReadOnly format={dateFormat} allowClear={false} />
         </Form.Item>
-        <Form.Item
-          label="Start Time"
-          name="startTime"
-          rules={[{ required: true, message: "Please input your start time!" }]}
-        >
+        <Form.Item label="Start Time" name="startTime">
           <TimePicker
             showNow={false}
             inputReadOnly
@@ -101,9 +91,7 @@ const SignInForm = ({ onFinish }) => {
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >
-          <Select options={jobOptions}>
-            <Select.Option value="demo">Demo</Select.Option>
-          </Select>
+          <Select options={jobOptions} />
         </Form.Item>
 
         <Form.Item className="button-submit-layout flex justify-center mt-8 ">
