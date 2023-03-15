@@ -48,7 +48,10 @@ const TimesheetAllocation = ({ remainingHours }) => {
     // console.log("labourHours", labourHours);
     // console.log("totalHours", totalHours);
     // const totalHours = remainingHour - labourHours; //calhere
-    if (totalHours !== "0:00") {
+    console.log("remain----------beforeee-------------", remain === "");
+
+    if (remain !== "00:00") {
+      console.log("remain-----------------------", remain);
       addFunc();
     }
   };
