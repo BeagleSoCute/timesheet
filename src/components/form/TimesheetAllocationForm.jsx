@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
-import { Button, Form, InputNumber, Select, Input } from "antd";
+import React, { useEffect, useState } from "react";
+import { Button, Form, TimePicker, Select, Input } from "antd";
 import { jobOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
+import { timeFormat } from "constants/format";
+import dayjs from "dayjs";
+import { calRemainFromLabourHour } from "services/timesheet.service";
 
 const formItemLayout = {
   labelCol: {
@@ -26,10 +29,30 @@ const initialValues = {
   remainingHour: "6",
 };
 
-const TimesheetAllocation = () => {
+const TimesheetAllocation = ({ remainingHours }) => {
   const [form] = Form.useForm();
+  const [remain, setRemain] = useState(remainingHours);
 
   const handleOnFinish = () => {};
+
+  const handleCalculateRemainHours = async (index, addFunc, removeFunc) => {
+    console.log("----called");
+    const labourHours = dayjs(
+      form.getFieldsValue().items[index].labourHours
+    ).format(timeFormat);
+    const totalHours = calRemainFromLabourHour(remain, labourHours);
+
+    setRemain(totalHours);
+
+    // console.log("remain", remain);
+    // console.log("labourHours", labourHours);
+    // console.log("totalHours", totalHours);
+    // const totalHours = remainingHour - labourHours; //calhere
+    if (totalHours !== "0:00") {
+      addFunc();
+    }
+  };
+
   return (
     <div className="timesheet-allocation px-12 py-5">
       <Form
@@ -51,18 +74,11 @@ const TimesheetAllocation = () => {
                         {convertToOrdinalNumber(index)} Allocation
                       </h1>
                     </div>
-                    <Form.Item
-                      // {...field}
-                      key={field.key}
-                      label="Remaining Hours to Allocate"
-                      name={[index, "remainingHour"]}
-                      className="bg-gray-300  p-1 "
-                      // rules={[
-                      //   { required: true, message: "Please input your remaining hours!" },
-                      // ]}
-                    >
-                      <InputNumber controls={false} />
-                    </Form.Item>
+
+                    <div className="remain-hour  flex justify-between px-2 mb-6">
+                      <span>Remaining Hours to Allocate:</span>
+                      <span className="text-2xl">{remain}</span>
+                    </div>
 
                     <Form.Item
                       // {...field}
@@ -119,17 +135,23 @@ const TimesheetAllocation = () => {
                         },
                       ]}
                     >
-                      <InputNumber controls={false} />
+                      <TimePicker
+                        onChange={() =>
+                          handleCalculateRemainHours(index, add, remove)
+                        }
+                        allowClear={false}
+                        showNow={false}
+                        inputReadOnly
+                        format={timeFormat}
+                      />
                     </Form.Item>
                     <Form.Item>
-                      <Button onClick={() => remove(field.name)}>
-                        Remove{" "}
-                      </Button>
+                      <Button onClick={() => remove(field.name)}>Remove</Button>
                     </Form.Item>
                   </div>
                 ))}
                 <Form.Item>
-                  <Button onClick={() => add()}>Add </Button>
+                  <Button onClick={() => add()}>Add</Button>
                 </Form.Item>
               </div>
             );

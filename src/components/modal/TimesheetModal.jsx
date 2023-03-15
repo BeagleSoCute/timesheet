@@ -13,7 +13,7 @@ const defaultProps = {
   onOk: () => {},
 };
 
-const TimesheetModal = ({ isOpenModal, onOk, onClose }) => {
+const TimesheetModal = ({ isOpenModal, remainingHours, onOk, onClose }) => {
   return (
     <div className="timesheet-modal">
       <Modal
@@ -24,7 +24,7 @@ const TimesheetModal = ({ isOpenModal, onOk, onClose }) => {
         onCancel={() => onClose()}
         width={1000}
       >
-        <TimesheetAllocation />
+        <TimesheetAllocation remainingHours={remainingHours} />
       </Modal>
     </div>
   );
