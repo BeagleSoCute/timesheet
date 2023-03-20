@@ -52,14 +52,14 @@ const TimesheetForm = ({ data, onOpenModal }) => {
       finishDate: dayjs(value.finishDate).format(dateFormat),
       finishTime: dayjs(value.finishTime).format(timeFormat),
       breaksTime: dayjs(value.breaksTime).format("mm"),
-      test: dayjs(dayjs(value.startTime)),
     };
     onOpenModal(result);
   };
   const initialValues = {
-    startDate: dayjs(data.startDate, dateFormat),
-    finishDate: dayjs(data.startDate, dateFormat),
-    startTime: dayjs(data.startTime, timeFormat),
+    startDate: data.startDate,
+    finishDate: data.startDate,
+    startTime: data.startTime,
+    timeFormat,
     isStartTimeCorrect: true,
     isTakenBreak: true,
   };

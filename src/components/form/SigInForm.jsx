@@ -44,12 +44,12 @@ const SignInForm = ({ onFinish }) => {
   const [form] = Form.useForm();
 
   const handleOnFinish = (value) => {
-    const result = {
-      ...value,
-      startDate: dayjs(value.startDate).format(dateFormat),
-      startTime: dayjs(value.startTime).format(timeFormat),
-    };
-    onFinish(result);
+    // const result = {
+    //   ...value,
+    //   startDate: dayjs(value.startDate).format(dateFormat),
+    //   startTime: dayjs(value.startTime).format(timeFormat),
+    // };
+    onFinish(value);
   };
   const initialValues = {
     startDate: dayjs(),

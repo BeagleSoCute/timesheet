@@ -6,30 +6,19 @@ dayjs.extend(duration);
 //   const breakTimeInMinutes = 15;
 
 export const calculateRemainHours = (value) => {
-  const { startDate, startTime, finishDate, finishTime, breaksTime, test } =
-    value;
-  console.log("testttt", test);
-
+  const { startDate, startTime, finishDate, finishTime, breaksTime } = value;
   const startDateTime = dayjs(startDate + " " + startTime, "DD-MM-YYYY HH:mm");
   const finishDateTime = dayjs(
     finishDate + " " + finishTime,
     "DD-MM-YYYY HH:mm"
   );
-
   const breakTimeInMinutes = breaksTime;
-
   const timeDiffInMs = finishDateTime.diff(startDateTime);
   const breakTimeInMs = breakTimeInMinutes * 60 * 1000;
-
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
-  const remainingHours = Math.floor(
-    dayjs.duration(remainingTimeInMs).as("hours")
-  );
-  //   const remainingMinutes = dayjs.duration(remainingTimeInMs).as("minutes") % 60;
-
-  const remainingTime = dayjs.duration(remainingTimeInMs).format("HH:mm");
+  const finalRemainingTimeInMs = remainingTimeInMs > 0 ? remainingTimeInMs : 0;
+  const remainingTime = dayjs.duration(finalRemainingTimeInMs).format("HH:mm");
   console.log(`Remaining time: ${remainingTime}`);
-
   return remainingTime;
 };
 

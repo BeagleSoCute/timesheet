@@ -29,29 +29,24 @@ const initialValues = {
   remainingHour: "6",
 };
 
-const TimesheetAllocation = ({ remainingHours }) => {
+const TimesheetAllocation = ({ remainingHours, setRemainingHour }) => {
   const [form] = Form.useForm();
-  const [remain, setRemain] = useState(remainingHours);
-
   const handleOnFinish = () => {};
-
   const handleCalculateRemainHours = async (index, addFunc, removeFunc) => {
     console.log("----called");
     const labourHours = dayjs(
       form.getFieldsValue().items[index].labourHours
     ).format(timeFormat);
-    const totalHours = calRemainFromLabourHour(remain, labourHours);
-
-    setRemain(totalHours);
-
+    const totalHours = calRemainFromLabourHour(remainingHours, labourHours);
+    setRemainingHour(totalHours);
     // console.log("remain", remain);
     // console.log("labourHours", labourHours);
     // console.log("totalHours", totalHours);
     // const totalHours = remainingHour - labourHours; //calhere
-    console.log("remain----------beforeee-------------", remain === "");
+    console.log("remain----------beforeee-------------", remainingHours === "");
 
-    if (remain !== "00:00") {
-      console.log("remain-----------------------", remain);
+    if (remainingHours !== "00:00") {
+      console.log("remain-----------------------", remainingHours);
       addFunc();
     }
   };
@@ -80,7 +75,7 @@ const TimesheetAllocation = ({ remainingHours }) => {
 
                     <div className="remain-hour  flex justify-between px-2 mb-6">
                       <span>Remaining Hours to Allocate:</span>
-                      <span className="text-2xl">{remain}</span>
+                      <span className="text-2xl">{remainingHours}</span>
                     </div>
 
                     <Form.Item

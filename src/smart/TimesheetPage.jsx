@@ -18,6 +18,7 @@ const TimesheetPage = () => {
 
   const handlecloseModal = () => {
     setOpenModal(false);
+    setRemainingHour("");
     //remove states in context
   };
 
@@ -26,6 +27,7 @@ const TimesheetPage = () => {
   const propsModal = {
     isOpenModal,
     remainingHours,
+    setRemainingHour,
     onClose: handlecloseModal,
     onOk: handleSubmit,
   };
