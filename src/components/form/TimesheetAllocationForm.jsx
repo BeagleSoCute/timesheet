@@ -45,18 +45,13 @@ const TimesheetAllocation = ({
   handleSetRemaingHour,
 }) => {
   const handleOnFinish = () => {};
+
   const handleCalculateRemainHours = async (value, index) => {
     console.log("----called", index);
-
     const items = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
-    // ? thisFormItem.previousLabourHour
-    // : 0;
-    console.log(
-      "inspect condition",
-      thisFormItem.previousLabourHour ? true : false
-    );
+
     const modifyPreviousLabourHourD = previousLabourHour
       ? dayjs(previousLabourHour).format(timeFormat)
       : undefined;
@@ -66,20 +61,31 @@ const TimesheetAllocation = ({
     const labourHours = dayjs(value).format(timeFormat);
     console.log("labourHours", labourHours);
 
-    const totalHours = await calRemainFromLabourHour(
+    const result = await calRemainFromLabourHour(
       remainingHours,
       labourHours,
       modifyPreviousLabourHourD
     );
+    if (!result.isSuccess) {
+      //No set previous and keep the labour value
+      thisFormItem = {
+        ...thisFormItem,
+        labourHours: previousLabourHour,
+      };
+      items.splice(index, 1, thisFormItem);
+      form.setFieldsValue({ items });
+      return;
+    }
+
     thisFormItem = {
       ...thisFormItem,
       previousLabourHour: value,
     };
     items.splice(index, 1, thisFormItem);
     form.setFieldsValue({ items });
-    console.log("remaining hours is ", totalHours);
+    console.log("remaining hours is ", result.value);
     console.log("thisFormItem---==--", thisFormItem);
-    handleSetRemaingHour(totalHours);
+    handleSetRemaingHour(result.value);
   };
 
   const handleRemove = (fieldName, remmove) => {

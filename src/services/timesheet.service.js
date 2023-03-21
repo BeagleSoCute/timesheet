@@ -54,10 +54,13 @@ export const calRemainFromLabourHour = (
 
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
-      ? "00:00"
-      : dayjs
-          .duration(remainingTimeInMinutesAfterSubtraction, "milliseconds")
-          .format("HH:mm");
+      ? { value: "00:00", isSuccess: false }
+      : {
+          value: dayjs
+            .duration(remainingTimeInMinutesAfterSubtraction, "milliseconds")
+            .format("HH:mm"),
+          isSuccess: true,
+        };
 
   // console.log(remainingTimeFormatted);
   return remainingTimeFormatted;
