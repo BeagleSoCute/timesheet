@@ -53,7 +53,7 @@ const TimesheetAllocation = ({
       });
     };
     init();
-  }, []);
+  }, [form]);
 
   const handleOnFinish = () => {
     handleOnOk();
@@ -94,9 +94,17 @@ const TimesheetAllocation = ({
     handleSetRemaingHour(result.value);
   };
   const handleRemove = async (fieldName, index, remmove) => {
-    const thisFormItem =
+    const currentLabourHours =
       form.getFieldsValue("items")["items"][index].labourHours;
-    const labourHours = dayjs(thisFormItem).format(timeFormat);
+    if (!currentLabourHours) {
+      console.log("throw");
+      remmove(fieldName);
+      return;
+    }
+    const labourHours = dayjs(currentLabourHours).format(timeFormat);
+    console.log("currentLabourHours", currentLabourHours);
+    console.log("labourHours", labourHours);
+
     const isReset = true;
     const result = await calRemainFromLabourHour(
       remainingHours,
@@ -210,7 +218,11 @@ const TimesheetAllocation = ({
                   </div>
                 ))}
                 <div className="flex justify-center">
-                  <Button className="w-2/3 mt-5" onClick={() => add()}>
+                  <Button
+                    disabled={remainingHours === "00:00"}
+                    className="w-2/3 mt-5"
+                    onClick={() => add()}
+                  >
                     Add
                   </Button>
                 </div>

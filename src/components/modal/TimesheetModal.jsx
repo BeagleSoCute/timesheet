@@ -24,7 +24,10 @@ const TimesheetModal = ({
 }) => {
   const [form] = Form.useForm();
   const handleClose = () => {
-    form.resetFields();
+    // form.resetFields();
+    form.setFieldsValue({
+      items: [{}],
+    });
     onClose();
   };
   const handleOnOk = () => {

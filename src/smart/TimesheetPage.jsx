@@ -11,13 +11,11 @@ const TimesheetPage = () => {
 
   const handleOpenModal = async (value) => {
     const res = await calculateRemainHours(value);
-    console.log("res-----", res);
     setRemainingHour(res);
     setOpenModal(true);
   };
 
   const handlecloseModal = () => {
-    console.log("handleSetRemaingHour is called");
     setOpenModal(false);
     setRemainingHour("");
     //remove states in context
