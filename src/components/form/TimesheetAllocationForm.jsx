@@ -55,8 +55,9 @@ const TimesheetAllocation = ({
     init();
   }, [form]);
 
-  const handleOnFinish = () => {
-    handleOnOk();
+  const handleOnFinish = (value) => {
+    const { items } = value;
+    handleOnOk(items);
   };
   const handleCalculateRemainHours = async (value, index) => {
     const items = form.getFieldsValue("items")["items"];
@@ -97,14 +98,10 @@ const TimesheetAllocation = ({
     const currentLabourHours =
       form.getFieldsValue("items")["items"][index].labourHours;
     if (!currentLabourHours) {
-      console.log("throw");
       remmove(fieldName);
       return;
     }
     const labourHours = dayjs(currentLabourHours).format(timeFormat);
-    console.log("currentLabourHours", currentLabourHours);
-    console.log("labourHours", labourHours);
-
     const isReset = true;
     const result = await calRemainFromLabourHour(
       remainingHours,
@@ -151,14 +148,13 @@ const TimesheetAllocation = ({
                       <span>Remaining Hours to Allocate:</span>
                       <span className="text-2xl">{remainingHours}</span>
                     </div>
-
                     <Form.Item
                       label="Job"
                       name={[index, "job"]}
                       rules={[
                         {
                           required: true,
-                          message: "Please select your Op/Lab!",
+                          message: "Please select your job!",
                         },
                       ]}
                     >
@@ -167,12 +163,18 @@ const TimesheetAllocation = ({
                     <Form.Item
                       label="Add Supervisor"
                       name={[index, "supervisors"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select your supervisor!",
+                        },
+                      ]}
                     >
                       <Select mode="multiple" options={jobOptions} />
                     </Form.Item>
                     <Form.Item
                       label="Op/Lab"
-                      name="lab"
+                      name={[index, "lab"]}
                       rules={[
                         {
                           required: true,

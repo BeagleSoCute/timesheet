@@ -1,15 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, Form, Button } from "antd";
+import { Modal, Form, Button, Spin } from "antd";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 const propTypes = {
   isOpenModal: PropTypes.bool,
+  loading: PropTypes.bool,
   onClose: PropTypes.func,
   onOk: PropTypes.func,
   handleSetRemaingHour: PropTypes.func,
 };
 const defaultProps = {
   isOpenModal: false,
+  loading: false,
   onClose: () => {},
   onOk: () => {},
   handleSetRemaingHour: () => {},
@@ -18,6 +20,7 @@ const defaultProps = {
 const TimesheetModal = ({
   isOpenModal,
   remainingHours,
+  loading,
   handleSetRemaingHour,
   handleSubmitModal,
   onClose,
@@ -30,19 +33,24 @@ const TimesheetModal = ({
     });
     onClose();
   };
-  const handleOnOk = () => {
-    handleSubmitModal();
+  const handleOnOk = async (value) => {
+    const isSuccess = await handleSubmitModal(value);
+    console.log("isSuccess", isSuccess);
+    if (isSuccess) {
+      form.setFieldsValue({
+        items: [{}],
+      });
+    }
   };
-
   const propsModal = {
     title: "Timesheet Allocation",
     open: isOpenModal,
-    // onOk: () => handleOnOk(),
     footer: [
-      <Button key="cancel" onClick={handleClose}>
+      <Button disabled={loading} key="cancel" onClick={handleClose}>
         Cancel
       </Button>,
       <Button
+        disabled={loading}
         key="submit"
         type="primary"
         htmlType="submit"
@@ -63,7 +71,9 @@ const TimesheetModal = ({
   return (
     <div className="timesheet-modal">
       <Modal centered {...propsModal}>
-        <TimesheetAllocationForm {...propsTimeSheetAllocationForm} />
+        <Spin size="large" spinning={loading}>
+          <TimesheetAllocationForm {...propsTimeSheetAllocationForm} />
+        </Spin>
       </Modal>
     </div>
   );
