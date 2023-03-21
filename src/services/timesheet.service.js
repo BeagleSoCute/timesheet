@@ -24,7 +24,8 @@ export const calculateRemainHours = (value) => {
 export const calRemainFromLabourHour = (
   remainingTime,
   currentSpent,
-  previousSpent
+  previousSpent,
+  isReset
 ) => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const [currentSpentHours, currentSpentMinutes] = currentSpent.split(":");
@@ -47,6 +48,9 @@ export const calRemainFromLabourHour = (
         ? remainingTimeInMillis + (previousSpentInMillis - currentSpentInMillis)
         : remainingTimeInMillis -
           (currentSpentInMillis - previousSpentInMillis);
+  } else if (isReset === true) {
+    remainingTimeInMinutesAfterSubtraction =
+      remainingTimeInMillis + currentSpentInMillis;
   } else {
     remainingTimeInMinutesAfterSubtraction =
       remainingTimeInMillis - currentSpentInMillis;

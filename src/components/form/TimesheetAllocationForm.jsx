@@ -85,126 +85,132 @@ const TimesheetAllocation = ({
     };
     items.splice(index, 1, thisFormItem);
     form.setFieldsValue({ items });
-    console.log("remaining hours is ", result.value);
-    console.log("thisFormItem---==--", thisFormItem);
     handleSetRemaingHour(result.value);
   };
-
-  const handleRemove = (fieldName, remmove) => {
-    console.log("removee");
+  const handleRemove = async (fieldName, index, remmove) => {
+    const thisFormItem =
+      form.getFieldsValue("items")["items"][index].labourHours;
+    const labourHours = dayjs(thisFormItem).format(timeFormat);
+    const isReset = true;
+    const result = await calRemainFromLabourHour(
+      remainingHours,
+      labourHours,
+      undefined,
+      isReset
+    );
+    handleSetRemaingHour(result.value);
     remmove(fieldName);
   };
-
   return (
     <div className="timesheet-allocation px-12 py-5">
-      <div className="form-wrapper">
-        <Form
-          id="timesheet-allo"
-          form={form}
-          name="timesheet-allocation-form"
-          {...formItemLayout}
-          // initialValues={initialValues}
-          onFinish={handleOnFinish}
-        >
-          <Form.List initialValues={initialValues} name="items">
-            {(fields, { add, remove }) => {
-              return (
-                <div>
-                  {fields.map((field, index) => (
-                    <div key={field.key}>
-                      <div className="bg-gray-700  px-4 text-white flex justify-between ">
-                        <h1 className="text-2xl	">
-                          {convertToOrdinalNumber(index)} Allocation
-                        </h1>
-                        <Form.Item className="my-auto">
-                          <Button
-                            onClick={() => handleRemove(field.name, remove)}
-                          >
-                            Remove
-                          </Button>
-                        </Form.Item>
-                      </div>
-                      <div className="remain-hour  flex justify-between px-2 mb-6">
-                        <span>Remaining Hours to Allocate:</span>
-                        <span className="text-2xl">{remainingHours}</span>
-                      </div>
-
-                      <Form.Item
-                        label="Job"
-                        name={[index, "job"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select your Op/Lab!",
-                          },
-                        ]}
-                      >
-                        <Select options={jobOptions} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Add Supervisor"
-                        name={[index, "supervisors"]}
-                      >
-                        <Select mode="multiple" options={jobOptions} />
-                      </Form.Item>
-                      <Form.Item
-                        label="Op/Lab"
-                        name="lab"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select your Op/Lab!",
-                          },
-                        ]}
-                      >
-                        <Select options={jobOptions} />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Description of work"
-                        name={[index, "description"]}
-                      >
-                        <Input.TextArea />
-                      </Form.Item>
-
-                      <Form.Item
-                        label="Labour Hour"
-                        name={[index, "labourHours"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your labour hours!",
-                          },
-                        ]}
-                      >
-                        <TimePicker
-                          onChange={(value) =>
-                            handleCalculateRemainHours(
-                              value,
-                              index,
-                              form.getFieldsValue("items")["items"][index]
-                                .labourHours
-                            )
+      <Form
+        id="timesheet-allo"
+        form={form}
+        name="timesheet-allocation-form"
+        {...formItemLayout}
+        // initialValues={initialValues}
+        onFinish={handleOnFinish}
+      >
+        <Form.List initialValues={initialValues} name="items">
+          {(fields, { add, remove }) => {
+            return (
+              <div>
+                {fields.map((field, index) => (
+                  <div className="form-item mb-10" key={field.key}>
+                    <div className="bg-gray-700  px-4 text-white flex justify-between ">
+                      <h1 className="text-2xl	">
+                        {convertToOrdinalNumber(index)} Allocation
+                      </h1>
+                      <Form.Item className="my-auto">
+                        <Button
+                          onClick={() =>
+                            handleRemove(field.name, index, remove)
                           }
-                          allowClear={false}
-                          showNow={false}
-                          inputReadOnly
-                          format={timeFormat}
-                        />
+                        >
+                          Remove
+                        </Button>
                       </Form.Item>
                     </div>
-                  ))}
-                  <div className="flex justify-center">
-                    <Button className="w-2/3 mt-5" onClick={() => add()}>
-                      Add
-                    </Button>
+                    <div className="remain-hour  flex justify-between px-2 mb-6">
+                      <span>Remaining Hours to Allocate:</span>
+                      <span className="text-2xl">{remainingHours}</span>
+                    </div>
+
+                    <Form.Item
+                      label="Job"
+                      name={[index, "job"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select your Op/Lab!",
+                        },
+                      ]}
+                    >
+                      <Select options={jobOptions} />
+                    </Form.Item>
+                    <Form.Item
+                      label="Add Supervisor"
+                      name={[index, "supervisors"]}
+                    >
+                      <Select mode="multiple" options={jobOptions} />
+                    </Form.Item>
+                    <Form.Item
+                      label="Op/Lab"
+                      name="lab"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please select your Op/Lab!",
+                        },
+                      ]}
+                    >
+                      <Select options={jobOptions} />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Description of work"
+                      name={[index, "description"]}
+                    >
+                      <Input.TextArea />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Labour Hour"
+                      name={[index, "labourHours"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input your labour hours!",
+                        },
+                      ]}
+                    >
+                      <TimePicker
+                        onChange={(value) =>
+                          handleCalculateRemainHours(
+                            value,
+                            index,
+                            form.getFieldsValue("items")["items"][index]
+                              .labourHours
+                          )
+                        }
+                        allowClear={false}
+                        showNow={false}
+                        inputReadOnly
+                        format={timeFormat}
+                      />
+                    </Form.Item>
                   </div>
+                ))}
+                <div className="flex justify-center">
+                  <Button className="w-2/3 mt-5" onClick={() => add()}>
+                    Add
+                  </Button>
                 </div>
-              );
-            }}
-          </Form.List>
-        </Form>
-      </div>
+              </div>
+            );
+          }}
+        </Form.List>
+      </Form>
     </div>
   );
 };
