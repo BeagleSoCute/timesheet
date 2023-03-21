@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Form, TimePicker, Select, Input } from "antd";
 import { jobOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
@@ -38,9 +38,7 @@ const formItemLayout = {
   },
 };
 
-const initialValues = {
-  remainingHour: "6",
-};
+const initialValues = [{}];
 
 const TimesheetAllocation = ({
   form,
@@ -48,10 +46,18 @@ const TimesheetAllocation = ({
   handleSetRemaingHour,
   handleOnOk,
 }) => {
+  useEffect(() => {
+    const init = () => {
+      form.setFieldsValue({
+        items: [{}],
+      });
+    };
+    init();
+  }, []);
+
   const handleOnFinish = () => {
     handleOnOk();
   };
-
   const handleCalculateRemainHours = async (value, index) => {
     const items = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
@@ -111,7 +117,7 @@ const TimesheetAllocation = ({
         // initialValues={initialValues}
         onFinish={handleOnFinish}
       >
-        <Form.List initialValues={initialValues} name="items">
+        <Form.List name="items">
           {(fields, { add, remove }) => {
             return (
               <div>
@@ -121,15 +127,17 @@ const TimesheetAllocation = ({
                       <h1 className="text-2xl	">
                         {convertToOrdinalNumber(index)} Allocation
                       </h1>
-                      <Form.Item className="my-auto">
-                        <Button
-                          onClick={() =>
-                            handleRemove(field.name, index, remove)
-                          }
-                        >
-                          Remove
-                        </Button>
-                      </Form.Item>
+                      {fields.length > 1 && (
+                        <Form.Item className="my-auto">
+                          <Button
+                            onClick={() =>
+                              handleRemove(field.name, index, remove)
+                            }
+                          >
+                            Remove
+                          </Button>
+                        </Form.Item>
+                      )}
                     </div>
                     <div className="remain-hour  flex justify-between px-2 mb-6">
                       <span>Remaining Hours to Allocate:</span>
