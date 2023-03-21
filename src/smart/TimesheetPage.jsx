@@ -23,7 +23,9 @@ const TimesheetPage = () => {
     //remove states in context
   };
 
-  const handleSubmit = () => {};
+  const handleSubmitModal = (value) => {
+    console.log("handleSubmitModal");
+  };
 
   const handleSetRemaingHour = (value) => {
     setRemainingHour(value);
@@ -33,8 +35,8 @@ const TimesheetPage = () => {
     isOpenModal,
     remainingHours,
     handleSetRemaingHour,
+    handleSubmitModal,
     onClose: handlecloseModal,
-    onOk: handleSubmit,
   };
   const propsTimesheetForm = {
     data: timesheetData,

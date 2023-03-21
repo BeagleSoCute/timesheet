@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { Modal, Form } from "antd";
+import { Modal, Form, Button } from "antd";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 const propTypes = {
   isOpenModal: PropTypes.bool,
@@ -19,7 +19,7 @@ const TimesheetModal = ({
   isOpenModal,
   remainingHours,
   handleSetRemaingHour,
-  onOk,
+  handleSubmitModal,
   onClose,
 }) => {
   const [form] = Form.useForm();
@@ -27,11 +27,27 @@ const TimesheetModal = ({
     form.resetFields();
     onClose();
   };
+  const handleOnOk = () => {
+    handleSubmitModal();
+  };
 
   const propsModal = {
     title: "Timesheet Allocation",
     open: isOpenModal,
-    onOk: () => onOk(),
+    // onOk: () => handleOnOk(),
+    footer: [
+      <Button key="cancel" onClick={handleClose}>
+        Cancel
+      </Button>,
+      <Button
+        key="submit"
+        type="primary"
+        htmlType="submit"
+        form="timesheet-allo"
+      >
+        Submit
+      </Button>,
+    ],
     onCancel: () => handleClose(),
     width: 1000,
   };
@@ -39,6 +55,7 @@ const TimesheetModal = ({
     form,
     remainingHours,
     handleSetRemaingHour,
+    handleOnOk,
   };
   return (
     <div className="timesheet-modal">
