@@ -1,10 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Button, Form, TimePicker, Select, Input } from "antd";
 import { jobOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs from "dayjs";
 import { calRemainFromLabourHour } from "services/timesheet.service";
+import PropTypes from "prop-types";
+
+const propTypes = {
+  remainingHours: PropTypes.string,
+  handleSetRemaingHour: PropTypes.func,
+};
+const defaultProps = {
+  remainingHours: "",
+  handleSetRemaingHour: () => {},
+};
 
 const formItemLayout = {
   labelCol: {
@@ -29,26 +39,50 @@ const initialValues = {
   remainingHour: "6",
 };
 
-const TimesheetAllocation = ({ remainingHours, setRemainingHour }) => {
-  const [form] = Form.useForm();
+const TimesheetAllocation = ({
+  form,
+  remainingHours,
+  handleSetRemaingHour,
+}) => {
   const handleOnFinish = () => {};
-  const handleCalculateRemainHours = async (index, addFunc, removeFunc) => {
+  const handleCalculateRemainHours = async (value, index) => {
     console.log("----called");
-    const labourHours = dayjs(
-      form.getFieldsValue().items[index].labourHours
-    ).format(timeFormat);
-    const totalHours = calRemainFromLabourHour(remainingHours, labourHours);
-    setRemainingHour(totalHours);
-    // console.log("remain", remain);
-    // console.log("labourHours", labourHours);
-    // console.log("totalHours", totalHours);
-    // const totalHours = remainingHour - labourHours; //calhere
-    console.log("remain----------beforeee-------------", remainingHours === "");
 
-    if (remainingHours !== "00:00") {
-      console.log("remain-----------------------", remainingHours);
-      addFunc();
-    }
+    const items = form.getFieldsValue("items")["items"];
+    let thisFormItem = form.getFieldsValue("items")["items"][index];
+    const previousLabourHour = thisFormItem.previousLabourHour
+      ? thisFormItem.previousLabourHour
+      : value;
+    console.log(
+      "inspect condition",
+      thisFormItem.previousLabourHour ? true : false
+    );
+    const modifyPreviousLabourHourD =
+      dayjs(previousLabourHour).format(timeFormat);
+
+    console.log("modifyPreviousLabourHourD", modifyPreviousLabourHourD);
+
+    const labourHours = dayjs(value).format(timeFormat);
+    console.log("labourHours", labourHours);
+
+    const totalHours = await calRemainFromLabourHour(
+      remainingHours,
+      labourHours,
+      modifyPreviousLabourHourD
+    );
+    thisFormItem = {
+      ...thisFormItem,
+      previousLabourHour,
+    };
+    items.splice(index, 1, thisFormItem);
+    form.setFieldsValue({ items });
+    console.log("thisFormItem---==--", thisFormItem);
+    handleSetRemaingHour(totalHours);
+  };
+
+  const handleRemove = (fieldName, remmove) => {
+    console.log("removee");
+    remmove(fieldName);
   };
 
   return (
@@ -134,8 +168,13 @@ const TimesheetAllocation = ({ remainingHours, setRemainingHour }) => {
                       ]}
                     >
                       <TimePicker
-                        onChange={() =>
-                          handleCalculateRemainHours(index, add, remove)
+                        onChange={(value) =>
+                          handleCalculateRemainHours(
+                            value,
+                            index,
+                            form.getFieldsValue("items")["items"][index]
+                              .labourHours
+                          )
                         }
                         allowClear={false}
                         showNow={false}
@@ -144,7 +183,9 @@ const TimesheetAllocation = ({ remainingHours, setRemainingHour }) => {
                       />
                     </Form.Item>
                     <Form.Item>
-                      <Button onClick={() => remove(field.name)}>Remove</Button>
+                      <Button onClick={() => handleRemove(field.name, remove)}>
+                        Remove
+                      </Button>
                     </Form.Item>
                   </div>
                 ))}
@@ -159,5 +200,8 @@ const TimesheetAllocation = ({ remainingHours, setRemainingHour }) => {
     </div>
   );
 };
+
+TimesheetAllocation.propTypes = propTypes;
+TimesheetAllocation.defaultProps = defaultProps;
 
 export default TimesheetAllocation;

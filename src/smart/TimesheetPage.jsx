@@ -17,6 +17,7 @@ const TimesheetPage = () => {
   };
 
   const handlecloseModal = () => {
+    console.log("handleSetRemaingHour is called");
     setOpenModal(false);
     setRemainingHour("");
     //remove states in context
@@ -24,10 +25,14 @@ const TimesheetPage = () => {
 
   const handleSubmit = () => {};
 
+  const handleSetRemaingHour = (value) => {
+    setRemainingHour(value);
+  };
+
   const propsModal = {
     isOpenModal,
     remainingHours,
-    setRemainingHour,
+    handleSetRemaingHour,
     onClose: handlecloseModal,
     onOk: handleSubmit,
   };

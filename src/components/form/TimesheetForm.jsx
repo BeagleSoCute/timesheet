@@ -3,15 +3,7 @@ import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
-import {
-  Button,
-  DatePicker,
-  Form,
-  Input,
-  TimePicker,
-  Alert,
-  InputNumber,
-} from "antd";
+import { Button, DatePicker, Form, TimePicker, Alert, InputNumber } from "antd";
 import dayjs from "dayjs";
 
 const propTypes = {

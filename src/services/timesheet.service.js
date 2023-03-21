@@ -21,21 +21,32 @@ export const calculateRemainHours = (value) => {
   console.log(`Remaining time: ${remainingTime}`);
   return remainingTime;
 };
-
-export const calRemainFromLabourHour = (remainingTime, timeSpent) => {
-  console.log("remainingTime", remainingTime);
-  console.log("timeSpent", timeSpent);
-
+export const calRemainFromLabourHour = (
+  remainingTime,
+  currentSpent,
+  previousSpent
+) => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
+  const [currentSpentHours, currentSpentMinutes] = currentSpent.split(":");
+  const [previousSpentHours, previousSpentMinutes] = previousSpent.split(":");
+  // console.log("current", currentSpent);
+  // console.log("previous", previousSpent);
+
   const remainingTimeInMillis =
     remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
 
-  const [timeSpentHours, timeSpentMinutes] = timeSpent.split(":");
-  const timeSpentInMillis =
-    timeSpentHours * 60 * 60 * 1000 + timeSpentMinutes * 60 * 1000;
+  const currentSpentInMillis =
+    currentSpentHours * 60 * 60 * 1000 + currentSpentMinutes * 60 * 1000;
+
+  const previousSpentInMillis =
+    previousSpentHours * 60 * 60 * 1000 + previousSpentMinutes * 60 * 1000;
 
   const remainingTimeInMinutesAfterSubtraction =
-    remainingTimeInMillis - timeSpentInMillis;
+    currentSpentInMillis < previousSpentInMillis
+      ? remainingTimeInMillis + (previousSpentInMillis - currentSpentInMillis)
+      : remainingTimeInMillis - currentSpentInMillis;
+  // console.log("currentSpentInMillis", currentSpentInMillis);
+  // console.log("previousSpentInMillis", previousSpentInMillis);
 
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
@@ -44,6 +55,6 @@ export const calRemainFromLabourHour = (remainingTime, timeSpent) => {
           .duration(remainingTimeInMinutesAfterSubtraction, "milliseconds")
           .format("HH:mm");
 
-  console.log(remainingTimeFormatted);
+  // console.log(remainingTimeFormatted);
   return remainingTimeFormatted;
 };
