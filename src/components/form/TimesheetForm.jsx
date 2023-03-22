@@ -108,6 +108,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         <Form.Item label="Start Time" name="startTime">
           <TimePicker
             disabled={isStartTimeCorrect}
+            // disabledHours={disabledStartTime}
             allowClear={false}
             showNow={false}
             inputReadOnly
@@ -131,6 +132,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           ]}
         >
           <TimePicker
+            // disabledHours={disabledFinishTime}
             allowClear={false}
             showNow={false}
             inputReadOnly
