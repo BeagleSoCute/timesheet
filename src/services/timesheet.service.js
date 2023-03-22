@@ -8,6 +8,7 @@ dayjs.extend(duration);
 
 export const calculateRemainHours = (value) => {
   const { startDate, startTime, finishDate, finishTime, breaksTime } = value;
+  console.log("breaksTime", breaksTime);
   const startDateTime = dayjs(startDate + " " + startTime, "DD-MM-YYYY HH:mm");
   const finishDateTime = dayjs(
     finishDate + " " + finishTime,
@@ -76,7 +77,6 @@ export const arrayToString = (arr) => {
 };
 
 export const trasformSubmitAllocatedHours = (value) => {
-  console.log("func", value);
   return value.map((item) => {
     return {
       ...item,

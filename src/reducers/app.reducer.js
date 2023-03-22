@@ -4,6 +4,7 @@ const TYPES = {
   SET_USER: "SET_USER",
   SET_NOTIFICATION: "SET_NOTIFICATION",
   SET_ALLOCATED_HOURS: "SET_ALLOCATED_HOURSs",
+  CLEAR_TIMESHEET_DATA: "CLEAR_TIMESHEET_DATA",
 };
 
 const defaultValue = {
@@ -28,6 +29,8 @@ const reducer = (state, action) => {
       return { ...state, notificationData: payload };
     case TYPES.SET_ALLOCATED_HOURS:
       return { ...state, allocatedData: payload };
+    case TYPES.CLEAR_TIMESHEET_DATA:
+      return { ...state, timesheetData: {} };
     default:
       break;
   }

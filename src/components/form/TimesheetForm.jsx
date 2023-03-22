@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
@@ -36,6 +36,9 @@ const formItemLayout = {
 
 const TimesheetForm = ({ data, onOpenModal }) => {
   const [form] = Form.useForm();
+  const [isBreak, setIsBreak] = useState(true);
+  const [isStartTimeCorrect, setIsStartTimeCorrect] = useState(true);
+
   const handleOnFinish = (value) => {
     const result = {
       ...value,
@@ -43,7 +46,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
       startTime: dayjs(value.startTime).format(timeFormat),
       finishDate: dayjs(value.finishDate).format(dateFormat),
       finishTime: dayjs(value.finishTime).format(timeFormat),
-      breaksTime: dayjs(value.breaksTime).format("mm"),
+      breaksTime: isBreak ? dayjs(value.breaksTime).format("mm") : "00",
     };
     onOpenModal(result);
   };
@@ -63,6 +66,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
     const finishDate = form.getFieldValue("finishDate");
     return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
   };
+
   return (
     <div className="timesheet-form">
       <h1 className="text-center mb-5">Time Sheet</h1>
@@ -73,7 +77,6 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         {...formItemLayout}
         initialValues={initialValues}
         onFinish={handleOnFinish}
-        autoComplete="off"
       >
         <Form.Item
           label="Enter Pin"
@@ -84,7 +87,10 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         </Form.Item>
 
         <Form.Item label="Is the Start time correct" name="isStartTimeCorrect">
-          <Radio.Group size="large">
+          <Radio.Group
+            onChange={(e) => setIsStartTimeCorrect(e.target.value)}
+            size="large"
+          >
             <Radio.Button value={true}>Yes </Radio.Button>
             <Radio.Button value={false}>No</Radio.Button>
           </Radio.Group>
@@ -93,6 +99,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         <Form.Item label="Start Date" name="startDate">
           <DatePicker
             disabledDate={handleDisabledStartDate}
+            disabled={isStartTimeCorrect}
             allowClear={false}
             inputReadOnly
             format={dateFormat}
@@ -100,6 +107,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         </Form.Item>
         <Form.Item label="Start Time" name="startTime">
           <TimePicker
+            disabled={isStartTimeCorrect}
             allowClear={false}
             showNow={false}
             inputReadOnly
@@ -130,7 +138,10 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           />
         </Form.Item>
         <Form.Item label="Have you taken a break" name="isTakenBreak">
-          <Radio.Group size="large">
+          <Radio.Group
+            onChange={(e) => setIsBreak(e.target.value)}
+            size="large"
+          >
             <Radio.Button value={true}>Yes </Radio.Button>
             <Radio.Button value={false}>No</Radio.Button>
           </Radio.Group>
@@ -139,13 +150,14 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           label="Total miniutes of breaks taken this day? Include paid and unpaid breaks"
           name="breaksTime"
           rules={[
-            {
+            isBreak && {
               required: true,
               message: "Please input your total minutes of breaks!",
             },
           ]}
         >
           <TimePicker
+            disabled={!isBreak}
             allowClear={false}
             showNow={false}
             inputReadOnly

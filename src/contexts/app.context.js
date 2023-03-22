@@ -10,6 +10,7 @@ export const AppContext = createContext({
   setLoading: () => {},
   setAuth: () => {},
   setAllocatedHours: () => {},
+  clearTimesheetData: () => {},
 });
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }) => {
@@ -40,6 +41,9 @@ export const AppProvider = ({ children }) => {
       },
       setAllocatedHours: (data) => {
         dispatch({ type: TYPES.SET_ALLOCATED_HOURS, payload: data });
+      },
+      clearTimesheetData: (data) => {
+        dispatch({ type: TYPES.CLEAR_TIMESHEET_DATA, payload: data });
       },
     };
   }, [loading, isAuth, timesheetData, allocatedData, dispatch]);

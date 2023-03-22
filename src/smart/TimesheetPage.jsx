@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import TimesheetForm from "components/form/TimesheetForm";
 import TimesheetModal from "components/modal/TimesheetModal";
@@ -7,7 +8,7 @@ import {
   trasformSubmitAllocatedHours,
 } from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
-import { Modal } from "antd";
+import { Modal, Button } from "antd";
 import TableData from "components/common/TableData";
 
 const tableColums = [
@@ -39,9 +40,14 @@ const tableColums = [
 ];
 
 const TimesheetPage = () => {
+  const navigate = useNavigate();
   const [isOpenModal, setOpenModal] = useState(false);
-  const { timesheetData, allocatedData, setAllocatedHours } =
-    useContext(AppContext);
+  const {
+    timesheetData,
+    allocatedData,
+    setAllocatedHours,
+    clearTimesheetData,
+  } = useContext(AppContext);
   const [remainingHours, setRemainingHour] = useState("");
   const [loadingModal, setLoadingModal] = useState(false);
 
@@ -103,6 +109,15 @@ const TimesheetPage = () => {
     setRemainingHour(value);
   };
 
+  const handleSignout = () => {
+    notification({
+      type: "success",
+      message: "Sign out Success",
+    });
+    clearTimesheetData();
+    navigate("/");
+  };
+
   const propsModal = {
     isOpenModal,
     remainingHours,
@@ -122,10 +137,15 @@ const TimesheetPage = () => {
   return (
     <div className="timesheet-page">
       <TimesheetForm {...propsTimesheetForm} />
-      <div className="mt-20 font-bold">
-        <p>Allocated hours</p>
-        <TableData {...propsTableData} />
-      </div>
+      {allocatedData.length !== 0 && (
+        <>
+          <div className="mt-20 font-bold">
+            <p>Allocated hours</p>
+            <TableData {...propsTableData} />
+          </div>
+          <Button onClick={() => handleSignout()}>Sign out</Button>
+        </>
+      )}
       <TimesheetModal {...propsModal} />
     </div>
   );
