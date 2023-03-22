@@ -77,9 +77,10 @@ export const arrayToString = (arr) => {
 };
 
 export const trasformSubmitAllocatedHours = (value) => {
-  return value.map((item) => {
+  return value.map((item, index) => {
     return {
       ...item,
+      key: index,
       labourHours: dayjs(item.labourHours).format(timeFormat),
       supervisors: arrayToString(item.supervisors),
     };
