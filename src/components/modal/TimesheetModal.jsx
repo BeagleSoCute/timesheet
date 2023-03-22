@@ -27,7 +27,6 @@ const TimesheetModal = ({
 }) => {
   const [form] = Form.useForm();
   const handleClose = () => {
-    // form.resetFields();
     form.setFieldsValue({
       items: [{}],
     });
@@ -35,7 +34,6 @@ const TimesheetModal = ({
   };
   const handleOnOk = async (value) => {
     const isSuccess = await handleSubmitModal(value);
-    console.log("isSuccess", isSuccess);
     if (isSuccess) {
       form.setFieldsValue({
         items: [{}],

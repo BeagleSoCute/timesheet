@@ -6,14 +6,16 @@ export const AppContext = createContext({
   loading: false,
   isAuth: false,
   timesheetData: {},
+  allocatedData: [],
   setLoading: () => {},
   setAuth: () => {},
+  setAllocatedHours: () => {},
 });
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
   const [reducerStates, dispatch] = useReducer(reducer, defaultValue);
-  const { loading, isAuth, timesheetData } = reducerStates;
+  const { loading, isAuth, timesheetData, allocatedData } = reducerStates;
   useEffect(() => {
     const init = async () => {
       if (!isAuth) {
@@ -29,14 +31,18 @@ export const AppProvider = ({ children }) => {
       loading,
       isAuth,
       timesheetData,
+      allocatedData,
       setLoading: (data) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
       setAuth: (data) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
+      setAllocatedHours: (data) => {
+        dispatch({ type: TYPES.SET_ALLOCATED_HOURS, payload: data });
+      },
     };
-  }, [loading, isAuth, timesheetData, dispatch]);
+  }, [loading, isAuth, timesheetData, allocatedData, dispatch]);
   return (
     <AppContext.Provider value={appContextValue}>
       {children}

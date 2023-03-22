@@ -1,4 +1,13 @@
 export const jobOptions = [
-  { value: "frontend", label: "Front-end developer" },
-  { value: "backend", label: "Back-end developer" },
+  { value: "Front-end developer", label: "Front-end developer" },
+  { value: "Back-end developer", label: "Back-end developer" },
+];
+export const supervisorOptions = [
+  { value: "Isabella Brown", label: "Isabella Brown" },
+  { value: "Jacob Miller", label: "Jacob Miller" },
+];
+
+export const labOptions = [
+  { value: "Labbour", label: "Labbour" },
+  { value: "Operature", label: "Operature" },
 ];

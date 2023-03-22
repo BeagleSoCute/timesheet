@@ -1,3 +1,4 @@
+import { timeFormat } from "constants/format";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
@@ -68,4 +69,19 @@ export const calRemainFromLabourHour = (
 
   // console.log(remainingTimeFormatted);
   return remainingTimeFormatted;
+};
+
+export const arrayToString = (arr) => {
+  return arr.join(", ");
+};
+
+export const trasformSubmitAllocatedHours = (value) => {
+  console.log("func", value);
+  return value.map((item) => {
+    return {
+      ...item,
+      labourHours: dayjs(item.labourHours).format(timeFormat),
+      supervisors: arrayToString(item.supervisors),
+    };
+  });
 };

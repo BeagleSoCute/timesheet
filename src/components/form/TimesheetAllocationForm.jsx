@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Button, Form, TimePicker, Select, Input } from "antd";
-import { jobOptions } from "data/options";
+import { jobOptions, supervisorOptions, labOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs from "dayjs";
@@ -37,9 +37,6 @@ const formItemLayout = {
     },
   },
 };
-
-const initialValues = [{}];
-
 const TimesheetAllocation = ({
   form,
   remainingHours,
@@ -54,7 +51,6 @@ const TimesheetAllocation = ({
     };
     init();
   }, [form]);
-
   const handleOnFinish = (value) => {
     const { items } = value;
     handleOnOk(items);
@@ -119,7 +115,6 @@ const TimesheetAllocation = ({
         form={form}
         name="timesheet-allocation-form"
         {...formItemLayout}
-        // initialValues={initialValues}
         onFinish={handleOnFinish}
       >
         <Form.List name="items">
@@ -170,7 +165,7 @@ const TimesheetAllocation = ({
                         },
                       ]}
                     >
-                      <Select mode="multiple" options={jobOptions} />
+                      <Select mode="multiple" options={supervisorOptions} />
                     </Form.Item>
                     <Form.Item
                       label="Op/Lab"
@@ -182,7 +177,7 @@ const TimesheetAllocation = ({
                         },
                       ]}
                     >
-                      <Select options={jobOptions} />
+                      <Select options={labOptions} />
                     </Form.Item>
 
                     <Form.Item

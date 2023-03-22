@@ -2,13 +2,46 @@ import React, { useContext, useState } from "react";
 import { AppContext } from "contexts/app.context";
 import TimesheetForm from "components/form/TimesheetForm";
 import TimesheetModal from "components/modal/TimesheetModal";
-import { calculateRemainHours } from "services/timesheet.service";
+import {
+  calculateRemainHours,
+  trasformSubmitAllocatedHours,
+} from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
 import { Modal } from "antd";
+import TableData from "components/common/TableData";
+
+const tableColums = [
+  {
+    title: "Job",
+    dataIndex: "job",
+    key: "job",
+  },
+  {
+    title: "CC",
+    dataIndex: "supervisors",
+    key: "supervisors",
+  },
+  {
+    title: "Op/Lab",
+    dataIndex: "lab",
+    key: "lab",
+  },
+  {
+    title: "Asset",
+    dataIndex: "asset",
+    key: "asset",
+  },
+  {
+    title: "Hours",
+    dataIndex: "labourHours",
+    key: "labourHours",
+  },
+];
 
 const TimesheetPage = () => {
   const [isOpenModal, setOpenModal] = useState(false);
-  const { timesheetData } = useContext(AppContext);
+  const { timesheetData, allocatedData, setAllocatedHours } =
+    useContext(AppContext);
   const [remainingHours, setRemainingHour] = useState("");
   const [loadingModal, setLoadingModal] = useState(false);
 
@@ -35,7 +68,6 @@ const TimesheetPage = () => {
       return false;
     }
     setLoadingModal(true);
-
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const success = true; //handler error when get error from the backend
@@ -51,6 +83,7 @@ const TimesheetPage = () => {
             onCancel: () => handlecloseModal(),
           });
           setLoadingModal(false);
+          setAllocatedHours(value);
           setRemainingHour("");
           resolve(true);
         } else {
@@ -82,9 +115,17 @@ const TimesheetPage = () => {
     data: timesheetData,
     onOpenModal: handleOpenModal,
   };
+  const propsTableData = {
+    columns: tableColums,
+    data: trasformSubmitAllocatedHours(allocatedData),
+  };
   return (
     <div className="timesheet-page">
       <TimesheetForm {...propsTimesheetForm} />
+      <div className="mt-20 font-bold">
+        <p>Allocated hours</p>
+        <TableData {...propsTableData} />
+      </div>
       <TimesheetModal {...propsModal} />
     </div>
   );

@@ -1,10 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
 import { Button, DatePicker, Form, TimePicker, Alert, InputNumber } from "antd";
 import dayjs from "dayjs";
+import { notification } from "helpers/notification.helper";
 
 const propTypes = {
   data: PropTypes.object,
@@ -55,6 +55,14 @@ const TimesheetForm = ({ data, onOpenModal }) => {
     isStartTimeCorrect: true,
     isTakenBreak: true,
   };
+  const handleDisabledEndDate = (current) => {
+    const startDate = form.getFieldValue("startDate");
+    return current && current.isBefore(dayjs(startDate).endOf("day"), "day");
+  };
+  const handleDisabledStartDate = (current) => {
+    const finishDate = form.getFieldValue("finishDate");
+    return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
+  };
   return (
     <div className="timesheet-form">
       <h1 className="text-center mb-5">Time Sheet</h1>
@@ -83,7 +91,12 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         </Form.Item>
 
         <Form.Item label="Start Date" name="startDate">
-          <DatePicker allowClear={false} inputReadOnly format={dateFormat} />
+          <DatePicker
+            disabledDate={handleDisabledStartDate}
+            allowClear={false}
+            inputReadOnly
+            format={dateFormat}
+          />
         </Form.Item>
         <Form.Item label="Start Time" name="startTime">
           <TimePicker
@@ -94,7 +107,12 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           />
         </Form.Item>
         <Form.Item label="Finish Date" name="finishDate">
-          <DatePicker allowClear={false} inputReadOnly format={dateFormat} />
+          <DatePicker
+            disabledDate={handleDisabledEndDate}
+            allowClear={false}
+            inputReadOnly
+            format={dateFormat}
+          />
         </Form.Item>
 
         <Form.Item
