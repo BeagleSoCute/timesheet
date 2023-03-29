@@ -23,6 +23,10 @@ code {
   text-align: start;
 }
 
+.ant-col.ant-form-item-label{
+  font-weight: bold;
+}
+
 
 @tailwind base;
 @tailwind components;

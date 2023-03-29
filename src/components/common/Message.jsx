@@ -1,5 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
+
+const propTypes = {
+  instructionMessage: PropTypes.string,
+};
+const defaultProps = {
+  instructionMessage: "No instruction message",
+};
 
 const Message = ({ instructionMessage }) => {
   return (
@@ -22,5 +30,8 @@ const StyledDiv = styled.div`
     }
   }
 `;
+
+Message.propTypes = propTypes;
+Message.defaultProps = defaultProps;
 
 export default Message;

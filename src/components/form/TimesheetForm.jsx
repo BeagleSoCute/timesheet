@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
-import { Button, DatePicker, Form, TimePicker, Alert, InputNumber } from "antd";
+import { DatePicker, Form, TimePicker, InputNumber } from "antd";
 import dayjs from "dayjs";
 import { notification } from "helpers/notification.helper";
+import Message from "components/common/Message";
+import styled from "styled-components";
+import Button from "components/common/Button";
 
 const propTypes = {
   data: PropTypes.object,
@@ -68,9 +71,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
   };
 
   return (
-    <div className="timesheet-form">
-      <h1 className="text-center mb-5">Time Sheet</h1>
-      <Alert className="mb-8" message="Welcome, Brunton" type="info" />
+    <StyledDiv className="timesheet-form">
       <Form
         form={form}
         name="basic"
@@ -79,19 +80,24 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         onFinish={handleOnFinish}
       >
         <Form.Item
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           label="Enter Pin"
           name="pin"
           rules={[{ required: true, message: "Please input your pin!" }]}
         >
-          <InputNumber controls={false} />
+          <InputNumber className="w-full" controls={false} />
         </Form.Item>
-
+        <Message instructionMessage="This is your SIGN OUT screen, enter finish time below" />
         <Form.Item label="Is the Start time correct" name="isStartTimeCorrect">
           <Radio.Group
+            className="is-time-correct"
             onChange={(e) => setIsStartTimeCorrect(e.target.value)}
             size="large"
           >
-            <Radio.Button value={true}>Yes </Radio.Button>
+            <Radio.Button className="mx-2" value={true}>
+              Yes
+            </Radio.Button>
             <Radio.Button value={false}>No</Radio.Button>
           </Radio.Group>
         </Form.Item>
@@ -141,14 +147,19 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         </Form.Item>
         <Form.Item label="Have you taken a break" name="isTakenBreak">
           <Radio.Group
+            className="is-taken-break"
             onChange={(e) => setIsBreak(e.target.value)}
             size="large"
           >
-            <Radio.Button value={true}>Yes </Radio.Button>
+            <Radio.Button className="mx-2" value={true}>
+              Yes
+            </Radio.Button>
             <Radio.Button value={false}>No</Radio.Button>
           </Radio.Group>
         </Form.Item>
         <Form.Item
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           label="Total miniutes of breaks taken this day? Include paid and unpaid breaks"
           name="breaksTime"
           rules={[
@@ -159,6 +170,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           ]}
         >
           <TimePicker
+            className="w-full"
             disabled={!isBreak}
             allowClear={false}
             showNow={false}
@@ -167,15 +179,57 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           />
         </Form.Item>
 
-        <Form.Item className="button-submit-layout flex justify-center mt-8 ">
-          <Button className="button-submit  " type="primary" htmlType="submit">
-            Allocate
-          </Button>
+        <Form.Item className=" flex justify-center mt-8 ">
+          <Button
+            type="primary"
+            label="Allocate..."
+            isPrimary={false}
+            htmlType="submit"
+          />
         </Form.Item>
       </Form>
-    </div>
+    </StyledDiv>
   );
 };
+
+const StyledDiv = styled.div`
+  &.timesheet-form {
+    .ant-radio-button-wrapper {
+      span {
+        color: white;
+        font-weight: bold;
+      }
+    }
+    .is-time-correct
+      .ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item {
+      background-color: #48ff00;
+      border-color: #48ff00;
+    }
+
+    .is-taken-break
+      .ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item {
+      background-color: #e9c250;
+      border-color: #e9c250;
+    }
+
+    .ant-radio-button-wrapper.ant-radio-button-wrapper-in-form-item {
+      background-color: #cccccc;
+      border-color: #cccccc;
+    }
+    .ant-radio-button-wrapper:first-child {
+      border-start-start-radius: 0px;
+      border-end-start-radius: 0px;
+    }
+    .ant-radio-button-wrapper:last-child {
+      border-start-end-radius: 0px;
+      border-end-end-radius: 0px;
+    }
+
+    label.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item::before {
+      background-color: none !important;
+    }
+  }
+`;
 
 TimesheetForm.propTypes = propTypes;
 TimesheetForm.defaultProps = defaultProps;
