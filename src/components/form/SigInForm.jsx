@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
-import companyLogo from "assets/images/company_logo.png";
 import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
 import dayjs from "dayjs";
 import Button from "components/common/Button";
+import Message from "components/common/Message";
 
 const propTypes = {
   onFinish: PropTypes.func,
@@ -36,13 +36,7 @@ const formItemLayout = {
 
 const SignInForm = ({ onFinish }) => {
   const [form] = Form.useForm();
-
   const handleOnFinish = (value) => {
-    // const result = {
-    //   ...value,
-    //   startDate: dayjs(value.startDate).format(dateFormat),
-    //   startTime: dayjs(value.startTime).format(timeFormat),
-    // };
     onFinish(value);
   };
   const initialValues = {
@@ -51,7 +45,6 @@ const SignInForm = ({ onFinish }) => {
   };
   return (
     <StyledDiv className="sigin-form">
-      <img className="w-full h-64  object-contain" src={companyLogo} />
       <Form
         form={form}
         name="basic"
@@ -69,16 +62,7 @@ const SignInForm = ({ onFinish }) => {
         >
           <InputNumber className="w-full" controls={false} />
         </Form.Item>
-
-        <div className="message-wrapper mb-0 bg-blue-900	">
-          <p className="text-white font-bold	">Welcome, Brunton</p>
-        </div>
-        <div className="message-wrapper mb-5   bg-red-600	">
-          <p className="text-white font-bold	">
-            This is the Sign In screen enter your start time below
-          </p>
-        </div>
-
+        <Message instructionMessage="This is the Sign In screen enter your start time below" />
         <Form.Item label="Start Date" name="startDate">
           <DatePicker inputReadOnly format={dateFormat} allowClear={false} />
         </Form.Item>
@@ -97,7 +81,7 @@ const SignInForm = ({ onFinish }) => {
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >
-          <Select options={jobOptions} />
+          <Select mode="multiple" options={jobOptions} />
         </Form.Item>
 
         <Form.Item className="flex justify-center mt-8 ">
@@ -110,12 +94,6 @@ const SignInForm = ({ onFinish }) => {
 
 const StyledDiv = styled.div`
   &.sigin-form {
-    .message-wrapper {
-      p {
-        padding: 10px;
-        margin: 0px;
-      }
-    }
   }
 `;
 

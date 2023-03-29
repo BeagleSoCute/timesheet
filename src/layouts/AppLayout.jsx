@@ -4,8 +4,8 @@ import { Layout, Spin } from "antd";
 import { useNavigate, Link } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import { Outlet } from "react-router-dom";
-const { Header } = Layout;
-const menuItems = [{ key: 1, label: "Home", path: "/" }];
+import companyLogo from "assets/images/company_logo.png";
+
 const AppLayout = () => {
   const { loading } = useContext(AppContext);
   const navigate = useNavigate();
@@ -23,13 +23,15 @@ const AppLayout = () => {
         </span>
       </div>
       <div className="w-full  h-screen p-3 bg-white">
+        <img className="w-full h-64  object-contain" src={companyLogo} />
+
         {loading ? (
           <div className="spin">
             <Spin size="large">{loading}</Spin>
           </div>
         ) : (
           <>
-            <Outlet className="" />
+            <Outlet />
           </>
         )}
       </div>
