@@ -54,6 +54,7 @@ const SignInForm = ({ onFinish }) => {
         autoComplete="off"
       >
         <Form.Item
+          colon={false}
           label="Enter Pin"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
@@ -63,10 +64,10 @@ const SignInForm = ({ onFinish }) => {
           <InputNumber className="w-full" controls={false} />
         </Form.Item>
         <Message instructionMessage="This is the Sign In screen enter your start time below" />
-        <Form.Item label="Start Date" name="startDate">
+        <Form.Item colon={false} label="Start Date" name="startDate">
           <DatePicker inputReadOnly format={dateFormat} allowClear={false} />
         </Form.Item>
-        <Form.Item label="Start Time" name="startTime">
+        <Form.Item colon={false} label="Start Time" name="startTime">
           <TimePicker
             showNow={false}
             inputReadOnly
@@ -75,6 +76,7 @@ const SignInForm = ({ onFinish }) => {
           />
         </Form.Item>
         <Form.Item
+          colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           label="Select Job"
@@ -84,7 +86,7 @@ const SignInForm = ({ onFinish }) => {
           <Select mode="multiple" options={jobOptions} />
         </Form.Item>
 
-        <Form.Item className="flex justify-center mt-8 ">
+        <Form.Item colon={false} className="flex justify-center mt-8 ">
           <Button label="Sign In" type="primary" htmlType="submit" />
         </Form.Item>
       </Form>

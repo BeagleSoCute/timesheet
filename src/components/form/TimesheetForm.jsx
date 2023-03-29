@@ -8,6 +8,7 @@ import { notification } from "helpers/notification.helper";
 import Message from "components/common/Message";
 import styled from "styled-components";
 import Button from "components/common/Button";
+import { renderFieldTitle } from "helpers/form.helper";
 
 const propTypes = {
   data: PropTypes.object,
@@ -80,6 +81,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         onFinish={handleOnFinish}
       >
         <Form.Item
+          colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           label="Enter Pin"
@@ -89,7 +91,14 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           <InputNumber className="w-full" controls={false} />
         </Form.Item>
         <Message instructionMessage="This is your SIGN OUT screen, enter finish time below" />
-        <Form.Item label="Is the Start time correct" name="isStartTimeCorrect">
+        <Form.Item
+          colon={false}
+          label={renderFieldTitle(
+            "Is the Start time correct",
+            "You can only change the time not the date of this field"
+          )}
+          name="isStartTimeCorrect"
+        >
           <Radio.Group
             className="is-time-correct"
             onChange={(e) => setIsStartTimeCorrect(e.target.value)}
@@ -102,7 +111,14 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="Start Date" name="startDate">
+        <Form.Item
+          colon={false}
+          label={renderFieldTitle(
+            "Actual Start Date / Time",
+            "If you want to change your start tie, you need to resubmi your timesheet. Enter No and resubmit"
+          )}
+          name="startDate"
+        >
           <DatePicker
             disabledDate={handleDisabledStartDate}
             disabled={isStartTimeCorrect}
@@ -111,7 +127,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
             format={dateFormat}
           />
         </Form.Item>
-        <Form.Item label="Start Time" name="startTime">
+        <Form.Item colon={false} label="Start Time" name="startTime">
           <TimePicker
             disabled={isStartTimeCorrect}
             // disabledHours={disabledStartTime}
@@ -121,7 +137,14 @@ const TimesheetForm = ({ data, onOpenModal }) => {
             format={timeFormat}
           />
         </Form.Item>
-        <Form.Item label="Finish Date" name="finishDate">
+        <Form.Item
+          colon={false}
+          label={renderFieldTitle(
+            "Finish Date",
+            "You can not back date this date, if you have forgotten your timesheet ypu must contact your manager"
+          )}
+          name="finishDate"
+        >
           <DatePicker
             disabledDate={handleDisabledEndDate}
             allowClear={false}
@@ -131,6 +154,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
         </Form.Item>
 
         <Form.Item
+          colon={false}
           label="Finish Time"
           name="finishTime"
           rules={[
@@ -145,7 +169,11 @@ const TimesheetForm = ({ data, onOpenModal }) => {
             format={timeFormat}
           />
         </Form.Item>
-        <Form.Item label="Have you taken a break" name="isTakenBreak">
+        <Form.Item
+          colon={false}
+          label="Have you taken a break"
+          name="isTakenBreak"
+        >
           <Radio.Group
             className="is-taken-break"
             onChange={(e) => setIsBreak(e.target.value)}
@@ -158,9 +186,13 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           </Radio.Group>
         </Form.Item>
         <Form.Item
+          colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          label="Total miniutes of breaks taken this day? Include paid and unpaid breaks"
+          label={renderFieldTitle(
+            "Total miniutes of breaks taken this day? Include paid and unpaid breaks",
+            "No break time is included in your allocations, but your paid break will be added back in at sign off stage for payroll."
+          )}
           name="breaksTime"
           rules={[
             isBreak && {
@@ -170,7 +202,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           ]}
         >
           <TimePicker
-            className="w-full"
+            className="w-full mt-2"
             disabled={!isBreak}
             allowClear={false}
             showNow={false}
@@ -179,7 +211,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           />
         </Form.Item>
 
-        <Form.Item className=" flex justify-center mt-8 ">
+        <Form.Item colon={false} className=" flex justify-center mt-8 ">
           <Button
             type="primary"
             label="Allocate..."
@@ -194,6 +226,11 @@ const TimesheetForm = ({ data, onOpenModal }) => {
 
 const StyledDiv = styled.div`
   &.timesheet-form {
+    .field-title {
+      span.description {
+        display: block;
+      }
+    }
     .ant-radio-button-wrapper {
       span {
         color: white;
