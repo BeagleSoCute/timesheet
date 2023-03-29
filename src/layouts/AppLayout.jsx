@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import styled from "styled-components";
-import { Layout, Menu, Spin } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Layout, Spin } from "antd";
+import { useNavigate, Link } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import { Outlet } from "react-router-dom";
 const { Header } = Layout;
@@ -14,17 +14,15 @@ const AppLayout = () => {
   };
   return (
     <StyledLayout className="app-layout">
-      <Header>
-        <div className="logo" />
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["0"]}
-          onClick={handleOnClick}
-          items={menuItems}
-        />
-      </Header>
-      <div className="container mx-auto my-10 w-6/12 p-16 bg-white border-solid border-4 border-gray-300">
+      <div className="flex menu px-2 bg-indigo-200 justify-between">
+        <Link className="text-black">
+          <p className="">Exit</p>
+        </Link>
+        <span className="mx-auto my-auto text-lg timesheet font-bold">
+          Timesheet
+        </span>
+      </div>
+      <div className="w-full  h-screen p-3 bg-white">
         {loading ? (
           <div className="spin">
             <Spin size="large">{loading}</Spin>
