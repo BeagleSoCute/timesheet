@@ -1,11 +1,13 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 import { notification } from "helpers/notification.helper";
 import { AppContext } from "contexts/app.context";
 import { Modal } from "antd";
 
 const TimesheetAllocation = () => {
-  const { remainingHours, setAllocatedHours, setRemainingHour } =
+  const navigate = useNavigate();
+  const { remainingHours, setAllocatedHours, setLoading, setRemainingHours } =
     useContext(AppContext);
   const handleSubmitAllocation = async (value) => {
     console.log("handleSubmitModal", value);
@@ -17,6 +19,7 @@ const TimesheetAllocation = () => {
       });
       return false;
     }
+    setLoading(true);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const success = true; //handler error when get error from the backend
@@ -29,10 +32,11 @@ const TimesheetAllocation = () => {
             closable: true,
             maskClosable: true,
             okButtonProps: { style: { display: "none" } },
-            onCancel: () => setRemainingHour(""),
+            onCancel: () => navigate("/timesheet-page"),
           });
           setAllocatedHours(value);
-          setRemainingHour("");
+          setRemainingHours("");
+          setLoading(false);
           resolve(true);
         } else {
           notification({
@@ -40,14 +44,19 @@ const TimesheetAllocation = () => {
             message:
               "Fails to complete Timesheet Allocation, Please try again later! ",
           });
+          setLoading(false);
           reject(false);
         }
       }, 3000);
     });
   };
-
+  const handleSetRemaingHour = (value) => {
+    setRemainingHours(value);
+  };
   const propsTimesheetAllocationForm = {
+    remainingHours,
     onSubmit: handleSubmitAllocation,
+    onSetRemaingHour: handleSetRemaingHour,
   };
   return (
     <div>

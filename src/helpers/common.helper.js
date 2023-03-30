@@ -63,3 +63,18 @@ export const convertToOrdinalNumber = (n) => {
 
   return deca[Math.floor(n / 10) - 2] + "y-" + special[n % 10];
 };
+
+export const getClassName = (rootClass, ...names) => {
+  const result = names.reduce(
+    (result, text) => (text ? `${result} ${text}` : result),
+    rootClass
+  );
+  console.log("result is", result);
+  return result;
+};
+
+//dynnanic className for shared components
+export const combineClassNames = (...names) => {
+  const result = names.filter(Boolean).join(" ");
+  return result;
+};

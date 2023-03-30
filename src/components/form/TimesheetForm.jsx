@@ -215,7 +215,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
           <Button
             type="primary"
             label="Allocate..."
-            isprimary={false}
+            isprimary="false"
             htmlType="submit"
           />
         </Form.Item>

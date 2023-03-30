@@ -25,15 +25,9 @@ const AppLayout = () => {
       <div className="w-full  h-screen p-3 bg-white">
         <img className="w-full h-64  object-contain" src={companyLogo} />
 
-        {loading ? (
-          <div className="spin">
-            <Spin size="large">{loading}</Spin>
-          </div>
-        ) : (
-          <>
-            <Outlet />
-          </>
-        )}
+        <Spin spinning={loading} size="large">
+          <Outlet />
+        </Spin>
       </div>
     </StyledLayout>
   );

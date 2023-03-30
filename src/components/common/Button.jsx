@@ -1,28 +1,35 @@
 import React from "react";
 import { Button } from "antd";
 import PropTypes from "prop-types";
+import { getClassName, combineClassNames } from "helpers/common.helper";
 
 const propTypes = {
-  isprimary: PropTypes.bool,
+  isprimary: PropTypes.string,
 };
 const defaultProps = {
-  isprimary: true,
+  isprimary: "true",
 };
 
-const StyledButton = (props) => {
-  const { label, isprimary } = props;
+const StyledButton = ({ label, isprimary, className, ...props }) => {
+  console.log("isprimary", isprimary);
   return (
     <div className="button">
-      {isprimary ? (
+      {isprimary === "true" ? (
         <Button
-          className="bg-yellow-400 text-black font-bold text-base w-32 h-12"
+          className={combineClassNames(
+            "bg-yellow-400 text-black font-bold text-base w-32 h-12",
+            className
+          )}
           {...props}
         >
           {label}
         </Button>
       ) : (
         <Button
-          className="bg-blue-800 text-white font-bold text-base w-32 h-12"
+          className={combineClassNames(
+            "bg-blue-800 text-white font-bold text-base w-32 h-12",
+            className
+          )}
           {...props}
         >
           {label}

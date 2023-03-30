@@ -7,22 +7,22 @@ import dayjs from "dayjs";
 import { calRemainFromLabourHour } from "services/timesheet.service";
 import PropTypes from "prop-types";
 import { notification } from "helpers/notification.helper";
-
+import DefaultButton from "components/common/Button";
 const propTypes = {
   remainingHours: PropTypes.string,
-  handleSetRemaingHour: PropTypes.func,
-  handleOnOk: PropTypes.func,
+  onSetRemaingHour: PropTypes.func,
+  onSubmit: PropTypes.func,
 };
 const defaultProps = {
   remainingHours: "",
-  handleSetRemaingHour: () => {},
-  handleOnOk: () => {},
+  onSetRemaingHour: () => {},
+  onSubmit: () => {},
 };
 
 const TimesheetAllocation = ({
   remainingHours,
-  handleSetRemaingHour,
-  handleOnOk,
+  onSetRemaingHour,
+  onSubmit,
 }) => {
   const [form] = Form.useForm();
   useEffect(() => {
@@ -34,8 +34,9 @@ const TimesheetAllocation = ({
     init();
   }, [form]);
   const handleOnFinish = (value) => {
+    console.log("handleOnFinish", value);
     const { items } = value;
-    handleOnOk(items);
+    onSubmit(items);
   };
   const handleCalculateRemainHours = async (value, index) => {
     const items = form.getFieldsValue("items")["items"];
@@ -70,7 +71,7 @@ const TimesheetAllocation = ({
     };
     items.splice(index, 1, thisFormItem);
     form.setFieldsValue({ items });
-    handleSetRemaingHour(result.value);
+    onSetRemaingHour(result.value);
   };
   const handleRemove = async (fieldName, index, remmove) => {
     const currentLabourHours =
@@ -87,7 +88,7 @@ const TimesheetAllocation = ({
       undefined,
       isReset
     );
-    handleSetRemaingHour(result.value);
+    onSetRemaingHour(result.value);
     remmove(fieldName);
   };
   return (
@@ -129,7 +130,7 @@ const TimesheetAllocation = ({
                       <Input
                         className="col-span-2 text-right"
                         readOnly
-                        value={0}
+                        value={remainingHours}
                       />
                     </div>
                     <Form.Item
@@ -192,6 +193,7 @@ const TimesheetAllocation = ({
                       ]}
                     >
                       <TimePicker
+                        className="w-full"
                         colon={false}
                         onChange={(value) =>
                           handleCalculateRemainHours(
@@ -222,6 +224,12 @@ const TimesheetAllocation = ({
             );
           }}
         </Form.List>
+        <DefaultButton
+          isprimary="true"
+          className="mt-5"
+          label="Finish"
+          htmlType="submit"
+        />
       </Form>
     </div>
   );
