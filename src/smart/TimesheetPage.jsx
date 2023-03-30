@@ -4,7 +4,7 @@ import { AppContext } from "contexts/app.context";
 import TimesheetForm from "components/form/TimesheetForm";
 import AllocationData from "components/common/AllocationData";
 import {
-  calculateRemainHours,
+  calculateRemainingHours,
   trasformSubmitAllocatedHours,
 } from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
@@ -20,7 +20,7 @@ const TimesheetPage = () => {
   } = useContext(AppContext);
   const handleSubmit = async (value) => {
     console.log("handleSubmit", value);
-    const res = await calculateRemainHours(value);
+    const res = await calculateRemainingHours(value);
     setRemainingHours(res);
     navigate("/timesheet-allocation");
   };

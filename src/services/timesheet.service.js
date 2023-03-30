@@ -6,10 +6,8 @@ dayjs.extend(duration);
 //   const finishDateTime = "2023-03-15 13:37";
 //   const breakTimeInMinutes = 15;
 
-export const calculateRemainHours = (value) => {
-  const { startDate, startTime, finishDate, finishTime, breaksTime } = value;
-  console.log("breaksTime", breaksTime);
-  const startDateTime = dayjs(startDate + " " + startTime, "DD-MM-YYYY HH:mm");
+export const calculateRemainingHours = (value) => {
+  const { startDateTime, finishDate, finishTime, breaksTime } = value;
   const finishDateTime = dayjs(
     finishDate + " " + finishTime,
     "DD-MM-YYYY HH:mm"

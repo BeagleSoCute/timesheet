@@ -46,31 +46,33 @@ const TimesheetForm = ({ data, onSubmit }) => {
   const handleOnFinish = (value) => {
     const result = {
       ...value,
-      startDate: dayjs(value.startDate).format(dateFormat),
-      startTime: dayjs(value.startTime).format(timeFormat),
+      startDateTime: dayjs(value.startDateTime).format("YYYY-MM-DD HH:mm"),
+      startTime: dayjs(value.startDateTime).format(timeFormat),
       finishDate: dayjs(value.finishDate).format(dateFormat),
       finishTime: dayjs(value.finishTime).format(timeFormat),
-      breaksTime: isBreak ? dayjs(value.breaksTime).format("mm") : "00",
+      breaksTime: isBreak ? value.breaksTime : "00",
     };
     onSubmit(result);
   };
   const initialValues = {
+    startDateTime: data.startDateTime,
     startDate: data.startDate,
     finishDate: data.startDate,
-    startTime: data.startTime,
+    startTime: dayjs(data.startTime, "HH:mm"),
     timeFormat,
     isStartTimeCorrect: true,
     isTakenBreak: true,
   };
   const handleDisabledEndDate = (current) => {
-    const startDate = form.getFieldValue("startDate");
-    return current && current.isBefore(dayjs(startDate).endOf("day"), "day");
+    const startDateTime = form.getFieldValue("startDateTime");
+    return (
+      current && current.isBefore(dayjs(startDateTime).endOf("day"), "day")
+    );
   };
   const handleDisabledStartDate = (current) => {
     const finishDate = form.getFieldValue("finishDate");
     return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
   };
-
   return (
     <StyledDiv className="timesheet-form">
       <Form
@@ -115,28 +117,32 @@ const TimesheetForm = ({ data, onSubmit }) => {
           colon={false}
           label={renderFieldTitle(
             "Actual Start Date / Time",
-            "If you want to change your start tie, you need to resubmi your timesheet. Enter No and resubmit"
+            "If you want to change your start time, you need to resubmit your timesheet. Enter No and resubmit"
           )}
-          name="startDate"
+          name="startDateTime"
         >
           <DatePicker
+            showTime
+            // value={initialValues.startDateTime} // Pass the initial value here
             disabledDate={handleDisabledStartDate}
             disabled={isStartTimeCorrect}
+            onChange={(value) => {
+              console.log(value);
+            }}
             allowClear={false}
-            inputReadOnly
-            format={dateFormat}
+            // inputReadOnly
+            format="YYYY-MM-DD HH:mm"
           />
         </Form.Item>
-        <Form.Item colon={false} label="Start Time" name="startTime">
+        {/* <Form.Item colon={false} label="Start Time" name="startTime">
           <TimePicker
             disabled={isStartTimeCorrect}
             // disabledHours={disabledStartTime}
             allowClear={false}
             showNow={false}
             inputReadOnly
-            format={timeFormat}
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           colon={false}
           label={renderFieldTitle(
@@ -201,13 +207,18 @@ const TimesheetForm = ({ data, onSubmit }) => {
             },
           ]}
         >
-          <TimePicker
+          {/* <TimePicker
             className="w-full mt-2"
             disabled={!isBreak}
             allowClear={false}
             showNow={false}
             inputReadOnly
             format={"mm"}
+          /> */}
+          <InputNumber
+            className="w-full mt-2"
+            disabled={!isBreak}
+            controls={false}
           />
         </Form.Item>
         <Form.Item colon={false} className=" flex justify-center mt-8 ">
