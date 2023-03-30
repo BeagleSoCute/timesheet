@@ -1,42 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import TimesheetForm from "components/form/TimesheetForm";
+import AllocationData from "components/common/AllocationData";
 import {
   calculateRemainHours,
   trasformSubmitAllocatedHours,
 } from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
-import { Button } from "antd";
-import TableData from "components/common/TableData";
-
-const tableColums = [
-  {
-    title: "Job",
-    dataIndex: "job",
-    key: "job",
-  },
-  {
-    title: "CC",
-    dataIndex: "supervisors",
-    key: "supervisors",
-  },
-  {
-    title: "Op/Lab",
-    dataIndex: "lab",
-    key: "lab",
-  },
-  {
-    title: "Asset",
-    dataIndex: "asset",
-    key: "asset",
-  },
-  {
-    title: "Hours",
-    dataIndex: "labourHours",
-    key: "labourHours",
-  },
-];
+import Button from "components/common/Button";
 
 const TimesheetPage = () => {
   const navigate = useNavigate();
@@ -52,7 +24,6 @@ const TimesheetPage = () => {
     setRemainingHours(res);
     navigate("/timesheet-allocation");
   };
-
   const handleSignout = () => {
     notification({
       type: "success",
@@ -61,25 +32,23 @@ const TimesheetPage = () => {
     clearTimesheetData();
     navigate("/");
   };
-
   const propsTimesheetForm = {
     data: timesheetData,
     onSubmit: handleSubmit,
-  };
-  const propsTableData = {
-    columns: tableColums,
-    data: trasformSubmitAllocatedHours(allocatedData),
   };
   return (
     <div className="timesheet-page">
       <TimesheetForm {...propsTimesheetForm} />
       {allocatedData.length !== 0 && (
         <>
-          <div className="mt-20 font-bold">
-            <p>Allocated hours</p>
-            <TableData {...propsTableData} />
+          <div className="mt-20">
+            <AllocationData
+              data={trasformSubmitAllocatedHours(allocatedData)}
+            />
           </div>
-          <Button onClick={() => handleSignout()}>Sign out</Button>
+          <div className="flex justify-center">
+            <Button label="Sign out" onClick={() => handleSignout()} />
+          </div>
         </>
       )}
     </div>
