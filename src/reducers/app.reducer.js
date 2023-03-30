@@ -5,11 +5,13 @@ const TYPES = {
   SET_NOTIFICATION: "SET_NOTIFICATION",
   SET_ALLOCATED_HOURS: "SET_ALLOCATED_HOURSs",
   CLEAR_TIMESHEET_DATA: "CLEAR_TIMESHEET_DATA",
+  SET_REMAINING_HOURS: "SET_REMAINING_HOURS",
 };
 
 const defaultValue = {
   loading: false,
   isAuth: false,
+  remainingHours: "",
   timesheetData: {},
   user: {},
   users: [],
@@ -31,6 +33,8 @@ const reducer = (state, action) => {
       return { ...state, allocatedData: payload };
     case TYPES.CLEAR_TIMESHEET_DATA:
       return { ...state, timesheetData: {} };
+    case TYPES.SET_REMAINING_HOURS:
+      return { ...state, remainingHours: payload };
     default:
       break;
   }

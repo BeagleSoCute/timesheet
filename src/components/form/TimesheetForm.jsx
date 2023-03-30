@@ -38,7 +38,7 @@ const formItemLayout = {
   },
 };
 
-const TimesheetForm = ({ data, onOpenModal }) => {
+const TimesheetForm = ({ data, onSubmit }) => {
   const [form] = Form.useForm();
   const [isBreak, setIsBreak] = useState(true);
   const [isStartTimeCorrect, setIsStartTimeCorrect] = useState(true);
@@ -52,7 +52,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
       finishTime: dayjs(value.finishTime).format(timeFormat),
       breaksTime: isBreak ? dayjs(value.breaksTime).format("mm") : "00",
     };
-    onOpenModal(result);
+    onSubmit(result);
   };
   const initialValues = {
     startDate: data.startDate,
@@ -215,7 +215,7 @@ const TimesheetForm = ({ data, onOpenModal }) => {
           <Button
             type="primary"
             label="Allocate..."
-            isPrimary={false}
+            isprimary={false}
             htmlType="submit"
           />
         </Form.Item>

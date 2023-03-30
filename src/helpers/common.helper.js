@@ -26,25 +26,25 @@ export const NumericInput = (props) => {
 
 export const convertToOrdinalNumber = (n) => {
   var special = [
-    "First",
-    "Second",
-    "Third",
-    "Fourth",
-    "Fifth",
-    "Sixth",
-    "Seventh",
-    "Eighth",
-    "Ninth",
-    "Tenth",
-    "Eleventh",
-    "Twelvth",
-    "Thirteenth",
-    "Fourteenth",
-    "Fifteenth",
-    "Sixteenth",
-    "Seventeenth",
-    "Sighteenth",
-    "Nineteenth",
+    "FIRST",
+    "SECOND",
+    "THIRD",
+    "FOURTH",
+    "FIFTH",
+    "SIXTH",
+    "SEVENTH",
+    "EIGHTH",
+    "NINTH",
+    "TENTH",
+    "ELEVENTH",
+    "TWELFTH",
+    "THIRTEENTH",
+    "FOURTEENTH",
+    "FIFTEENTH",
+    "SIXTEENTH",
+    "SEVENTEENTH",
+    "SIXTEENTH",
+    "NINETEENTH",
   ];
   var deca = [
     "twent",
@@ -56,7 +56,10 @@ export const convertToOrdinalNumber = (n) => {
     "eight",
     "ninet",
   ];
+  //uppercase every character special and deca
+
   if (n < 20) return special[n];
   if (n % 10 === 0) return deca[Math.floor(n / 10) - 2] + "ieth";
+
   return deca[Math.floor(n / 10) - 2] + "y-" + special[n % 10];
 };

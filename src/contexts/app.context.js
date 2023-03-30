@@ -5,6 +5,7 @@ import { notification } from "helpers/notification.helper";
 export const AppContext = createContext({
   loading: false,
   isAuth: false,
+  remainingHours: "",
   timesheetData: {},
   allocatedData: [],
   setLoading: () => {},
@@ -16,7 +17,8 @@ export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
   const [reducerStates, dispatch] = useReducer(reducer, defaultValue);
-  const { loading, isAuth, timesheetData, allocatedData } = reducerStates;
+  const { loading, isAuth, remainingHours, timesheetData, allocatedData } =
+    reducerStates;
   useEffect(() => {
     const init = async () => {
       if (!isAuth) {
@@ -31,6 +33,7 @@ export const AppProvider = ({ children }) => {
     return {
       loading,
       isAuth,
+      remainingHours,
       timesheetData,
       allocatedData,
       setLoading: (data) => {
@@ -45,8 +48,11 @@ export const AppProvider = ({ children }) => {
       clearTimesheetData: (data) => {
         dispatch({ type: TYPES.CLEAR_TIMESHEET_DATA, payload: data });
       },
+      setRemainingHours: (data) => {
+        dispatch({ type: TYPES.SET_REMAINING_HOURS, payload: data });
+      },
     };
-  }, [loading, isAuth, timesheetData, allocatedData, dispatch]);
+  }, [loading, isAuth, timesheetData, remainingHours, allocatedData, dispatch]);
   return (
     <AppContext.Provider value={appContextValue}>
       {children}

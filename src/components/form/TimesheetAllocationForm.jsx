@@ -19,30 +19,12 @@ const defaultProps = {
   handleOnOk: () => {},
 };
 
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 14,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 10,
-    },
-  },
-};
 const TimesheetAllocation = ({
-  form,
   remainingHours,
   handleSetRemaingHour,
   handleOnOk,
 }) => {
+  const [form] = Form.useForm();
   useEffect(() => {
     const init = () => {
       form.setFieldsValue({
@@ -114,7 +96,8 @@ const TimesheetAllocation = ({
         id="timesheet-allo"
         form={form}
         name="timesheet-allocation-form"
-        {...formItemLayout}
+        labelCol={{ span: 24 }}
+        wrapperCol={{ span: 24 }}
         onFinish={handleOnFinish}
       >
         <Form.List name="items">
@@ -123,9 +106,9 @@ const TimesheetAllocation = ({
               <div>
                 {fields.map((field, index) => (
                   <div className="form-item mb-10" key={field.key}>
-                    <div className="bg-gray-700  px-4 text-white flex justify-between ">
-                      <h1 className="text-2xl	">
-                        {convertToOrdinalNumber(index)} Allocation
+                    <div className="bg-blue-900  px-4 text-white flex justify-between ">
+                      <h1 className="text-2xl my-3	">
+                        {convertToOrdinalNumber(index)} ALLOCATION
                       </h1>
                       {fields.length > 1 && (
                         <Form.Item className="my-auto">
@@ -139,11 +122,18 @@ const TimesheetAllocation = ({
                         </Form.Item>
                       )}
                     </div>
-                    <div className="remain-hour  flex justify-between px-2 mb-6">
-                      <span>Remaining Hours to Allocate:</span>
-                      <span className="text-2xl">{remainingHours}</span>
+                    <div className="remain-hour  grid  grid-cols-12 ">
+                      <span className="font-bold col-span-10 my-auto">
+                        Remaining Hours to Allocate:
+                      </span>
+                      <Input
+                        className="col-span-2 text-right"
+                        readOnly
+                        value={0}
+                      />
                     </div>
                     <Form.Item
+                      colon={false}
                       label="Job"
                       name={[index, "job"]}
                       rules={[
@@ -157,6 +147,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
                     <Form.Item
                       label="Add Supervisor"
+                      colon={false}
                       name={[index, "supervisors"]}
                       rules={[
                         {
@@ -169,6 +160,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
                     <Form.Item
                       label="Op/Lab"
+                      colon={false}
                       name={[index, "lab"]}
                       rules={[
                         {
@@ -181,6 +173,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
 
                     <Form.Item
+                      colon={false}
                       label="Description of work"
                       name={[index, "description"]}
                     >
@@ -188,6 +181,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
 
                     <Form.Item
+                      colon={false}
                       label="Labour Hour"
                       name={[index, "labourHours"]}
                       rules={[
@@ -198,6 +192,7 @@ const TimesheetAllocation = ({
                       ]}
                     >
                       <TimePicker
+                        colon={false}
                         onChange={(value) =>
                           handleCalculateRemainHours(
                             value,

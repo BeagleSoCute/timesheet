@@ -3,17 +3,17 @@ import { Button } from "antd";
 import PropTypes from "prop-types";
 
 const propTypes = {
-  isPrimary: PropTypes.bool,
+  isprimary: PropTypes.bool,
 };
 const defaultProps = {
-  isPrimary: true,
+  isprimary: true,
 };
 
 const StyledButton = (props) => {
-  const { label, isPrimary } = props;
+  const { label, isprimary } = props;
   return (
     <div className="button">
-      {isPrimary ? (
+      {isprimary ? (
         <Button
           className="bg-yellow-400 text-black font-bold text-base w-32 h-12"
           {...props}
