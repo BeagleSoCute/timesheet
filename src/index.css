@@ -39,7 +39,14 @@ code {
 
 }
 
-
+input, textarea {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  -moz-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  max-height: 100%;
+  user-scalable: 0;
+}
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
