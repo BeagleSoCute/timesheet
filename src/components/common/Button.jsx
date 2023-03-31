@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "antd";
 import PropTypes from "prop-types";
-import { getClassName, combineClassNames } from "helpers/common.helper";
+import { combineClassNames } from "helpers/common.helper";
 
 const propTypes = {
   isprimary: PropTypes.string,

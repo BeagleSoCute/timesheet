@@ -13,17 +13,6 @@ export const randomString = () => {
   return result;
 };
 
-export const NumericInput = (props) => {
-  const { value, onChange } = props;
-  const handleChange = (e) => {
-    const { value: inputValue } = e.target;
-    const reg = /^-?\d*(\.\d*)?$/;
-    if (reg.test(inputValue) || inputValue === "" || inputValue === "-") {
-      onChange(inputValue);
-    }
-  };
-};
-
 export const convertToOrdinalNumber = (n) => {
   var special = [
     "FIRST",

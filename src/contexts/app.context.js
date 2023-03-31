@@ -27,7 +27,7 @@ export const AppProvider = ({ children }) => {
       }
     };
     init();
-  }, [isAuth]);
+  }, [navigate, isAuth]);
 
   const appContextValue = useMemo(() => {
     return {
