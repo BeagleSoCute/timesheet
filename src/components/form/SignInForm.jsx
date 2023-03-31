@@ -15,25 +15,6 @@ const defaultProps = {
   onFinish: () => {},
 };
 
-const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 12,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 12,
-    },
-  },
-};
-
 const SignInForm = ({ onFinish }) => {
   const [form] = Form.useForm();
   const handleOnFinish = (value) => {
@@ -48,12 +29,12 @@ const SignInForm = ({ onFinish }) => {
       <Form
         form={form}
         name="basic"
-        {...formItemLayout}
         initialValues={initialValues}
         onFinish={handleOnFinish}
         autoComplete="off"
       >
         <Form.Item
+          className="full-content"
           colon={false}
           label="Enter Pin"
           labelCol={{ span: 24 }}
@@ -76,9 +57,10 @@ const SignInForm = ({ onFinish }) => {
           />
         </Form.Item>
         <Form.Item
-          colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
+          className="full-content"
+          colon={false}
           label="Select Job"
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
