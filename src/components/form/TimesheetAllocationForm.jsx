@@ -19,6 +19,11 @@ const defaultProps = {
   onSubmit: () => {},
 };
 
+const formItemLayout = {
+  labelCol: { span: 12 },
+  wrapperCol: { span: 12 },
+};
+
 const TimesheetAllocation = ({
   remainingHours,
   onSetRemaingHour,
@@ -92,8 +97,9 @@ const TimesheetAllocation = ({
     remmove(fieldName);
   };
   return (
-    <div className="timesheet-allocation px-12 py-5">
+    <div className="timesheet-allocation  ">
       <Form
+        {...formItemLayout}
         id="timesheet-allo"
         form={form}
         name="timesheet-allocation-form"
@@ -134,6 +140,7 @@ const TimesheetAllocation = ({
                       />
                     </div>
                     <Form.Item
+                      className="full-content"
                       colon={false}
                       label="Job"
                       name={[index, "job"]}
@@ -147,6 +154,7 @@ const TimesheetAllocation = ({
                       <Select options={jobOptions} />
                     </Form.Item>
                     <Form.Item
+                      className="full-content"
                       label="Add Supervisor"
                       colon={false}
                       name={[index, "supervisors"]}
@@ -160,6 +168,7 @@ const TimesheetAllocation = ({
                       <Select mode="multiple" options={supervisorOptions} />
                     </Form.Item>
                     <Form.Item
+                      className="full-content"
                       label="Op/Lab"
                       colon={false}
                       name={[index, "lab"]}
@@ -174,6 +183,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
 
                     <Form.Item
+                      className="full-content"
                       colon={false}
                       label="Description of work"
                       name={[index, "description"]}
@@ -182,6 +192,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
 
                     <Form.Item
+                      className="full-content"
                       colon={false}
                       label="Labour Hour"
                       name={[index, "labourHours"]}

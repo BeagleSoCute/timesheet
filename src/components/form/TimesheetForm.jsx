@@ -20,22 +20,8 @@ const defaultProps = {
 };
 
 const formItemLayout = {
-  labelCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 14,
-    },
-  },
-  wrapperCol: {
-    xs: {
-      span: 24,
-    },
-    sm: {
-      span: 10,
-    },
-  },
+  labelCol: { span: 12 },
+  wrapperCol: { span: 12 },
 };
 
 const TimesheetForm = ({ data, onSubmit }) => {
@@ -77,12 +63,13 @@ const TimesheetForm = ({ data, onSubmit }) => {
     <StyledDiv className="timesheet-form">
       <Form
         form={form}
-        name="basic"
         {...formItemLayout}
+        name="basic"
         initialValues={initialValues}
         onFinish={handleOnFinish}
       >
         <Form.Item
+          className="full-content"
           colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
@@ -123,26 +110,15 @@ const TimesheetForm = ({ data, onSubmit }) => {
         >
           <DatePicker
             showTime
-            // value={initialValues.startDateTime} // Pass the initial value here
             disabledDate={handleDisabledStartDate}
             disabled={isStartTimeCorrect}
             onChange={(value) => {
               console.log(value);
             }}
             allowClear={false}
-            // inputReadOnly
             format="YYYY-MM-DD HH:mm"
           />
         </Form.Item>
-        {/* <Form.Item colon={false} label="Start Time" name="startTime">
-          <TimePicker
-            disabled={isStartTimeCorrect}
-            // disabledHours={disabledStartTime}
-            allowClear={false}
-            showNow={false}
-            inputReadOnly
-          />
-        </Form.Item> */}
         <Form.Item
           colon={false}
           label={renderFieldTitle(
@@ -192,6 +168,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
           </Radio.Group>
         </Form.Item>
         <Form.Item
+          className="full-content"
           colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
@@ -207,14 +184,6 @@ const TimesheetForm = ({ data, onSubmit }) => {
             },
           ]}
         >
-          {/* <TimePicker
-            className="w-full mt-2"
-            disabled={!isBreak}
-            allowClear={false}
-            showNow={false}
-            inputReadOnly
-            format={"mm"}
-          /> */}
           <InputNumber
             className="w-full mt-2"
             disabled={!isBreak}

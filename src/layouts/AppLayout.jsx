@@ -22,9 +22,8 @@ const AppLayout = () => {
           Timesheet
         </span>
       </div>
-      <div className="w-full  h-screen p-3 bg-white">
-        <img className="w-full h-64  object-contain" src={companyLogo} />
-
+      <div className="w-full px-2 2xl:px-5 py-2 xl:px-5 lg:px-5 md:px-5 sm:px-5 h-screen bg-white">
+        <img className="w-full h-64   object-contain" src={companyLogo} />
         <Spin spinning={loading} size="large">
           <Outlet />
         </Spin>
