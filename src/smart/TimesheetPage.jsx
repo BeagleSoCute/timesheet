@@ -46,7 +46,7 @@ const TimesheetPage = () => {
               data={trasformSubmitAllocatedHours(allocatedData)}
             />
           </div>
-          <div className="flex justify-center">
+          <div className="flex justify-center mb-10">
             <Button label="Sign out" onClick={() => handleSignout()} />
           </div>
         </>

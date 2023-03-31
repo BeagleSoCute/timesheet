@@ -27,7 +27,10 @@ const TimesheetForm = ({ data, onSubmit }) => {
   const [form] = Form.useForm();
   const [isBreak, setIsBreak] = useState(true);
   const [isStartTimeCorrect, setIsStartTimeCorrect] = useState(true);
-
+  const handleChangeIsBreak = (value) => {
+    setIsBreak(value);
+    form.setFieldValue("breaksTime", "");
+  };
   const handleOnFinish = (value) => {
     const result = {
       ...value,
@@ -157,7 +160,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
         >
           <Radio.Group
             className="is-taken-break"
-            onChange={(e) => setIsBreak(e.target.value)}
+            onChange={(e) => handleChangeIsBreak(e.target.value)}
             size="large"
           >
             <Radio.Button className="mx-2" value={true}>
@@ -191,6 +194,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
         </Form.Item>
         <Form.Item colon={false} className=" flex justify-center mt-8 ">
           <Button
+            className="mb-10"
             type="primary"
             label="Allocate..."
             isprimary="false"

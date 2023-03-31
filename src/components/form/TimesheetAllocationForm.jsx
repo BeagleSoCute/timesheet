@@ -225,7 +225,7 @@ const TimesheetAllocation = ({
                 <div className="flex justify-center">
                   <Button
                     disabled={remainingHours === "00:00"}
-                    className="w-2/3 mt-5"
+                    className="w-2/3 mt-5 mb-10"
                     onClick={() => add()}
                   >
                     Add
@@ -237,7 +237,7 @@ const TimesheetAllocation = ({
         </Form.List>
         <DefaultButton
           isprimary="true"
-          className="mt-5"
+          className="mt-5 mb-10"
           label="Finish"
           htmlType="submit"
         />
