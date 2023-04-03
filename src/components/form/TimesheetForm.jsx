@@ -67,6 +67,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
         form={form}
         {...formItemLayout}
         name="basic"
+        requiredMark={false}
         initialValues={initialValues}
         onFinish={handleOnFinish}
       >
@@ -75,7 +76,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
           colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          label="Enter Pin"
+          label="Enter Pin *"
           name="pin"
           rules={[{ required: true, message: "Please input your pin!" }]}
         >
@@ -138,12 +139,11 @@ const TimesheetForm = ({ data, onSubmit }) => {
         </Form.Item>
 
         <Form.Item
+          className="fit-error"
           colon={false}
-          label="Finish Time"
+          label="Finish Time *"
           name="finishTime"
-          rules={[
-            { required: true, message: "Please input your finish time!" },
-          ]}
+          rules={[{ required: true, message: "Please input finish time!" }]}
         >
           <TimePicker
             // disabledHours={disabledFinishTime}
@@ -182,7 +182,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
           rules={[
             isBreak && {
               required: true,
-              message: "Please input your total minutes of breaks!",
+              message: "Please input total minutes of breaks!",
             },
           ]}
         >
@@ -194,10 +194,8 @@ const TimesheetForm = ({ data, onSubmit }) => {
         </Form.Item>
         <Form.Item colon={false} className=" flex justify-center mt-8 ">
           <Button
-            className="mb-10"
-            type="primary"
+            className="mb-10 bg-blue-800 text-white font-bold "
             label="Allocate..."
-            isprimary="false"
             htmlType="submit"
           />
         </Form.Item>

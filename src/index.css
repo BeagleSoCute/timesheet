@@ -6,6 +6,15 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+p,span{
+  font-size: 18px;
+}
+.ant-form-item-label label,.ant-form-item-explain-error,input, select {
+  font-size: 18px!important;
+}
+.ant-form-item .ant-form-item-label >label{
+  height: auto;
+}
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
@@ -15,7 +24,7 @@ code {
   white-space: normal;
   text-align: start;
 }
-.ant-form-item-control-input-content,.ant-form-item-explain-error{
+.ant-form-item-control-input-content,.fit-error .ant-form-item-explain-error{
   text-align: right;
 }
 
@@ -27,9 +36,21 @@ code {
   font-weight: bold;
 }
 @media screen and (max-width: 575px) {
+
+  p,span{
+    font-size: 14px;
+  }
+  
+  .ant-form-item-label label,.ant-form-item-explain-error,input, select {
+    font-size: 14px!important;
+  }
+  
+
 .ant-col.ant-form-item-control,.ant-col.ant-form-item-label{
   flex: 1 1 0!important;
   max-width: 0;
+
+  
 }
 
 .full-content .ant-col.ant-form-item-control,.full-content .ant-col.ant-form-item-label{

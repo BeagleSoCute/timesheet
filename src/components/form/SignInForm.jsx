@@ -29,6 +29,7 @@ const SignInForm = ({ onFinish }) => {
       <Form
         form={form}
         name="basic"
+        requiredMark={false}
         initialValues={initialValues}
         onFinish={handleOnFinish}
         autoComplete="off"
@@ -36,7 +37,7 @@ const SignInForm = ({ onFinish }) => {
         <Form.Item
           className="full-content"
           colon={false}
-          label="Enter Pin"
+          label="Enter Pin *"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           name="pin"
@@ -61,7 +62,7 @@ const SignInForm = ({ onFinish }) => {
           wrapperCol={{ span: 24 }}
           className="full-content"
           colon={false}
-          label="Select Job"
+          label="Select Job *"
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >

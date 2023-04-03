@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Form, TimePicker, Select, Input } from "antd";
+import { Form, TimePicker, Select, Input } from "antd";
 import { jobOptions, supervisorOptions, labOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
@@ -8,6 +8,7 @@ import { calRemainFromLabourHour } from "services/timesheet.service";
 import PropTypes from "prop-types";
 import { notification } from "helpers/notification.helper";
 import DefaultButton from "components/common/Button";
+
 const propTypes = {
   remainingHours: PropTypes.string,
   onSetRemaingHour: PropTypes.func,
@@ -39,7 +40,6 @@ const TimesheetAllocation = ({
     init();
   }, [form]);
   const handleOnFinish = (value) => {
-    console.log("handleOnFinish", value);
     const { items } = value;
     onSubmit(items);
   };
@@ -100,6 +100,7 @@ const TimesheetAllocation = ({
     <div className="timesheet-allocation  ">
       <Form
         {...formItemLayout}
+        requiredMark={false}
         id="timesheet-allo"
         form={form}
         name="timesheet-allocation-form"
@@ -118,23 +119,24 @@ const TimesheetAllocation = ({
                         {convertToOrdinalNumber(index)} ALLOCATION
                       </h1>
                       {fields.length > 1 && (
-                        <Form.Item className="my-auto">
-                          <Button
+                        <Form.Item className="my-auto text-red-600 font-bold">
+                          <DefaultButton
+                            className="px-2  w-full h-full "
+                            label="Remove
+                            "
                             onClick={() =>
                               handleRemove(field.name, index, remove)
                             }
-                          >
-                            Remove
-                          </Button>
+                          />
                         </Form.Item>
                       )}
                     </div>
-                    <div className="remain-hour  grid  grid-cols-12 ">
-                      <span className="font-bold col-span-10 my-auto">
+                    <div className="remain-hour grid grid-cols-12 ">
+                      <span className="font-bold col-span-8 my-auto">
                         Remaining Hours to Allocate:
                       </span>
                       <Input
-                        className="col-span-2 text-right"
+                        className="col-span-4 text-right"
                         readOnly
                         value={remainingHours}
                       />
@@ -142,7 +144,7 @@ const TimesheetAllocation = ({
                     <Form.Item
                       className="full-content"
                       colon={false}
-                      label="Job"
+                      label="Job *"
                       name={[index, "job"]}
                       rules={[
                         {
@@ -155,7 +157,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
                     <Form.Item
                       className="full-content"
-                      label="Add Supervisor"
+                      label="Add Supervisor *"
                       colon={false}
                       name={[index, "supervisors"]}
                       rules={[
@@ -169,7 +171,7 @@ const TimesheetAllocation = ({
                     </Form.Item>
                     <Form.Item
                       className="full-content"
-                      label="Op/Lab"
+                      label="Op/Lab *"
                       colon={false}
                       name={[index, "lab"]}
                       rules={[
@@ -185,7 +187,7 @@ const TimesheetAllocation = ({
                     <Form.Item
                       className="full-content"
                       colon={false}
-                      label="Description of work"
+                      label="Description of work *"
                       name={[index, "description"]}
                     >
                       <Input.TextArea />
@@ -194,7 +196,7 @@ const TimesheetAllocation = ({
                     <Form.Item
                       className="full-content"
                       colon={false}
-                      label="Labour Hour"
+                      label="Labour Hour *"
                       name={[index, "labourHours"]}
                       rules={[
                         {
@@ -223,20 +225,20 @@ const TimesheetAllocation = ({
                   </div>
                 ))}
                 <div className="flex justify-center">
-                  <Button
+                  <DefaultButton
+                    isprimary="false"
                     disabled={remainingHours === "00:00"}
-                    className="w-2/3 mt-5 mb-10"
+                    className="mt-5 mb-10 w-64 h-8"
                     onClick={() => add()}
-                  >
-                    Add
-                  </Button>
+                    label="Add"
+                  />
                 </div>
               </div>
             );
           }}
         </Form.List>
         <DefaultButton
-          isprimary="true"
+          type="primary"
           className="mt-5 mb-10"
           label="Finish"
           htmlType="submit"

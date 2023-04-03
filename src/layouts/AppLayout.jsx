@@ -36,6 +36,7 @@ const AppLayout = () => {
 const StyledLayout = styled(Layout)`
   &.app-layout {
     /* height: 100vh; */
+    background-color: white;
     .spin {
       display: flex;
       justify-content: center;

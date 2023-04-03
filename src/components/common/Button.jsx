@@ -4,17 +4,16 @@ import PropTypes from "prop-types";
 import { combineClassNames } from "helpers/common.helper";
 
 const propTypes = {
-  isprimary: PropTypes.string,
+  type: PropTypes.string,
 };
 const defaultProps = {
-  isprimary: "true",
+  // type: "",
 };
 
-const StyledButton = ({ label, isprimary, className, ...props }) => {
-  console.log("isprimary", isprimary);
+const StyledButton = ({ label, type, className, ...props }) => {
   return (
     <div className="button">
-      {isprimary === "true" ? (
+      {type === "primary" ? (
         <Button
           className={combineClassNames(
             "bg-yellow-400 text-black font-bold text-base w-32 h-12",
@@ -26,10 +25,7 @@ const StyledButton = ({ label, isprimary, className, ...props }) => {
         </Button>
       ) : (
         <Button
-          className={combineClassNames(
-            "bg-blue-800 text-white font-bold text-base w-32 h-12",
-            className
-          )}
+          className={combineClassNames(" text-base w-32 h-12", className)}
           {...props}
         >
           {label}
