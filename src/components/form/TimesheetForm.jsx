@@ -245,6 +245,9 @@ const StyledDiv = styled.div`
         display: block;
       }
     }
+    label.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item::before {
+      background-color: transparent !important;
+    }
     .ant-radio-button-wrapper {
       span {
         color: white;
