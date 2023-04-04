@@ -10,7 +10,6 @@ const TimesheetAllocation = () => {
   const { remainingHours, setAllocatedHours, setLoading, setRemainingHours } =
     useContext(AppContext);
   const handleSubmitAllocation = async (value) => {
-    console.log("handleSubmitModal", value);
     if (remainingHours !== "00:00") {
       notification({
         type: "error",

@@ -2,6 +2,7 @@ import React from "react";
 import { Button } from "antd";
 import PropTypes from "prop-types";
 import { combineClassNames } from "helpers/common.helper";
+import styled from "styled-components";
 
 const propTypes = {
   type: PropTypes.string,
@@ -12,11 +13,11 @@ const defaultProps = {
 
 const StyledButton = ({ label, type, className, ...props }) => {
   return (
-    <div className="button">
+    <StyledDiv className="button">
       {type === "primary" ? (
         <Button
           className={combineClassNames(
-            "bg-yellow-400 text-black font-bold text-base w-32 h-12",
+            "primary-button bg-yellow-400 text-black font-bold text-base w-32 h-12",
             className
           )}
           {...props}
@@ -25,15 +26,34 @@ const StyledButton = ({ label, type, className, ...props }) => {
         </Button>
       ) : (
         <Button
-          className={combineClassNames(" text-base w-32 h-12", className)}
+          className={combineClassNames(
+            "default-button text-base w-32 h-12",
+            className
+          )}
           {...props}
         >
           {label}
         </Button>
       )}
-    </div>
+    </StyledDiv>
   );
 };
+const StyledDiv = styled.div`
+  &.button {
+    .primary-button.ant-btn:hover {
+      color: inherit !important;
+      border-color: inherit !important;
+    }
+    .default-button.ant-btn:hover {
+      color: white !important;
+      border-color: inherit !important;
+    }
+    .no-color-button.ant-btn:hover {
+      color: inherit !important;
+      border-color: inherit !important;
+    }
+  }
+`;
 StyledButton.propTypes = propTypes;
 StyledButton.defaultProps = defaultProps;
 export default StyledButton;

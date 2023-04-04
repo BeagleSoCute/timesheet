@@ -136,9 +136,9 @@ const TimesheetAllocation = ({
                         {convertToOrdinalNumber(index)} ALLOCATION
                       </h1>
                       {fields.length > 1 && (
-                        <Form.Item className="my-auto text-red-600 font-bold px-1">
+                        <Form.Item className="my-auto px-1">
                           <DefaultButton
-                            className=" w-full h-full "
+                            className="no-color-button w-full h-full "
                             label="Remove
                             "
                             onClick={() =>
@@ -247,7 +247,7 @@ const TimesheetAllocation = ({
                   <div className="flex justify-center">
                     <DefaultButton
                       isprimary="false"
-                      className="mt-5 mb-10 w-64 h-8"
+                      className="no-color-button mt-5 mb-10 w-64 h-8  "
                       onClick={() => add()}
                       label="Add"
                     />

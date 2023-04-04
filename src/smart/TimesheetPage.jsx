@@ -46,7 +46,11 @@ const TimesheetPage = () => {
             />
           </div>
           <div className="flex justify-center mb-10">
-            <Button label="Sign out" onClick={() => handleSignout()} />
+            <Button
+              type="primary"
+              label="Sign out"
+              onClick={() => handleSignout()}
+            />
           </div>
         </>
       )}

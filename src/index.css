@@ -71,7 +71,6 @@ code {
   border-radius: 0px!important;
 }
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
