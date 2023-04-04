@@ -19,7 +19,7 @@ const AppLayout = () => {
           Timesheet
         </span>
       </div>
-      <div className="w-full px-3 2xl:px-5 xl:px-5 lg:px-5 md:px-5 sm:px-5 h-screen">
+      <div className="w-full px-3 2xl:px-64 xl:px-64 lg:px-5 md:px-5 sm:px-5 h-screen">
         <img
           className="w-full h-64  object-contain "
           src={companyLogo}
@@ -35,7 +35,6 @@ const AppLayout = () => {
 
 const StyledLayout = styled(Layout)`
   &.app-layout {
-    /* height: 100vh; */
     background-color: white;
     .spin {
       display: flex;

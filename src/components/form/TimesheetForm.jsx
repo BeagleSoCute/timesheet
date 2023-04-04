@@ -45,6 +45,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
     onSubmit(result);
   };
   const initialValues = {
+    pin: data.pin,
     startDateTime: data.startDateTime,
     startDate: data.startDate,
     finishDate: data.startDate,
@@ -104,7 +105,6 @@ const TimesheetForm = ({ data, onSubmit }) => {
             <Radio.Button value={false}>No</Radio.Button>
           </Radio.Group>
         </Form.Item>
-
         <Form.Item
           colon={false}
           label={renderFieldTitle(
@@ -118,7 +118,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
             disabledDate={handleDisabledStartDate}
             disabled={isStartTimeCorrect}
             onChange={(value) => {
-              console.log(value);
+              form.resetFields(["finishTime"]);
             }}
             allowClear={false}
             format="DD/MM/YYYY HH:mm"

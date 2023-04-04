@@ -97,7 +97,7 @@ const TimesheetAllocation = ({
     remmove(fieldName);
   };
   return (
-    <div className="timesheet-allocation  ">
+    <div className="timesheet-allocation bg-gray-200 ">
       <Form
         {...formItemLayout}
         requiredMark={false}
@@ -131,97 +131,99 @@ const TimesheetAllocation = ({
                         </Form.Item>
                       )}
                     </div>
-                    <div className="remain-hour grid grid-cols-12 ">
-                      <span className="font-bold col-span-8 my-auto">
-                        Remaining Hours to Allocate:
-                      </span>
-                      <Input
-                        className="col-span-4 text-right"
-                        readOnly
-                        value={remainingHours}
-                      />
-                    </div>
-                    <Form.Item
-                      className="full-content"
-                      colon={false}
-                      label="Job *"
-                      name={[index, "job"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select your job!",
-                        },
-                      ]}
-                    >
-                      <Select options={jobOptions} />
-                    </Form.Item>
-                    <Form.Item
-                      className="full-content"
-                      label="Add Supervisor *"
-                      colon={false}
-                      name={[index, "supervisors"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select your supervisor!",
-                        },
-                      ]}
-                    >
-                      <Select mode="multiple" options={supervisorOptions} />
-                    </Form.Item>
-                    <Form.Item
-                      className="full-content"
-                      label="Op/Lab *"
-                      colon={false}
-                      name={[index, "lab"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please select your Op/Lab!",
-                        },
-                      ]}
-                    >
-                      <Select options={labOptions} />
-                    </Form.Item>
-
-                    <Form.Item
-                      className="full-content"
-                      colon={false}
-                      label="Description of work"
-                      name={[index, "description"]}
-                    >
-                      <Input.TextArea />
-                    </Form.Item>
-
-                    <Form.Item
-                      className="full-content"
-                      colon={false}
-                      label="Labour Hour *"
-                      name={[index, "labourHours"]}
-                      rules={[
-                        {
-                          required: true,
-                          message: "Please input your labour hours!",
-                        },
-                      ]}
-                    >
-                      <TimePicker
-                        className="w-full"
+                    <div className="px-5">
+                      <div className="remain-hour grid grid-cols-12 ">
+                        <span className="font-bold col-span-8 my-auto">
+                          Remaining Hours to Allocate:
+                        </span>
+                        <Input
+                          className="col-span-4 text-right"
+                          readOnly
+                          value={remainingHours}
+                        />
+                      </div>
+                      <Form.Item
+                        className="full-content"
                         colon={false}
-                        onChange={(value) =>
-                          handleCalculateRemainHours(
-                            value,
-                            index,
-                            form.getFieldsValue("items")["items"][index]
-                              .labourHours
-                          )
-                        }
-                        allowClear={false}
-                        showNow={false}
-                        inputReadOnly
-                        format={timeFormat}
-                      />
-                    </Form.Item>
+                        label="Job *"
+                        name={[index, "job"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select your job!",
+                          },
+                        ]}
+                      >
+                        <Select options={jobOptions} />
+                      </Form.Item>
+                      <Form.Item
+                        className="full-content"
+                        label="Add Supervisor *"
+                        colon={false}
+                        name={[index, "supervisors"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select your supervisor!",
+                          },
+                        ]}
+                      >
+                        <Select mode="multiple" options={supervisorOptions} />
+                      </Form.Item>
+                      <Form.Item
+                        className="full-content"
+                        label="Op/Lab *"
+                        colon={false}
+                        name={[index, "lab"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please select your Op/Lab!",
+                          },
+                        ]}
+                      >
+                        <Select options={labOptions} />
+                      </Form.Item>
+
+                      <Form.Item
+                        className="full-content"
+                        colon={false}
+                        label="Description of work"
+                        name={[index, "description"]}
+                      >
+                        <Input.TextArea />
+                      </Form.Item>
+
+                      <Form.Item
+                        className="full-content"
+                        colon={false}
+                        label="Labour Hour *"
+                        name={[index, "labourHours"]}
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please input your labour hours!",
+                          },
+                        ]}
+                      >
+                        <TimePicker
+                          className="w-full"
+                          colon={false}
+                          onChange={(value) =>
+                            handleCalculateRemainHours(
+                              value,
+                              index,
+                              form.getFieldsValue("items")["items"][index]
+                                .labourHours
+                            )
+                          }
+                          allowClear={false}
+                          showNow={false}
+                          inputReadOnly
+                          format={timeFormat}
+                        />
+                      </Form.Item>
+                    </div>
                   </div>
                 ))}
                 <div className="flex justify-center">
@@ -239,7 +241,7 @@ const TimesheetAllocation = ({
         </Form.List>
         <DefaultButton
           type="primary"
-          className="mt-5 mb-10"
+          className="mt-5 ml-5 mb-10"
           label="Finish"
           htmlType="submit"
         />
