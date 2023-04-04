@@ -280,7 +280,8 @@ const StyledDiv = styled.div`
     .ant-form-item-label,
     .lable-bg-color {
       background-color: #e7e9fa;
-      padding: 0 8px;
+      /* padding-left: 8px; */
+      padding: 0px 0px 0px 8px;
     }
   }
 `;
