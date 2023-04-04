@@ -8,6 +8,7 @@ import { calRemainFromLabourHour } from "services/timesheet.service";
 import PropTypes from "prop-types";
 import { notification } from "helpers/notification.helper";
 import DefaultButton from "components/common/Button";
+import styled from "styled-components";
 
 const propTypes = {
   remainingHours: PropTypes.string,
@@ -44,6 +45,7 @@ const TimesheetAllocation = ({
     onSubmit(items);
   };
   const handleCalculateRemainHours = async (value, index) => {
+    console.log("value is ", value);
     const items = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
@@ -97,7 +99,7 @@ const TimesheetAllocation = ({
     remmove(fieldName);
   };
   return (
-    <div className="timesheet-allocation bg-gray-200 ">
+    <StyledDiv className="timesheet-allocation-form">
       <Form
         {...formItemLayout}
         requiredMark={false}
@@ -113,15 +115,15 @@ const TimesheetAllocation = ({
             return (
               <div>
                 {fields.map((field, index) => (
-                  <div className="form-item mb-10" key={field.key}>
+                  <div className="form-item" key={field.key}>
                     <div className="bg-blue-900  px-4 text-white flex justify-between ">
                       <h1 className="text-2xl my-3	">
                         {convertToOrdinalNumber(index)} ALLOCATION
                       </h1>
                       {fields.length > 1 && (
-                        <Form.Item className="my-auto text-red-600 font-bold">
+                        <Form.Item className="my-auto text-red-600 font-bold px-1">
                           <DefaultButton
-                            className="px-2  w-full h-full "
+                            className=" w-full h-full "
                             label="Remove
                             "
                             onClick={() =>
@@ -131,9 +133,9 @@ const TimesheetAllocation = ({
                         </Form.Item>
                       )}
                     </div>
-                    <div className="px-5">
-                      <div className="remain-hour grid grid-cols-12 ">
-                        <span className="font-bold col-span-8 my-auto">
+                    <div>
+                      <div className="remain-hour grid grid-cols-12 mt-1 bg-gray-200">
+                        <span className="font-bold col-span-8 my-auto px-1">
                           Remaining Hours to Allocate:
                         </span>
                         <Input
@@ -143,7 +145,7 @@ const TimesheetAllocation = ({
                         />
                       </div>
                       <Form.Item
-                        className="full-content"
+                        className="full-content bg-gray-200 mb-0 px-1"
                         colon={false}
                         label="Job *"
                         name={[index, "job"]}
@@ -157,7 +159,7 @@ const TimesheetAllocation = ({
                         <Select options={jobOptions} />
                       </Form.Item>
                       <Form.Item
-                        className="full-content"
+                        className="full-content bg-gray-200 mb-0 px-1"
                         label="Add Supervisor *"
                         colon={false}
                         name={[index, "supervisors"]}
@@ -171,7 +173,7 @@ const TimesheetAllocation = ({
                         <Select mode="multiple" options={supervisorOptions} />
                       </Form.Item>
                       <Form.Item
-                        className="full-content"
+                        className="full-content bg-gray-200 mb-0 px-1"
                         label="Op/Lab *"
                         colon={false}
                         name={[index, "lab"]}
@@ -186,7 +188,7 @@ const TimesheetAllocation = ({
                       </Form.Item>
 
                       <Form.Item
-                        className="full-content"
+                        className="full-content bg-gray-200 mb-0 px-1"
                         colon={false}
                         label="Description of work"
                         name={[index, "description"]}
@@ -195,7 +197,7 @@ const TimesheetAllocation = ({
                       </Form.Item>
 
                       <Form.Item
-                        className="full-content"
+                        className="full-content bg-gray-200 mb-0 pb-2 px-1"
                         colon={false}
                         label="Labour Hour *"
                         name={[index, "labourHours"]}
@@ -226,29 +228,40 @@ const TimesheetAllocation = ({
                     </div>
                   </div>
                 ))}
-                <div className="flex justify-center">
-                  <DefaultButton
-                    isprimary="false"
-                    disabled={remainingHours === "00:00"}
-                    className="mt-5 mb-10 w-64 h-8"
-                    onClick={() => add()}
-                    label="Add"
-                  />
-                </div>
+                {remainingHours !== "00:00" && (
+                  <div className="flex justify-center">
+                    <DefaultButton
+                      isprimary="false"
+                      className="mt-5 mb-10 w-64 h-8"
+                      onClick={() => add()}
+                      label="Add"
+                    />
+                  </div>
+                )}
               </div>
             );
           }}
         </Form.List>
-        <DefaultButton
-          type="primary"
-          className="mt-5 ml-5 mb-10"
-          label="Finish"
-          htmlType="submit"
-        />
+        <div className=" my-0">
+          {remainingHours === "00:00" && (
+            <p className="bg-gray-200 my-0">All hours have been allocated</p>
+          )}
+          <DefaultButton
+            type="primary"
+            className=""
+            label="Finish"
+            htmlType="submit"
+          />
+        </div>
       </Form>
-    </div>
+    </StyledDiv>
   );
 };
+
+const StyledDiv = styled.div`
+  &.timesheet-allocation-form {
+  }
+`;
 
 TimesheetAllocation.propTypes = propTypes;
 TimesheetAllocation.defaultProps = defaultProps;

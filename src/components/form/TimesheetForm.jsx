@@ -135,6 +135,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
           <DatePicker
             disabledDate={handleDisabledEndDate}
             allowClear={false}
+            onChange={() => form.resetFields(["finishTime"])}
             inputReadOnly
             format={dateFormat}
           />

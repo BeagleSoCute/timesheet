@@ -82,6 +82,12 @@ input, textarea {
   max-height: 100%;
   user-scalable: 0;
 }
+
+.ant-picker-time-panel-column {
+  overflow-y: scroll!important;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
