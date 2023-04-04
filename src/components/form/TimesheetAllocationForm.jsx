@@ -45,10 +45,25 @@ const TimesheetAllocation = ({
     onSubmit(items);
   };
   const handleCalculateRemainHours = async (value, index) => {
-    console.log("value is ", value);
     const items = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
+
+    if (value.hour() === 0 && value.minute() === 0) {
+      thisFormItem = {
+        ...thisFormItem,
+        labourHours: previousLabourHour,
+      };
+
+      await items.splice(index, 1, thisFormItem);
+      form.setFieldsValue({ items });
+      notification({
+        type: "error",
+        message: "Labour hour can not be 0, Please try again",
+      });
+      return;
+    }
+
     const modifyPreviousLabourHourD = previousLabourHour
       ? dayjs(previousLabourHour).format(timeFormat)
       : undefined;

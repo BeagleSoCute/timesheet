@@ -19,7 +19,6 @@ const TimesheetPage = () => {
     clearTimesheetData,
   } = useContext(AppContext);
   const handleSubmit = async (value) => {
-    console.log("handleSubmit", value);
     const res = await calculateRemainingHours(value);
     setRemainingHours(res);
     navigate("/timesheet-allocation");

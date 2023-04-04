@@ -4,7 +4,6 @@ dayjs.extend(duration);
 
 export const calculateRemainingHours = (value) => {
   const { startDateTime, finishDate, finishTime, breaksTime } = value;
-  console.log("value in calculateRemainingHours is ", value);
   const startDate = dayjs(startDateTime, "DD-MM-YYYY HH:mm");
   const finishDateTime = dayjs(
     finishDate + " " + finishTime,
@@ -71,7 +70,6 @@ export const calRemainFromLabourHour = (
           isSuccess: true,
         };
 
-  // console.log(remainingTimeFormatted);
   return remainingTimeFormatted;
 };
 
