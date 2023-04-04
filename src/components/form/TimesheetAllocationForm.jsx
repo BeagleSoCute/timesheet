@@ -187,7 +187,7 @@ const TimesheetAllocation = ({
                     <Form.Item
                       className="full-content"
                       colon={false}
-                      label="Description of work *"
+                      label="Description of work"
                       name={[index, "description"]}
                     >
                       <Input.TextArea />

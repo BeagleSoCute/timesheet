@@ -119,7 +119,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
               console.log(value);
             }}
             allowClear={false}
-            format="YYYY-MM-DD HH:mm"
+            format="YYYY/MM/DD HH:mm"
           />
         </Form.Item>
         <Form.Item
@@ -151,11 +151,45 @@ const TimesheetForm = ({ data, onSubmit }) => {
             showNow={false}
             inputReadOnly
             format={timeFormat}
+            disabledHours={() => {
+              const startDate = form.getFieldValue("startDate");
+              const finishDate = form.getFieldValue("finishDate");
+              if (dayjs(startDate).isSame(finishDate, "date")) {
+                // disable all hours before the selected start time
+                const startTime = form.getFieldValue("startDateTime");
+                const disabledHours = [];
+                for (let i = 0; i < dayjs(startTime).hour(); i++) {
+                  disabledHours.push(i);
+                }
+                return disabledHours;
+              } else {
+                // enable all hours when finish date is not the same as start date
+                return [];
+              }
+            }}
+            disabledMinutes={(selectedHour) => {
+              const startDate = form.getFieldValue("startDateTime");
+              const finishDate = form.getFieldValue("finishDate");
+              if (dayjs(startDate).isSame(finishDate, "date")) {
+                // disable the selected start time minute if the selected hour is the same as the start time hour
+                const startTime = form.getFieldValue("startDateTime");
+                const startHour = dayjs(startTime).hour();
+                const startMinute = dayjs(startTime).minute();
+                if (selectedHour === startHour) {
+                  return Array.from(Array(startMinute + 1).keys());
+                } else {
+                  return [];
+                }
+              } else {
+                // enable all minutes when finish date is not the same as start date
+                return [];
+              }
+            }}
           />
         </Form.Item>
         <Form.Item
           colon={false}
-          label="Have you taken a break"
+          label="Have you taken a break?"
           name="isTakenBreak"
         >
           <Radio.Group
