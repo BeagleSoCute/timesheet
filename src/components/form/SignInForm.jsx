@@ -35,7 +35,7 @@ const SignInForm = ({ onFinish }) => {
         autoComplete="off"
       >
         <Form.Item
-          className="full-content"
+          className="full-content mb-0"
           colon={false}
           label="Enter Pin *"
           labelCol={{ span: 24 }}

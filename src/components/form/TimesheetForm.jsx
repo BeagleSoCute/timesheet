@@ -8,6 +8,7 @@ import Message from "components/common/Message";
 import styled from "styled-components";
 import Button from "components/common/Button";
 import { renderFieldTitle } from "helpers/form.helper";
+import { notification } from "helpers/notification.helper";
 
 const propTypes = {
   data: PropTypes.object,
@@ -64,6 +65,26 @@ const TimesheetForm = ({ data, onSubmit }) => {
     const finishDate = form.getFieldValue("finishDate");
     return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
   };
+  const handleErrorSelectFinishime = (current) => {
+    const startDate = form.getFieldValue("startDateTime");
+    const finishDate = form.getFieldValue("finishDate");
+    const startTime = form.getFieldValue("startDateTime");
+    const startHour = dayjs(startTime).hour();
+    const startMinute = dayjs(startTime).minute();
+    const finishHour = dayjs(current).hour();
+    const finishMinute = dayjs(current).minute();
+    if (
+      dayjs(startDate).isSame(finishDate, "date") &&
+      startHour === finishHour &&
+      startMinute >= finishMinute
+    ) {
+      notification({
+        type: "error",
+        message: "Finish time must be greater than start time",
+      });
+      form.resetFields(["finishTime"]);
+    }
+  };
   return (
     <StyledDiv className="timesheet-form">
       <Form
@@ -75,7 +96,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
         onFinish={handleOnFinish}
       >
         <Form.Item
-          className="full-content"
+          className="full-content mb-0"
           colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
@@ -153,13 +174,13 @@ const TimesheetForm = ({ data, onSubmit }) => {
             showNow={false}
             inputReadOnly
             format={timeFormat}
+            onChange={(value) => handleErrorSelectFinishime(value)}
             disabledTime={(current) => {
               const startDate = form.getFieldValue("startDateTime");
               const finishDate = form.getFieldValue("finishDate");
               const startTime = form.getFieldValue("startDateTime");
               const startHour = dayjs(startTime).hour();
               const startMinute = dayjs(startTime).minute();
-
               if (dayjs(startDate).isSame(finishDate, "date")) {
                 return {
                   disabledHours: () => {
@@ -171,7 +192,11 @@ const TimesheetForm = ({ data, onSubmit }) => {
                   },
                   disabledMinutes: (hour) => {
                     if (hour === startHour) {
-                      return Array.from(Array(startMinute + 1).keys());
+                      const disabledMinutes = [];
+                      for (let i = 0; i <= startMinute; i++) {
+                        disabledMinutes.push(i);
+                      }
+                      return disabledMinutes;
                     } else {
                       return [];
                     }

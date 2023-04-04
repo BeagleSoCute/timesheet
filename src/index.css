@@ -63,28 +63,12 @@ code {
 
 }
 
-/* prevent the input to zoom when using the mobile device */
-input, select {
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-input, textarea {
-  -webkit-text-size-adjust: 100%;
-  -ms-text-size-adjust: 100%;
-  -moz-text-size-adjust: 100%;
-  text-size-adjust: 100%;
-  max-height: 100%;
-  user-scalable: 0;
-}
-
 .ant-picker-time-panel-column {
   overflow-y: scroll!important;
+}
+
+.ant-select-selector,.ant-input,.ant-picker,.ant-input-number {
+  border-radius: 0px!important;
 }
 
 
