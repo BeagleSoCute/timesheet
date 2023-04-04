@@ -30,7 +30,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
   const [isStartTimeCorrect, setIsStartTimeCorrect] = useState(true);
   const handleChangeIsBreak = (value) => {
     setIsBreak(value);
-    form.setFieldValue("breaksTime", "");
+    form.resetFields(["breaksTime"]);
   };
   const handleOnFinish = (value) => {
     const result = {
