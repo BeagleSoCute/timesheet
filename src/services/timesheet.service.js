@@ -1,9 +1,6 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
-//   const startDateTime = "2023-03-15 12:03";
-//   const finishDateTime = "2023-03-15 13:37";
-//   const breakTimeInMinutes = 15;
 
 export const calculateRemainingHours = (value) => {
   const { startDateTime, finishDate, finishTime, breaksTime } = value;
@@ -16,10 +13,18 @@ export const calculateRemainingHours = (value) => {
   const breakTimeInMs = breakTimeInMinutes * 60 * 1000;
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   const finalRemainingTimeInMs = remainingTimeInMs > 0 ? remainingTimeInMs : 0;
-  const remainingTime = dayjs.duration(finalRemainingTimeInMs).format("HH:mm");
-  console.log(`Remaining time: ${remainingTime}`);
+  const remainingHours = Math.floor(finalRemainingTimeInMs / (60 * 60 * 1000));
+  const remainingMinutes = Math.floor(
+    (finalRemainingTimeInMs % (60 * 60 * 1000)) / (60 * 1000)
+  );
+  const remainingTime = `${remainingHours}:${padMinutes(remainingMinutes)}`;
   return remainingTime;
 };
+
+const padMinutes = (minutes) => {
+  return minutes.toString().padStart(2, "0");
+};
+
 export const calRemainFromLabourHour = (
   remainingTime,
   currentSpent,

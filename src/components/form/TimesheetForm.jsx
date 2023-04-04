@@ -34,7 +34,9 @@ const TimesheetForm = ({ data, onSubmit }) => {
   const handleOnFinish = (value) => {
     const result = {
       ...value,
-      startDateTime: dayjs(value.startDateTime).format("YYYY-MM-DD HH:mm"),
+      startDateTime: dayjs(value.startDateTime).format(
+        `${dateFormat} ${timeFormat}`
+      ),
       startTime: dayjs(value.startDateTime).format(timeFormat),
       finishDate: dayjs(value.finishDate).format(dateFormat),
       finishTime: dayjs(value.finishTime).format(timeFormat),
@@ -119,7 +121,7 @@ const TimesheetForm = ({ data, onSubmit }) => {
               console.log(value);
             }}
             allowClear={false}
-            format="YYYY/MM/DD HH:mm"
+            format="DD/MM/YYYY HH:mm"
           />
         </Form.Item>
         <Form.Item
