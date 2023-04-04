@@ -148,43 +148,41 @@ const TimesheetForm = ({ data, onSubmit }) => {
           rules={[{ required: true, message: "Please input finish time!" }]}
         >
           <TimePicker
-            // disabledHours={disabledFinishTime}
             allowClear={false}
             showNow={false}
             inputReadOnly
             format={timeFormat}
-            disabledHours={() => {
-              const startDate = form.getFieldValue("startDate");
-              const finishDate = form.getFieldValue("finishDate");
-              if (dayjs(startDate).isSame(finishDate, "date")) {
-                // disable all hours before the selected start time
-                const startTime = form.getFieldValue("startDateTime");
-                const disabledHours = [];
-                for (let i = 0; i < dayjs(startTime).hour(); i++) {
-                  disabledHours.push(i);
-                }
-                return disabledHours;
-              } else {
-                // enable all hours when finish date is not the same as start date
-                return [];
-              }
-            }}
-            disabledMinutes={(selectedHour) => {
+            disabledTime={(current) => {
               const startDate = form.getFieldValue("startDateTime");
               const finishDate = form.getFieldValue("finishDate");
+              const startTime = form.getFieldValue("startDateTime");
+              const startHour = dayjs(startTime).hour();
+              const startMinute = dayjs(startTime).minute();
+
               if (dayjs(startDate).isSame(finishDate, "date")) {
-                // disable the selected start time minute if the selected hour is the same as the start time hour
-                const startTime = form.getFieldValue("startDateTime");
-                const startHour = dayjs(startTime).hour();
-                const startMinute = dayjs(startTime).minute();
-                if (selectedHour === startHour) {
-                  return Array.from(Array(startMinute + 1).keys());
-                } else {
-                  return [];
-                }
+                return {
+                  disabledHours: () => {
+                    const disabledHours = [];
+                    for (let i = 0; i < startHour; i++) {
+                      disabledHours.push(i);
+                    }
+                    return disabledHours;
+                  },
+                  disabledMinutes: (hour) => {
+                    if (hour === startHour) {
+                      return Array.from(Array(startMinute + 1).keys());
+                    } else {
+                      return [];
+                    }
+                  },
+                  disabledSeconds: () => [],
+                };
               } else {
-                // enable all minutes when finish date is not the same as start date
-                return [];
+                return {
+                  disabledHours: () => [],
+                  disabledMinutes: () => [],
+                  disabledSeconds: () => [],
+                };
               }
             }}
           />
