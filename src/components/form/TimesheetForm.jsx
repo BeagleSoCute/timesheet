@@ -24,8 +24,7 @@ const formItemLayout = {
   wrapperCol: { span: 12 },
 };
 
-const TimesheetForm = ({ data, onSubmit }) => {
-  const [form] = Form.useForm();
+const TimesheetForm = ({ form, data, onSubmit }) => {
   const [isBreak, setIsBreak] = useState(true);
   const [isStartTimeCorrect, setIsStartTimeCorrect] = useState(true);
   const handleChangeIsBreak = (value) => {

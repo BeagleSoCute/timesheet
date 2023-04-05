@@ -13,13 +13,16 @@ export const calculateRemainingHours = (value) => {
   const timeDiffInMs = finishDateTime.diff(startDate);
   const breakTimeInMs = breakTimeInMinutes * 60 * 1000;
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
+  if (remainingTimeInMs < 0) {
+    return { isSuccess: false };
+  }
   const finalRemainingTimeInMs = remainingTimeInMs > 0 ? remainingTimeInMs : 0;
   const remainingHours = Math.floor(finalRemainingTimeInMs / (60 * 60 * 1000));
   const remainingMinutes = Math.floor(
     (finalRemainingTimeInMs % (60 * 60 * 1000)) / (60 * 1000)
   );
   const remainingTime = `${remainingHours}:${padMinutes(remainingMinutes)}`;
-  return remainingTime;
+  return { isSuccess: true, res: remainingTime };
 };
 const padMinutes = (minutes) => {
   return minutes.toString().padStart(2, "0");

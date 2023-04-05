@@ -9,8 +9,11 @@ import {
 } from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
 import Button from "components/common/Button";
+import { Form } from "antd";
 
 const TimesheetPage = () => {
+  const [form] = Form.useForm();
+
   const navigate = useNavigate();
   const {
     timesheetData,
@@ -19,7 +22,16 @@ const TimesheetPage = () => {
     clearTimesheetData,
   } = useContext(AppContext);
   const handleSubmit = async (value) => {
-    const res = await calculateRemainingHours(value);
+    const { isSuccess, res } = await calculateRemainingHours(value);
+    if (!isSuccess) {
+      notification({
+        type: "error",
+        message:
+          "Your break time exceed the finish time, please input the break time again! ",
+      });
+      form.resetFields(["breaksTime"]);
+      return false;
+    }
     setRemainingHours(res);
     navigate("/timesheet-allocation");
   };
@@ -32,6 +44,7 @@ const TimesheetPage = () => {
     navigate("/");
   };
   const propsTimesheetForm = {
+    form,
     data: timesheetData,
     onSubmit: handleSubmit,
   };
