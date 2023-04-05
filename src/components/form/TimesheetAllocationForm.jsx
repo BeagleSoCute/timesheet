@@ -32,16 +32,10 @@ const TimesheetAllocation = ({
   onSubmit,
 }) => {
   const [form] = Form.useForm();
-  useEffect(() => {
-    const init = () => {
-      form.setFieldsValue({
-        items: [{}],
-      });
-    };
-    init();
-  }, [form]);
+
   const handleOnFinish = (value) => {
     const { items } = value;
+    console.log("items", items);
     onSubmit(items);
   };
   const handleCalculateRemainHours = async (value, index) => {
@@ -96,6 +90,11 @@ const TimesheetAllocation = ({
     onSetRemaingHour(result.value);
   };
   const handleRemove = async (fieldName, index, remmove) => {
+    const items = form.getFieldsValue("items")["items"];
+    let thisFormItem = form.getFieldsValue("items")["items"][index];
+    console.log("thisFormItem", thisFormItem);
+
+    let nextFormItem = form.getFieldsValue("items")["items"][index + 1];
     const currentLabourHours =
       form.getFieldsValue("items")["items"][index].labourHours;
     if (!currentLabourHours) {
@@ -110,13 +109,57 @@ const TimesheetAllocation = ({
       undefined,
       isReset
     );
+    //set allocation that located before one that be removed
+    console.log("thisFormItem.remainingHours", thisFormItem.remainingHours);
+    nextFormItem = {
+      ...nextFormItem,
+      remainingHours: thisFormItem.remainingHours,
+      description: "this was updated",
+    };
+    await items.splice(index + 1, 1, nextFormItem);
+    console.log("item after replacesssss", items);
+
+    for (let i = index + 1; i < items.length; i++) {
+      //update remaining hour for each item
+      const item = items[i];
+      console.log("item in loop", item, i);
+      console.log("index in loop", i);
+      console.log("index of replace alloo", index + 1);
+      item.remainingHours =
+        items[i + 1].remainingHours - items[i - 1].labourHours;
+      // item.description = "index is" + i;
+      items.splice(i, 1, item);
+    }
+
+    form.setFieldsValue({ items });
     onSetRemaingHour(result.value);
     remmove(fieldName);
+  };
+  const handleAdd = async (index, add) => {
+    console.log("handleAdd", index + 1);
+    await add();
+    //Assign remaining hour to new item
+    const items = form.getFieldsValue("items")["items"];
+    const thisFormItem = form.getFieldsValue("items")["items"][index + 1];
+    console.log("items", items);
+    thisFormItem.remainingHours = remainingHours;
+    items.splice(index + 1, 1, thisFormItem);
+    form.setFieldsValue({ items });
+    console.log("thisFormItem", thisFormItem);
+  };
+
+  const initialValues = {
+    items: [
+      {
+        remainingHours,
+      },
+    ],
   };
   return (
     <StyledDiv className="timesheet-allocation-form">
       <Form
         {...formItemLayout}
+        initialValues={initialValues}
         requiredMark={false}
         id="timesheet-allo"
         form={form}
@@ -149,16 +192,25 @@ const TimesheetAllocation = ({
                       )}
                     </div>
                     <div>
-                      <div className="remain-hour grid grid-cols-12 mt-1 lable-bg-color">
-                        <span className="font-bold col-span-8 my-auto ">
+                      <Form.Item
+                        labelCol={{ span: 15 }}
+                        wrapperCol={{ span: 9 }}
+                        name={[index, "remainingHours"]}
+                        label="Remaining Hours to Allocate:"
+                        className="remain-hour mb-0 mt-1"
+                      >
+                        {/* <span className="font-bold col-span-8 my-auto ">
                           Remaining Hours to Allocate:
-                        </span>
+                        </span> */}
                         <Input
                           className="col-span-4 text-right"
                           readOnly
-                          value={remainingHours}
+                          // value={
+                          //   form.getFieldsValue("items")["items"][index]
+                          //     ?.remainingHours
+                          // }
                         />
-                      </div>
+                      </Form.Item>
                       <Form.Item
                         className="full-content mb-0 "
                         colon={false}
@@ -212,7 +264,7 @@ const TimesheetAllocation = ({
                       </Form.Item>
 
                       <Form.Item
-                        className="full-content  mb-0 "
+                        className="full-content mb-0 "
                         colon={false}
                         label="Labour Hour *"
                         name={[index, "labourHours"]}
@@ -248,7 +300,7 @@ const TimesheetAllocation = ({
                     <DefaultButton
                       isprimary="false"
                       className="no-color-button mt-5 mb-10 w-64 h-8  "
-                      onClick={() => add()}
+                      onClick={() => handleAdd(fields.length - 1, add)}
                       label="Add"
                     />
                   </div>
@@ -257,6 +309,7 @@ const TimesheetAllocation = ({
             );
           }}
         </Form.List>
+
         <div className="my-0">
           {remainingHours === "00:00" && (
             <p className="lable-bg-color p-2 my-0">
