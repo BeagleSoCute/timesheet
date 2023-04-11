@@ -20,6 +20,7 @@ const TimesheetPage = () => {
     allocatedData,
     setRemainingHours,
     clearTimesheetData,
+    setTimesheetData,
   } = useContext(AppContext);
   const handleSubmit = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value);
@@ -32,7 +33,11 @@ const TimesheetPage = () => {
       form.resetFields(["breaksTime"]);
       return false;
     }
-    setRemainingHours(res);
+    setTimesheetData({
+      ...timesheetData,
+      breaksTime: value.breaksTime,
+      remainingHours: res,
+    });
     navigate("/timesheet-allocation");
   };
   const handleSignout = () => {

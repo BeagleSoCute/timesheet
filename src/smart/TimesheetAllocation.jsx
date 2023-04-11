@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 import { notification } from "helpers/notification.helper";
@@ -7,8 +7,12 @@ import { Modal } from "antd";
 
 const TimesheetAllocation = () => {
   const navigate = useNavigate();
-  const { remainingHours, setAllocatedHours, setLoading, setRemainingHours } =
+  const { timesheetData, setAllocatedHours, setLoading } =
     useContext(AppContext);
+  const [remainingHours, setRemainingHours] = useState(
+    timesheetData.remainingHours
+  );
+
   const handleSubmitAllocation = async (value) => {
     if (remainingHours !== "00:00") {
       notification({
@@ -21,7 +25,7 @@ const TimesheetAllocation = () => {
     setLoading(true);
     return new Promise((resolve, reject) => {
       setTimeout(() => {
-        const success = true; //handler error when get error from the backend
+        const success = true; //handle error when get error from the backend
         if (success) {
           Modal.success({
             content: (
