@@ -58,7 +58,7 @@ const TimesheetAllocation = ({
       ? dayjs(previousLabourHour).format(timeFormat)
       : undefined;
     const labourHours = dayjs(value).format(timeFormat);
-    const result = calRemainFromLabourHour(
+    const result = await calRemainFromLabourHour(
       remainingHours,
       labourHours,
       modifyPreviousLabourHourD
@@ -88,7 +88,7 @@ const TimesheetAllocation = ({
       const thisLabourHours = dayjs(allItems[i - 1].labourHours).format(
         timeFormat
       );
-      const result = calRemainFromLabourHour(
+      const result = await calRemainFromLabourHour(
         allItems[i - 1].remainingHours,
         thisLabourHours,
         undefined
@@ -113,7 +113,7 @@ const TimesheetAllocation = ({
       return;
     }
     if (allItems.length === thisIndex + 1) {
-      const result = calRemainFromLabourHour(
+      const result = await calRemainFromLabourHour(
         remainingHours,
         labourHours,
         undefined,
@@ -124,7 +124,7 @@ const TimesheetAllocation = ({
       return;
     }
     const isReset = true;
-    const result = calRemainFromLabourHour(
+    const result = await calRemainFromLabourHour(
       remainingHours,
       labourHours,
       undefined,
@@ -142,7 +142,7 @@ const TimesheetAllocation = ({
       const thisLabourHours = dayjs(allItems[i - 1].labourHours).format(
         timeFormat
       );
-      const result = calRemainFromLabourHour(
+      const result = await calRemainFromLabourHour(
         allItems[i - 1].remainingHours,
         thisLabourHours,
         undefined
