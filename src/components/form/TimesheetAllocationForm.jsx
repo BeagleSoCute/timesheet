@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Form, TimePicker, Select, Input } from "antd";
 import { jobOptions, supervisorOptions, labOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
