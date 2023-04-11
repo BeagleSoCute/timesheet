@@ -34,8 +34,7 @@ const TimesheetAllocation = ({
   const [form] = Form.useForm();
 
   const handleOnFinish = (value) => {
-    const { items } = value;
-    onSubmit(items);
+    onSubmit(value);
   };
   const handleCalculateRemainHours = async (value, index) => {
     const allItems = form.getFieldsValue("items")["items"];
@@ -165,6 +164,8 @@ const TimesheetAllocation = ({
   };
 
   const initialValues = {
+    paidBreak: 555,
+    unpaidBreak: 222,
     items: [
       {
         remainingHours,
@@ -184,6 +185,27 @@ const TimesheetAllocation = ({
         wrapperCol={{ span: 24 }}
         onFinish={handleOnFinish}
       >
+        <div className="break-time-container mt-10 mb-5 p-2">
+          <Form.Item
+            labelCol={{ span: 15 }}
+            wrapperCol={{ span: 9 }}
+            label="Paid break"
+            name="paidBreak"
+            className=""
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            labelCol={{ span: 15 }}
+            wrapperCol={{ span: 9 }}
+            label="Unpaid break"
+            name="unpaidBreak"
+            className="mb-0"
+          >
+            <Input />
+          </Form.Item>
+        </div>
+
         <Form.List name="items">
           {(fields, { add, remove }) => {
             return (
@@ -358,6 +380,9 @@ const StyledDiv = styled.div`
       background-color: #e7e9fa;
       /* padding-left: 8px; */
       padding: 0px 0px 0px 8px;
+    }
+    .break-time-container {
+      background-color: #e7e9fa;
     }
   }
 `;

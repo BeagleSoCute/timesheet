@@ -33,7 +33,7 @@ const TimesheetAllocation = () => {
             okButtonProps: { style: { display: "none" } },
             onCancel: () => navigate("/timesheet-page"),
           });
-          setAllocatedHours(value);
+          setAllocatedHours(value.items);
           setRemainingHours("");
           setLoading(false);
           resolve(true);
