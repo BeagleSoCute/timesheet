@@ -90,18 +90,37 @@ const TimesheetAllocation = ({
     onSetRemaingHour(result.value);
   };
   const handleRemove = async (fieldName, index, remmove) => {
-    const items = form.getFieldsValue("items")["items"];
-    let thisFormItem = form.getFieldsValue("items")["items"][index];
-    console.log("thisFormItem", thisFormItem);
+    const thisIndex = index;
+    const replacingIndex = index + 1;
+    const allItems = form.getFieldsValue("items")["items"];
 
-    let nextFormItem = form.getFieldsValue("items")["items"][index + 1];
+    // console.log("all Item", allItems);
+    let thisFormItem = form.getFieldsValue("items")["items"][thisIndex];
+    // console.log("thisFormItem", thisFormItem);
+    let nextFormItem = form.getFieldsValue("items")["items"][replacingIndex];
     const currentLabourHours =
       form.getFieldsValue("items")["items"][index].labourHours;
+    const labourHours = dayjs(currentLabourHours).format(timeFormat);
+
     if (!currentLabourHours) {
+      //this will be called when there is not current labour hour => can remove without any caculatation
       remmove(fieldName);
       return;
     }
-    const labourHours = dayjs(currentLabourHours).format(timeFormat);
+
+    if (allItems.length === thisIndex + 1) {
+      console.log("match condition--------------------");
+      const result = await calRemainFromLabourHour(
+        remainingHours,
+        labourHours,
+        undefined,
+        true
+      );
+      onSetRemaingHour(result.value);
+      remmove(fieldName);
+      return;
+    }
+
     const isReset = true;
     const result = await calRemainFromLabourHour(
       remainingHours,
@@ -116,36 +135,51 @@ const TimesheetAllocation = ({
       remainingHours: thisFormItem.remainingHours,
       description: "this was updated",
     };
-    await items.splice(index + 1, 1, nextFormItem);
-    console.log("item after replacesssss", items);
+    console.log("item before replacesssss", allItems);
 
-    for (let i = index + 1; i < items.length; i++) {
+    await allItems.splice(replacingIndex, 1, nextFormItem);
+    form.setFieldsValue({ items: allItems });
+    console.log("item after replacesssss", allItems);
+    // After replacing form item, the recalculate the remaing hour for each item
+    for (let i = replacingIndex + 1; i < allItems.length; i++) {
       //update remaining hour for each item
-      const item = items[i];
+      const item = allItems[i];
       console.log("item in loop", item, i);
       console.log("index in loop", i);
       console.log("index of replace alloo", index + 1);
-      item.remainingHours =
-        items[i + 1].remainingHours - items[i - 1].labourHours;
-      // item.description = "index is" + i;
-      items.splice(i, 1, item);
-    }
 
-    form.setFieldsValue({ items });
+      const thosLabourHours = dayjs(allItems[i + -1].labourHours).format(
+        timeFormat
+      );
+      const result = calRemainFromLabourHour(
+        allItems[i + -1].remainingHours,
+        thosLabourHours,
+        undefined
+      );
+      console.log("result for", i, result);
+      item.remainingHours = result.value;
+      allItems.splice(i, 1, item);
+    }
+    allItems.splice(thisIndex, 1);
+
+    form.setFieldsValue({ items: allItems });
+    console.log("item after finish for loops", allItems);
+
     onSetRemaingHour(result.value);
-    remmove(fieldName);
+
+    // remmove(fieldName);
   };
   const handleAdd = async (index, add) => {
     console.log("handleAdd", index + 1);
     await add();
     //Assign remaining hour to new item
-    const items = form.getFieldsValue("items")["items"];
-    const thisFormItem = form.getFieldsValue("items")["items"][index + 1];
-    console.log("items", items);
-    thisFormItem.remainingHours = remainingHours;
-    items.splice(index + 1, 1, thisFormItem);
-    form.setFieldsValue({ items });
-    console.log("thisFormItem", thisFormItem);
+    const allItems = form.getFieldsValue("items")["items"];
+    const newFormItem = form.getFieldsValue("items")["items"][index + 1];
+    console.log("items", allItems);
+    newFormItem.remainingHours = remainingHours;
+    allItems.splice(index + 1, 1, newFormItem);
+    form.setFieldsValue({ items: allItems });
+    console.log("newFormItem", newFormItem);
   };
 
   const initialValues = {
