@@ -12,7 +12,7 @@ export const labOptions = [
   { value: "Operature", label: "Operature" },
 ];
 
-export const reasonCode = [
+export const reasonCodeOptions = [
   { value: "codeA", label: "Code-A" },
   { value: "codeB", label: "Code-B" },
   { value: "codeC", label: "Code-C" },

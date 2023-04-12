@@ -4,7 +4,7 @@ import {
   jobOptions,
   supervisorOptions,
   labOptions,
-  reasonCode,
+  reasonCodeOptions,
 } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
@@ -14,6 +14,7 @@ import PropTypes from "prop-types";
 import { notification } from "helpers/notification.helper";
 import DefaultButton from "components/common/Button";
 import styled from "styled-components";
+import { calculateNewRemainingTime } from "services/timesheet.service";
 
 const propTypes = {
   remainingHours: PropTypes.string,
@@ -47,6 +48,12 @@ const TimesheetAllocation = ({
 }) => {
   const [form] = Form.useForm();
   const [reasonCode, setReasonCode] = useState("");
+  const [totalRemainingHours, setTotalRemainingHours] =
+    useState(remainingHours);
+
+  const [previouTotalBreak, setPreviousTotalBreak] = useState(
+    paidBreak + unpaidBreak
+  );
 
   const handleOnFinish = (value) => {
     onSubmit(value);
@@ -178,6 +185,54 @@ const TimesheetAllocation = ({
     form.setFieldsValue({ items: allItems });
   };
 
+  const validateUnpaidBreak = () => {
+    if (reasonCode === "codeA" || reasonCode === "codeB") {
+      return "error";
+    } else {
+      return "";
+    }
+  };
+
+  const validatePaidBreak = () => {
+    if (reasonCode === "codeC") {
+      return "error";
+    } else {
+      return "";
+    }
+  };
+
+  const handleChangeBreak = async (value) => {
+    const allItems = form.getFieldsValue("items")["items"];
+    const paidBreak = form.getFieldsValue().paidBreak;
+    const currentTotalBreak = parseInt(value) + parseInt(paidBreak);
+    const res = calculateNewRemainingTime(
+      totalRemainingHours,
+      currentTotalBreak,
+      previouTotalBreak
+    );
+    setPreviousTotalBreak(currentTotalBreak);
+    console.log("result", res);
+    for (let i = 0; i < allItems.length; i++) {
+      let thisItem = allItems[i];
+      if (i === 0) {
+        thisItem.remainingHours = res;
+        allItems.splice(0, 1, thisItem); //update the item
+      } else {
+        const thisLabourHours = dayjs(allItems[i - 1].labourHours).format(
+          timeFormat
+        );
+        const result = await calRemainFromLabourHour(
+          allItems[i - 1].remainingHours,
+          thisLabourHours,
+          undefined
+        );
+        thisItem.remainingHours = result.value;
+        allItems.splice(i, 1, thisItem); //update the item
+      }
+      form.setFieldsValue({ items: allItems });
+    }
+  };
+
   const initialValues = {
     paidBreak,
     unpaidBreak,
@@ -206,6 +261,7 @@ const TimesheetAllocation = ({
             wrapperCol={{ span: 9 }}
             label="Paid break"
             name="paidBreak"
+            validateStatus={validatePaidBreak()}
             className=""
           >
             <InputNumber className="w-full" controls={false} />
@@ -216,16 +272,45 @@ const TimesheetAllocation = ({
             label="Unpaid break"
             name="unpaidBreak"
             className="mb-0"
+            onChange={(e) => handleChangeBreak(e.target.value)}
+            validateStatus={validateUnpaidBreak()}
+            rules={[
+              {
+                // required: true,
+                message: "Please select reason code",
+              },
+            ]}
           >
             <InputNumber className="w-full" controls={false} />
           </Form.Item>
 
           {!isLegalBreak && (
             <div className="mt-5">
-              <Form.Item label="Reason Code" name="reasonCode">
-                <Select options={reasonCode} />
+              <Form.Item
+                label="Reason Code *"
+                name="reasonCode"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select reason code",
+                  },
+                ]}
+              >
+                <Select
+                  onSelect={(value) => setReasonCode(value)}
+                  options={reasonCodeOptions}
+                />
               </Form.Item>
-              <Form.Item label="Reason" name="reason">
+              <Form.Item
+                label="Reason *"
+                name="reason"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please give a reason",
+                  },
+                ]}
+              >
                 <Input.TextArea />
               </Form.Item>
             </div>

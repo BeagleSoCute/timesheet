@@ -127,3 +127,39 @@ export const transformBreakingTime = (totalBreak, totalHours) => {
     };
   }
 };
+
+export const calculateNewRemainingTime = (
+  remainingTime,
+  currentTotalBreak,
+  previousTotalBreak
+) => {
+  console.log("previousTotalBreak", previousTotalBreak);
+  console.log("currentTotalBreak", currentTotalBreak);
+  console.log("remainingTime", remainingTime);
+
+  // Parse the remainingTime string into hours and minutes
+  const [hours, minutes] = remainingTime.split(":").map(Number);
+
+  // Create a duration object using hours and minutes
+  const remainingDuration = dayjs.duration({ hours, minutes });
+
+  // Subtract the breakTime (in minutes) from the remainingDuration
+  const newRemainingDuration =
+    previousTotalBreak > currentTotalBreak
+      ? remainingDuration.add(previousTotalBreak - currentTotalBreak, "minutes")
+      : remainingDuration.subtract(
+          currentTotalBreak - previousTotalBreak,
+          "minutes"
+        );
+
+  // Format the new remaining time into "HH:mm" format
+  const newRemainingTime = `${newRemainingDuration
+    .hours()
+    .toString()
+    .padStart(2, "0")}:${newRemainingDuration
+    .minutes()
+    .toString()
+    .padStart(2, "0")}`;
+
+  return newRemainingTime;
+};
