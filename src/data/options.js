@@ -11,3 +11,9 @@ export const labOptions = [
   { value: "Labbour", label: "Labbour" },
   { value: "Operature", label: "Operature" },
 ];
+
+export const reasonCode = [
+  { value: "codeA", label: "Code-A" },
+  { value: "codeB", label: "Code-B" },
+  { value: "codeC", label: "Code-C" },
+];

@@ -12,7 +12,6 @@ const TimesheetAllocation = () => {
   const [remainingHours, setRemainingHours] = useState(
     timesheetData.remainingHours
   );
-
   const handleSubmitAllocation = async (value) => {
     if (remainingHours !== "00:00") {
       notification({
@@ -58,6 +57,9 @@ const TimesheetAllocation = () => {
   };
   const propsTimesheetAllocationForm = {
     remainingHours,
+    paidBreak: timesheetData.paidBreak,
+    unpaidBreak: timesheetData.unpaidBreak,
+    isLegalBreak: timesheetData.isLegalBreak,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: handleSetRemaingHour,
   };

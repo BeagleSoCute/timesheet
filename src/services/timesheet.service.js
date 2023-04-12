@@ -21,11 +21,13 @@ export const calculateRemainingHours = (value) => {
   const remainingMinutes = Math.floor(
     (finalRemainingTimeInMs % (60 * 60 * 1000)) / (60 * 1000)
   );
-  const remainingTime = `${remainingHours}:${padMinutes(remainingMinutes)}`;
+  const remainingTime = `${padTime(remainingHours)}:${padTime(
+    remainingMinutes
+  )}`;
   return { isSuccess: true, res: remainingTime };
 };
-const padMinutes = (minutes) => {
-  return minutes.toString().padStart(2, "0");
+const padTime = (time) => {
+  return time.toString().padStart(2, "0");
 };
 
 export const calRemainFromLabourHour = (
@@ -65,7 +67,7 @@ export const calRemainFromLabourHour = (
 
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
-      ? { value: "00:00", isSuccess: false }
+      ? { value: 0, isSuccess: false }
       : {
           value: dayjs
             .duration(remainingTimeInMinutesAfterSubtraction, "milliseconds")
@@ -93,4 +95,35 @@ export const trasformSubmitAllocatedHours = (value) => {
       supervisors: arrayToString(item.supervisors),
     };
   });
+};
+
+export const transformBreakingTime = (totalBreak, totalHours) => {
+  const hours = dayjs(totalHours, "HH:mm").hour();
+  let legal = 0;
+  if (totalBreak === "00") {
+    return {
+      paidBreak: 0,
+      unpaidBreak: 0,
+    };
+  } else if (hours >= 8) {
+    legal = 50;
+    return {
+      paidBreak: 20,
+      unpaidBreak: totalBreak - 20,
+      isLegalBreak: totalBreak < legal ? false : true,
+    };
+  } else if (hours >= 6) {
+    legal = 40;
+    return {
+      paidBreak: 10,
+      unpaidBreak: totalBreak - 10,
+      isLegalBreak: totalBreak < legal ? false : true,
+    };
+  } else {
+    return {
+      paidBreak: 0,
+      unpaidBreak: totalBreak,
+      isLegalBreak: false,
+    };
+  }
 };

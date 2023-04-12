@@ -1,6 +1,11 @@
-import React from "react";
-import { Form, TimePicker, Select, Input } from "antd";
-import { jobOptions, supervisorOptions, labOptions } from "data/options";
+import React, { useState } from "react";
+import { Form, TimePicker, Select, Input, InputNumber } from "antd";
+import {
+  jobOptions,
+  supervisorOptions,
+  labOptions,
+  reasonCode,
+} from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs from "dayjs";
@@ -12,11 +17,17 @@ import styled from "styled-components";
 
 const propTypes = {
   remainingHours: PropTypes.string,
+  paidBreak: PropTypes.number,
+  unpaidBreak: PropTypes.number,
+  isLegalBreak: PropTypes.bool,
   onSetRemaingHour: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 const defaultProps = {
   remainingHours: "",
+  paidBreak: 0,
+  unpaidBreak: 0,
+  isLegalBreak: true,
   onSetRemaingHour: () => {},
   onSubmit: () => {},
 };
@@ -28,10 +39,14 @@ const formItemLayout = {
 
 const TimesheetAllocation = ({
   remainingHours,
+  paidBreak,
+  unpaidBreak,
+  isLegalBreak,
   onSetRemaingHour,
   onSubmit,
 }) => {
   const [form] = Form.useForm();
+  const [reasonCode, setReasonCode] = useState("");
 
   const handleOnFinish = (value) => {
     onSubmit(value);
@@ -164,8 +179,8 @@ const TimesheetAllocation = ({
   };
 
   const initialValues = {
-    paidBreak: 555,
-    unpaidBreak: 222,
+    paidBreak,
+    unpaidBreak,
     items: [
       {
         remainingHours,
@@ -193,7 +208,7 @@ const TimesheetAllocation = ({
             name="paidBreak"
             className=""
           >
-            <Input />
+            <InputNumber className="w-full" controls={false} />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 15 }}
@@ -202,8 +217,19 @@ const TimesheetAllocation = ({
             name="unpaidBreak"
             className="mb-0"
           >
-            <Input />
+            <InputNumber className="w-full" controls={false} />
           </Form.Item>
+
+          {!isLegalBreak && (
+            <div className="mt-5">
+              <Form.Item label="Reason Code" name="reasonCode">
+                <Select options={reasonCode} />
+              </Form.Item>
+              <Form.Item label="Reason" name="reason">
+                <Input.TextArea />
+              </Form.Item>
+            </div>
+          )}
         </div>
 
         <Form.List name="items">

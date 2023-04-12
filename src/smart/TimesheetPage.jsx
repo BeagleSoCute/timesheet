@@ -6,6 +6,7 @@ import AllocationData from "components/common/AllocationData";
 import {
   calculateRemainingHours,
   trasformSubmitAllocatedHours,
+  transformBreakingTime,
 } from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
 import Button from "components/common/Button";
@@ -15,13 +16,8 @@ const TimesheetPage = () => {
   const [form] = Form.useForm();
 
   const navigate = useNavigate();
-  const {
-    timesheetData,
-    allocatedData,
-    setRemainingHours,
-    clearTimesheetData,
-    setTimesheetData,
-  } = useContext(AppContext);
+  const { timesheetData, allocatedData, clearTimesheetData, setTimesheetData } =
+    useContext(AppContext);
   const handleSubmit = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value);
     if (!isSuccess) {
@@ -33,9 +29,19 @@ const TimesheetPage = () => {
       form.resetFields(["breaksTime"]);
       return false;
     }
+    console.log("value", value);
+    console.log("res", res);
+    const { paidBreak, unpaidBreak, isLegalBreak } = transformBreakingTime(
+      value.breaksTime,
+      res
+    );
+    console.log("paidBreak", paidBreak);
+    console.log("unpaidBreak", unpaidBreak);
     setTimesheetData({
       ...timesheetData,
-      breaksTime: value.breaksTime,
+      paidBreak,
+      unpaidBreak,
+      isLegalBreak,
       remainingHours: res,
     });
     navigate("/timesheet-allocation");
