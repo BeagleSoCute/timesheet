@@ -46,14 +46,9 @@ const TimesheetAllocation = ({
   onSetRemaingHour,
   onSubmit,
 }) => {
+  const initRemainingHours = remainingHours;
   const [form] = Form.useForm();
   const [reasonCode, setReasonCode] = useState("");
-  const [totalRemainingHours, setTotalRemainingHours] =
-    useState(remainingHours);
-
-  const [previouTotalBreak, setPreviousTotalBreak] = useState(
-    paidBreak + unpaidBreak
-  );
 
   const handleOnFinish = (value) => {
     onSubmit(value);
@@ -202,15 +197,11 @@ const TimesheetAllocation = ({
   };
 
   const handleChangeBreak = async (value) => {
+    //Note
     const allItems = form.getFieldsValue("items")["items"];
     const paidBreak = form.getFieldsValue().paidBreak;
-    const currentTotalBreak = parseInt(value) + parseInt(paidBreak);
-    const res = calculateNewRemainingTime(
-      totalRemainingHours,
-      currentTotalBreak,
-      previouTotalBreak
-    );
-    setPreviousTotalBreak(currentTotalBreak);
+    const totalBreak = parseInt(value) + parseInt(paidBreak);
+    const res = calculateNewRemainingTime(initRemainingHours, totalBreak);
     console.log("result", res);
     for (let i = 0; i < allItems.length; i++) {
       let thisItem = allItems[i];

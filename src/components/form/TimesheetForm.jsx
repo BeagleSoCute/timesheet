@@ -40,7 +40,7 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
       startTime: dayjs(value.startDateTime).format(timeFormat),
       finishDate: dayjs(value.finishDate).format(dateFormat),
       finishTime: dayjs(value.finishTime).format(timeFormat),
-      breaksTime: isBreak ? value.breaksTime : "00",
+      breaksTime: isBreak ? value.breaksTime : 0,
     };
     onSubmit(result);
   };

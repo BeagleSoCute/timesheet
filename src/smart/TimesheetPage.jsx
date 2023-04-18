@@ -19,12 +19,12 @@ const TimesheetPage = () => {
   const { timesheetData, allocatedData, clearTimesheetData, setTimesheetData } =
     useContext(AppContext);
   const handleSubmit = async (value) => {
-    const { isSuccess, res } = await calculateRemainingHours(value);
+    const { isSuccess, res } = await calculateRemainingHours(value); //ANCHOR
     if (!isSuccess) {
       notification({
         type: "error",
         message:
-          "Your break time exceed the finish time, please input the break time again! ",
+          "Your break time exceed the finish time, please input the break time again!",
       });
       form.resetFields(["breaksTime"]);
       return false;
@@ -32,9 +32,9 @@ const TimesheetPage = () => {
     console.log("value", value);
     console.log("res", res);
     const { paidBreak, unpaidBreak, isLegalBreak } = transformBreakingTime(
-      value.breaksTime,
-      res
-    );
+      res.breakTime,
+      res.workingHours
+    ); //ANCHOR
     console.log("paidBreak", paidBreak);
     console.log("unpaidBreak", unpaidBreak);
     setTimesheetData({
@@ -42,7 +42,7 @@ const TimesheetPage = () => {
       paidBreak,
       unpaidBreak,
       isLegalBreak,
-      remainingHours: res,
+      remainingHours: res.remainingTime,
     });
     navigate("/timesheet-allocation");
   };

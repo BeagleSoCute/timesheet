@@ -9,9 +9,19 @@ export const calculateRemainingHours = (value) => {
     finishDate + " " + finishTime,
     "DD-MM-YYYY HH:mm"
   );
-  const breakTimeInMinutes = breaksTime;
+  let breakTimeInMinutes; //NOTE default here based on the legal break time
   const timeDiffInMs = finishDateTime.diff(startDate);
+  const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
+  //NOTE set default for break time if not provided and check the deault legal break time
+  if (breaksTime === 0) {
+    const legalBreakingTime = hours >= 8 ? 50 : hours >= 6 ? 40 : 0;
+    breakTimeInMinutes = legalBreakingTime;
+  } else {
+    breakTimeInMinutes = breaksTime;
+  }
+
   const breakTimeInMs = breakTimeInMinutes * 60 * 1000;
+
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   if (remainingTimeInMs < 0) {
     return { isSuccess: false };
@@ -24,7 +34,10 @@ export const calculateRemainingHours = (value) => {
   const remainingTime = `${padTime(remainingHours)}:${padTime(
     remainingMinutes
   )}`;
-  return { isSuccess: true, res: remainingTime };
+  return {
+    isSuccess: true,
+    res: { remainingTime, breakTime: breakTimeInMinutes, workingHours: hours },
+  };
 };
 const padTime = (time) => {
   return time.toString().padStart(2, "0");
@@ -98,22 +111,16 @@ export const trasformSubmitAllocatedHours = (value) => {
 };
 
 export const transformBreakingTime = (totalBreak, totalHours) => {
-  const hours = dayjs(totalHours, "HH:mm").hour();
-  let legal = 0;
-  if (totalBreak === "00") {
-    return {
-      paidBreak: 0,
-      unpaidBreak: 0,
-    };
-  } else if (hours >= 8) {
-    legal = 50;
+  const hours = totalHours;
+  if (hours >= 8) {
+    const legal = 50;
     return {
       paidBreak: 20,
       unpaidBreak: totalBreak - 20,
       isLegalBreak: totalBreak < legal ? false : true,
     };
   } else if (hours >= 6) {
-    legal = 40;
+    const legal = 40;
     return {
       paidBreak: 10,
       unpaidBreak: totalBreak - 10,
@@ -128,29 +135,23 @@ export const transformBreakingTime = (totalBreak, totalHours) => {
   }
 };
 
-export const calculateNewRemainingTime = (
-  remainingTime,
-  currentTotalBreak,
-  previousTotalBreak
-) => {
-  console.log("previousTotalBreak", previousTotalBreak);
-  console.log("currentTotalBreak", currentTotalBreak);
-  console.log("remainingTime", remainingTime);
+export const calculateNewRemainingTime = (remainingHours, totalBreak) => {
+  // console.log("totalBreak", totalBreak);
+  // console.log("remainingHours", remainingHours);
 
-  // Parse the remainingTime string into hours and minutes
-  const [hours, minutes] = remainingTime.split(":").map(Number);
+  // Parse the remainingHours string into hours and minutes
+  const [hours, minutes] = remainingHours.split(":").map(Number);
 
   // Create a duration object using hours and minutes
   const remainingDuration = dayjs.duration({ hours, minutes });
 
   // Subtract the breakTime (in minutes) from the remainingDuration
-  const newRemainingDuration =
-    previousTotalBreak > currentTotalBreak
-      ? remainingDuration.add(previousTotalBreak - currentTotalBreak, "minutes")
-      : remainingDuration.subtract(
-          currentTotalBreak - previousTotalBreak,
-          "minutes"
-        );
+  const newRemainingDuration = remainingDuration.subtract(
+    totalBreak,
+    "minutes"
+  );
+  // console.log("remainingDuration", remainingDuration);
+  // console.log("newRemainingDuration", newRemainingDuration);
 
   // Format the new remaining time into "HH:mm" format
   const newRemainingTime = `${newRemainingDuration
