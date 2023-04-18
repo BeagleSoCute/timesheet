@@ -57,6 +57,7 @@ const TimesheetAllocation = () => {
   };
   const propsTimesheetAllocationForm = {
     remainingHours,
+    actualTime: timesheetData.actualTime,
     paidBreak: timesheetData.paidBreak,
     unpaidBreak: timesheetData.unpaidBreak,
     isLegalBreak: timesheetData.isLegalBreak,

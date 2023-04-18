@@ -20,12 +20,14 @@ const propTypes = {
   remainingHours: PropTypes.string,
   paidBreak: PropTypes.number,
   unpaidBreak: PropTypes.number,
+  actualTime: PropTypes.string,
   isLegalBreak: PropTypes.bool,
   onSetRemaingHour: PropTypes.func,
   onSubmit: PropTypes.func,
 };
 const defaultProps = {
   remainingHours: "",
+  actualTime: "",
   paidBreak: 0,
   unpaidBreak: 0,
   isLegalBreak: true,
@@ -40,6 +42,7 @@ const formItemLayout = {
 
 const TimesheetAllocation = ({
   remainingHours,
+  actualTime,
   paidBreak,
   unpaidBreak,
   isLegalBreak,
@@ -54,6 +57,7 @@ const TimesheetAllocation = ({
     onSubmit(value);
   };
   const handleCalculateRemainHours = async (value, index) => {
+    //ANCHOR
     const allItems = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
@@ -97,7 +101,7 @@ const TimesheetAllocation = ({
       ...thisFormItem,
       previousLabourHour: value,
     };
-    allItems.splice(index, 1, thisFormItem);
+    await allItems.splice(index, 1, thisFormItem);
     //handle update remaining hour in other form item
     for (let i = index + 1; i < allItems.length; i++) {
       const thisItem = allItems[i];
@@ -110,9 +114,9 @@ const TimesheetAllocation = ({
         undefined
       );
       thisItem.remainingHours = result.value;
-      allItems.splice(i, 1, thisItem); //update the item
+      await allItems.splice(i, 1, thisItem); //update the item
     }
-    form.setFieldsValue({ items: allItems });
+    await form.setFieldsValue({ items: allItems });
     onSetRemaingHour(result.value);
   };
   const handleRemove = async (fieldName, index, remmove) => {
@@ -175,7 +179,7 @@ const TimesheetAllocation = ({
     //Assign remaining hour to new item
     const allItems = form.getFieldsValue("items")["items"];
     const newFormItem = form.getFieldsValue("items")["items"][index + 1];
-    newFormItem.remainingHours = remainingHours;
+    newFormItem.remainingHours = remainingHours; //NOTE bug happen here
     allItems.splice(index + 1, 1, newFormItem);
     form.setFieldsValue({ items: allItems });
   };
@@ -197,17 +201,20 @@ const TimesheetAllocation = ({
   };
 
   const handleChangeBreak = async (value) => {
-    //Note
+    //ANCHOR
     const allItems = form.getFieldsValue("items")["items"];
     const paidBreak = form.getFieldsValue().paidBreak;
     const totalBreak = parseInt(value) + parseInt(paidBreak);
-    const res = calculateNewRemainingTime(initRemainingHours, totalBreak);
-    console.log("result", res);
+    const initialRemainingHours = await calculateNewRemainingTime(
+      actualTime,
+      totalBreak
+    );
+    let thisItem;
     for (let i = 0; i < allItems.length; i++) {
-      let thisItem = allItems[i];
+      thisItem = allItems[i];
       if (i === 0) {
-        thisItem.remainingHours = res;
-        allItems.splice(0, 1, thisItem); //update the item
+        thisItem.remainingHours = initialRemainingHours;
+        await allItems.splice(i, 1, thisItem); //update the item
       } else {
         const thisLabourHours = dayjs(allItems[i - 1].labourHours).format(
           timeFormat
@@ -218,10 +225,11 @@ const TimesheetAllocation = ({
           undefined
         );
         thisItem.remainingHours = result.value;
-        allItems.splice(i, 1, thisItem); //update the item
+        await allItems.splice(i, 1, thisItem); //update the item
       }
-      form.setFieldsValue({ items: allItems });
     }
+    await form.setFieldsValue({ items: allItems });
+    onSetRemaingHour(allItems[allItems.length - 1].remainingHours);
   };
 
   const initialValues = {

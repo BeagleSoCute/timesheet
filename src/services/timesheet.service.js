@@ -12,6 +12,7 @@ export const calculateRemainingHours = (value) => {
   let breakTimeInMinutes; //NOTE default here based on the legal break time
   const timeDiffInMs = finishDateTime.diff(startDate);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
+  const minutes = Math.floor((timeDiffInMs % (60 * 60 * 1000)) / (60 * 1000));
   //NOTE set default for break time if not provided and check the deault legal break time
   if (breaksTime === 0) {
     const legalBreakingTime = hours >= 8 ? 50 : hours >= 6 ? 40 : 0;
@@ -34,9 +35,16 @@ export const calculateRemainingHours = (value) => {
   const remainingTime = `${padTime(remainingHours)}:${padTime(
     remainingMinutes
   )}`;
+
+  const actualTime = `${padTime(hours)}:${padTime(minutes)}`;
   return {
     isSuccess: true,
-    res: { remainingTime, breakTime: breakTimeInMinutes, workingHours: hours },
+    res: {
+      remainingTime,
+      breakTime: breakTimeInMinutes,
+      workingHours: hours,
+      actualTime,
+    },
   };
 };
 const padTime = (time) => {
@@ -78,6 +86,9 @@ export const calRemainFromLabourHour = (
       remainingTimeInMillis - currentSpentInMillis;
   }
 
+  remainingTimeInMinutesAfterSubtraction =
+    remainingTimeInMillis - currentSpentInMillis;
+
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
       ? { value: 0, isSuccess: false }
@@ -87,7 +98,6 @@ export const calRemainFromLabourHour = (
             .format("HH:mm"),
           isSuccess: true,
         };
-
   return remainingTimeFormatted;
 };
 
@@ -136,12 +146,8 @@ export const transformBreakingTime = (totalBreak, totalHours) => {
 };
 
 export const calculateNewRemainingTime = (remainingHours, totalBreak) => {
-  // console.log("totalBreak", totalBreak);
-  // console.log("remainingHours", remainingHours);
-
   // Parse the remainingHours string into hours and minutes
   const [hours, minutes] = remainingHours.split(":").map(Number);
-
   // Create a duration object using hours and minutes
   const remainingDuration = dayjs.duration({ hours, minutes });
 
@@ -150,9 +156,6 @@ export const calculateNewRemainingTime = (remainingHours, totalBreak) => {
     totalBreak,
     "minutes"
   );
-  // console.log("remainingDuration", remainingDuration);
-  // console.log("newRemainingDuration", newRemainingDuration);
-
   // Format the new remaining time into "HH:mm" format
   const newRemainingTime = `${newRemainingDuration
     .hours()
@@ -161,6 +164,5 @@ export const calculateNewRemainingTime = (remainingHours, totalBreak) => {
     .minutes()
     .toString()
     .padStart(2, "0")}`;
-
   return newRemainingTime;
 };

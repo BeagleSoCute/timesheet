@@ -43,6 +43,7 @@ const TimesheetPage = () => {
       unpaidBreak,
       isLegalBreak,
       remainingHours: res.remainingTime,
+      actualTime: res.actualTime,
     });
     navigate("/timesheet-allocation");
   };
