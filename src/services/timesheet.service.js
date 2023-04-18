@@ -59,15 +59,11 @@ export const calRemainFromLabourHour = (
 ) => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const [currentSpentHours, currentSpentMinutes] = currentSpent.split(":");
-
   const remainingTimeInMillis =
     remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
-
   const currentSpentInMillis =
     currentSpentHours * 60 * 60 * 1000 + currentSpentMinutes * 60 * 1000;
-
   let remainingTimeInMinutesAfterSubtraction;
-
   if (previousSpent) {
     const [previousSpentHours, previousSpentMinutes] = previousSpent.split(":");
     const previousSpentInMillis =
@@ -85,10 +81,6 @@ export const calRemainFromLabourHour = (
     remainingTimeInMinutesAfterSubtraction =
       remainingTimeInMillis - currentSpentInMillis;
   }
-
-  remainingTimeInMinutesAfterSubtraction =
-    remainingTimeInMillis - currentSpentInMillis;
-
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
       ? { value: 0, isSuccess: false }
