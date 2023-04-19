@@ -51,6 +51,50 @@ const padTime = (time) => {
   return time.toString().padStart(2, "0");
 };
 
+export const isValidBreakingTime = (
+  remainingTime,
+  totalBreakingTime,
+  previousTotalBreakingTime,
+  actualTime,
+  lastItemRemainingTime
+) => {
+  //ANCHOR isValidBreakingTime
+  if (
+    totalBreakingTime < previousTotalBreakingTime ||
+    totalBreakingTime === previousTotalBreakingTime
+  ) {
+    return true;
+  } else if (remainingTime === "00:00") {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const calculateActualRemain = async (remainingTime, lastLabourHours) => {
+  //ANCHOR bug
+  console.log("lastLabourHours", lastLabourHours);
+  const labour = await dayjs(lastLabourHours).format("HH:mm");
+  console.log("labour", labour);
+  const [remainingHours, remainingMinutes] = remainingTime.split(":");
+  const [labourHours, labourMinutes] = labour.split(":");
+
+  const remainingTimeInMillis =
+    remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
+  const LabourInMillis =
+    labourHours * 60 * 60 * 1000 + labourMinutes * 60 * 1000;
+
+  const result = remainingTimeInMillis - LabourInMillis;
+
+  const finalResult = dayjs.duration(result, "milliseconds").format("HH:mm");
+
+  if (remainingTimeInMillis < LabourInMillis) {
+    return "00:00";
+  }
+
+  return finalResult;
+};
+
 export const calRemainFromLabourHour = (
   remainingTime,
   currentSpent,
@@ -81,9 +125,13 @@ export const calRemainFromLabourHour = (
     remainingTimeInMinutesAfterSubtraction =
       remainingTimeInMillis - currentSpentInMillis;
   }
+  console.log(
+    "remainingTimeInMinutesAfterSubtraction",
+    remainingTimeInMinutesAfterSubtraction
+  );
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
-      ? { value: 0, isSuccess: false }
+      ? { value: "00:00", isSuccess: false }
       : {
           value: dayjs
             .duration(remainingTimeInMinutesAfterSubtraction, "milliseconds")

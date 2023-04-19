@@ -14,7 +14,10 @@ import PropTypes from "prop-types";
 import { notification } from "helpers/notification.helper";
 import DefaultButton from "components/common/Button";
 import styled from "styled-components";
-import { calculateNewRemainingTime } from "services/timesheet.service";
+import {
+  calculateNewRemainingTime,
+  isValidBreakingTime,
+} from "services/timesheet.service";
 
 const propTypes = {
   remainingHours: PropTypes.string,
@@ -52,6 +55,7 @@ const TimesheetAllocation = ({
   const initRemainingHours = remainingHours;
   const [form] = Form.useForm();
   const [reasonCode, setReasonCode] = useState("");
+  const [previousBrekingTime, setPreviousBrekingTime] = useState(unpaidBreak);
 
   const handleOnFinish = (value) => {
     onSubmit(value);
@@ -179,7 +183,7 @@ const TimesheetAllocation = ({
     //Assign remaining hour to new item
     const allItems = form.getFieldsValue("items")["items"];
     const newFormItem = form.getFieldsValue("items")["items"][index + 1];
-    newFormItem.remainingHours = remainingHours; //NOTE bug happen here
+    newFormItem.remainingHours = remainingHours;
     allItems.splice(index + 1, 1, newFormItem);
     form.setFieldsValue({ items: allItems });
   };
@@ -205,10 +209,17 @@ const TimesheetAllocation = ({
     const allItems = form.getFieldsValue("items")["items"];
     const paidBreak = form.getFieldsValue().paidBreak;
     const totalBreak = parseInt(value) + parseInt(paidBreak);
+    console.log("remainingHours", remainingHours);
+    console.log(
+      "allItems[allItems.length - 1].remainingHours",
+      allItems[allItems.length - 1].remainingHours
+    );
+
     const initialRemainingHours = await calculateNewRemainingTime(
       actualTime,
       totalBreak
     );
+
     let thisItem;
     for (let i = 0; i < allItems.length; i++) {
       thisItem = allItems[i];
@@ -224,12 +235,32 @@ const TimesheetAllocation = ({
           thisLabourHours,
           undefined
         );
+        console.log("result++++++", result);
         thisItem.remainingHours = result.value;
         await allItems.splice(i, 1, thisItem); //update the item
       }
     }
+
+    const isValid = await isValidBreakingTime(
+      allItems[allItems.length - 1].remainingHours,
+      totalBreak,
+      previousBrekingTime,
+      actualTime
+    );
+    if (!isValid) {
+      console.log("errorrrr-----");
+      form.setFieldValue("unpaidBreak", previousBrekingTime);
+      notification({
+        type: "error",
+        message:
+          "Break time can not excess or equal to the remaining hour, Please try again",
+      });
+      return;
+    }
+
     await form.setFieldsValue({ items: allItems });
     onSetRemaingHour(allItems[allItems.length - 1].remainingHours);
+    setPreviousBrekingTime(value);
   };
 
   const initialValues = {
@@ -271,7 +302,6 @@ const TimesheetAllocation = ({
             label="Unpaid break"
             name="unpaidBreak"
             className="mb-0"
-            onChange={(e) => handleChangeBreak(e.target.value)}
             validateStatus={validateUnpaidBreak()}
             rules={[
               {
@@ -280,7 +310,11 @@ const TimesheetAllocation = ({
               },
             ]}
           >
-            <InputNumber className="w-full" controls={false} />
+            <InputNumber
+              onBlur={(e) => handleChangeBreak(e.target.value)}
+              className="w-full"
+              controls={false}
+            />
           </Form.Item>
 
           {!isLegalBreak && (
