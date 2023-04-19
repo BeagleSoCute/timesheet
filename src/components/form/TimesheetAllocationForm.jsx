@@ -299,7 +299,11 @@ const TimesheetAllocation = ({
               },
             ]}
           >
-            <InputNumber className="w-full" controls={false} />
+            <InputNumber
+              onBlur={(e) => handleChangeBreak(e.target.value)}
+              className="w-full"
+              controls={false}
+            />
           </Form.Item>
           <Form.Item
             labelCol={{ span: 15 }}
