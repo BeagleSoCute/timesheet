@@ -292,7 +292,12 @@ const TimesheetAllocation = ({
             label="Paid break"
             name="paidBreak"
             validateStatus={validatePaidBreak()}
-            className=""
+            rules={[
+              {
+                required: true,
+                message: "Please select unbaid break",
+              },
+            ]}
           >
             <InputNumber className="w-full" controls={false} />
           </Form.Item>
@@ -305,8 +310,8 @@ const TimesheetAllocation = ({
             validateStatus={validateUnpaidBreak()}
             rules={[
               {
-                // required: true,
-                message: "Please select reason code",
+                required: true,
+                message: "Please select unbaid break",
               },
             ]}
           >
@@ -481,9 +486,12 @@ const TimesheetAllocation = ({
                   <div className="flex justify-center">
                     <DefaultButton
                       disabled={
-                        form.getFieldsValue("items")["items"] &&
-                        form.getFieldsValue("items")["items"][fields.length - 1]
-                          ?.labourHours === undefined
+                        (
+                          form.getFieldsValue("items")["items"] === undefined ||
+                          form.getFieldsValue("items")["items"][
+                            fields.length - 1
+                          ]
+                        )?.labourHours === undefined
                           ? true
                           : false
                       }

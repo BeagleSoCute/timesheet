@@ -166,21 +166,15 @@ export const transformBreakingTime = (totalBreak, totalHours) => {
     const legal = 50;
     return {
       paidBreak: 20,
-      unpaidBreak: totalBreak - 20,
-      isLegalBreak: totalBreak < legal ? false : true,
-    };
-  } else if (hours >= 6) {
-    const legal = 40;
-    return {
-      paidBreak: 10,
-      unpaidBreak: totalBreak - 10,
+      unpaidBreak: totalBreak < legal ? 30 : totalBreak - 20,
       isLegalBreak: totalBreak < legal ? false : true,
     };
   } else {
+    const legal = 40;
     return {
-      paidBreak: 0,
-      unpaidBreak: totalBreak,
-      isLegalBreak: false,
+      paidBreak: 10,
+      unpaidBreak: totalBreak < legal ? 30 : totalBreak - 10,
+      isLegalBreak: totalBreak < legal ? false : true,
     };
   }
 };
