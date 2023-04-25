@@ -52,7 +52,6 @@ const TimesheetAllocation = ({
   onSetRemaingHour,
   onSubmit,
 }) => {
-  const initRemainingHours = remainingHours;
   const [form] = Form.useForm();
   const [reasonCode, setReasonCode] = useState("");
   const [previousBrekingTime, setPreviousBrekingTime] = useState(unpaidBreak);
@@ -61,7 +60,7 @@ const TimesheetAllocation = ({
     onSubmit(value);
   };
   const handleCalculateRemainHours = async (value, index) => {
-    //ANCHOR
+    //ANCHOR handleCalculateRemainHours
     const allItems = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
@@ -179,8 +178,8 @@ const TimesheetAllocation = ({
     onSetRemaingHour(result.value);
   };
   const handleAdd = async (index, add) => {
+    //ANCHOR handleAdd
     await add();
-    //Assign remaining hour to new item
     const allItems = form.getFieldsValue("items")["items"];
     const newFormItem = form.getFieldsValue("items")["items"][index + 1];
     newFormItem.remainingHours = remainingHours;
@@ -204,21 +203,33 @@ const TimesheetAllocation = ({
     }
   };
 
-  const handleChangeBreak = async (value) => {
-    //ANCHOR
+  const handleChangeBreak = async (value, thisInput) => {
+    //ANCHOR handleChangeBreak
     const allItems = form.getFieldsValue("items")["items"];
-    const paidBreak = form.getFieldsValue().paidBreak;
-    const totalBreak = parseInt(value) + parseInt(paidBreak);
-    console.log("remainingHours", remainingHours);
-    console.log(
-      "allItems[allItems.length - 1].remainingHours",
-      allItems[allItems.length - 1].remainingHours
-    );
-
+    const thisBreak =
+      thisInput === "unpaidBreak"
+        ? form.getFieldsValue().paidBreak
+        : form.getFieldsValue().unpaidBreak;
+    const totalBreak = parseInt(value) + parseInt(thisBreak);
     const initialRemainingHours = await calculateNewRemainingTime(
       actualTime,
       totalBreak
     );
+    const isValid = await isValidBreakingTime(
+      remainingHours,
+      totalBreak,
+      previousBrekingTime,
+      actualTime
+    );
+    if (!isValid) {
+      form.setFieldValue("unpaidBreak", previousBrekingTime);
+      notification({
+        type: "error",
+        message:
+          "Break time can not excess or equal to the remaining hour, Please try again",
+      });
+      return;
+    }
 
     let thisItem;
     for (let i = 0; i < allItems.length; i++) {
@@ -235,31 +246,23 @@ const TimesheetAllocation = ({
           thisLabourHours,
           undefined
         );
-        console.log("result++++++", result);
         thisItem.remainingHours = result.value;
         await allItems.splice(i, 1, thisItem); //update the item
       }
     }
-
-    const isValid = await isValidBreakingTime(
-      allItems[allItems.length - 1].remainingHours,
-      totalBreak,
-      previousBrekingTime,
-      actualTime
-    );
-    if (!isValid) {
-      console.log("errorrrr-----");
-      form.setFieldValue("unpaidBreak", previousBrekingTime);
-      notification({
-        type: "error",
-        message:
-          "Break time can not excess or equal to the remaining hour, Please try again",
-      });
-      return;
+    const lastItem = allItems[allItems.length - 1];
+    if (lastItem.labourHours) {
+      const thisLabourHours = dayjs(lastItem.labourHours).format(timeFormat);
+      const result = await calRemainFromLabourHour(
+        lastItem.remainingHours,
+        thisLabourHours,
+        undefined
+      );
+      onSetRemaingHour(result.value);
+    } else {
+      onSetRemaingHour(lastItem.remainingHours);
     }
-
     await form.setFieldsValue({ items: allItems });
-    onSetRemaingHour(allItems[allItems.length - 1].remainingHours);
     setPreviousBrekingTime(value);
   };
 
@@ -300,7 +303,7 @@ const TimesheetAllocation = ({
             ]}
           >
             <InputNumber
-              onBlur={(e) => handleChangeBreak(e.target.value)}
+              onBlur={(e) => handleChangeBreak(e.target.value, "paidBreak")}
               className="w-full"
               controls={false}
             />
@@ -320,7 +323,7 @@ const TimesheetAllocation = ({
             ]}
           >
             <InputNumber
-              onBlur={(e) => handleChangeBreak(e.target.value)}
+              onBlur={(e) => handleChangeBreak(e.target.value, "unpaidBreak")}
               className="w-full"
               controls={false}
             />

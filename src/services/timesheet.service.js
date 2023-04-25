@@ -61,11 +61,10 @@ const padTime = (time) => {
 export const isValidBreakingTime = (
   remainingTime,
   totalBreakingTime,
-  previousTotalBreakingTime,
-  actualTime,
-  lastItemRemainingTime
+  previousTotalBreakingTime
 ) => {
   //ANCHOR isValidBreakingTime
+  //ANCHOR hours
   if (
     totalBreakingTime < previousTotalBreakingTime ||
     totalBreakingTime === previousTotalBreakingTime
