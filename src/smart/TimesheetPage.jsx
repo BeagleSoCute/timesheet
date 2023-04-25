@@ -14,7 +14,6 @@ import { Form } from "antd";
 
 const TimesheetPage = () => {
   const [form] = Form.useForm();
-
   const navigate = useNavigate();
   const { timesheetData, allocatedData, clearTimesheetData, setTimesheetData } =
     useContext(AppContext);
@@ -29,19 +28,11 @@ const TimesheetPage = () => {
       form.resetFields(["breaksTime"]);
       return false;
     }
-    console.log("value", value);
-    console.log("res", res);
-    const { paidBreak, unpaidBreak, isLegalBreak } = transformBreakingTime(
-      res.breakTime,
-      res.workingHours
-    ); //ANCHOR
-    console.log("paidBreak", paidBreak);
-    console.log("unpaidBreak", unpaidBreak);
     setTimesheetData({
       ...timesheetData,
-      paidBreak,
-      unpaidBreak,
-      isLegalBreak,
+      paidBreak: res.paidBreak,
+      unpaidBreak: res.unpaidBreak,
+      isLegalBreak: res.isLegalBreak,
       remainingHours: res.remainingTime,
       actualTime: res.actualTime,
     });

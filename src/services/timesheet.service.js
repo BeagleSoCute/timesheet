@@ -21,8 +21,11 @@ export const calculateRemainingHours = (value) => {
     breakTimeInMinutes = breaksTime;
   }
 
-  const breakTimeInMs = breakTimeInMinutes * 60 * 1000;
-
+  const { paidBreak, unpaidBreak, isLegalBreak } = transformBreakingTime(
+    breakTimeInMinutes,
+    hours
+  );
+  const breakTimeInMs = (unpaidBreak + paidBreak) * 60 * 1000;
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   if (remainingTimeInMs < 0) {
     return { isSuccess: false };
@@ -37,6 +40,7 @@ export const calculateRemainingHours = (value) => {
   )}`;
 
   const actualTime = `${padTime(hours)}:${padTime(minutes)}`;
+
   return {
     isSuccess: true,
     res: {
@@ -44,6 +48,9 @@ export const calculateRemainingHours = (value) => {
       breakTime: breakTimeInMinutes,
       workingHours: hours,
       actualTime,
+      paidBreak,
+      unpaidBreak,
+      isLegalBreak,
     },
   };
 };
