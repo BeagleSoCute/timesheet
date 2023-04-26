@@ -28,7 +28,7 @@ const TimesheetAllocation = () => {
         if (success) {
           Modal.success({
             content: (
-              <p className="text-xl">Timesheet Allocstion is completed</p>
+              <p className="text-xl">Timesheet Allocation is completed</p>
             ),
             centered: true,
             closable: true,
