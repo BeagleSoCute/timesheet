@@ -17,6 +17,7 @@ import styled from "styled-components";
 import {
   calculateNewRemainingTime,
   isValidBreakingTime,
+  transformTimeToMs,
 } from "services/timesheet.service";
 
 const propTypes = {
@@ -54,13 +55,15 @@ const TimesheetAllocation = ({
 }) => {
   const [form] = Form.useForm();
   const [reasonCode, setReasonCode] = useState("");
-  const [previousBrekingTime, setPreviousBrekingTime] = useState(unpaidBreak);
+  const [previousUnpaidBrekingTime, setPreviousUnpaidBrekingTime] =
+    useState(unpaidBreak);
+  const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
+    useState(paidBreak);
 
   const handleOnFinish = (value) => {
     onSubmit(value);
   };
   const handleCalculateRemainHours = async (value, index) => {
-    //ANCHOR handleCalculateRemainHours
     const allItems = form.getFieldsValue("items")["items"];
     let thisFormItem = form.getFieldsValue("items")["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
@@ -171,14 +174,13 @@ const TimesheetAllocation = ({
         undefined
       );
       thisItem.remainingHours = result.value;
-      allItems.splice(i, 1, thisItem); //update the item
+      allItems.splice(i, 1, thisItem);
     }
-    allItems.splice(thisIndex, 1); //remove the selected item
+    allItems.splice(thisIndex, 1);
     form.setFieldsValue({ items: allItems });
     onSetRemaingHour(result.value);
   };
   const handleAdd = async (index, add) => {
-    //ANCHOR handleAdd
     await add();
     const allItems = form.getFieldsValue("items")["items"];
     const newFormItem = form.getFieldsValue("items")["items"][index + 1];
@@ -204,7 +206,19 @@ const TimesheetAllocation = ({
   };
 
   const handleChangeBreak = async (value, thisInput) => {
-    //ANCHOR handleChangeBreak
+    //ANCHOR - handleChangeBreak
+    if (value === "") {
+      if (thisInput === "unpaidBreak") {
+        form.setFieldValue("unpaidBreak", previousUnpaidBrekingTime);
+      } else {
+        form.setFieldValue("paidBreak", previousPaidBrekingTime);
+      }
+      notification({
+        type: "error",
+        message: "Break time can not be empty",
+      });
+      return;
+    }
     const allItems = form.getFieldsValue("items")["items"];
     const lastItem = allItems[allItems.length - 1];
     const thisBreak =
@@ -219,10 +233,16 @@ const TimesheetAllocation = ({
     const isValid = await isValidBreakingTime(
       actualTime,
       totalBreak,
-      previousBrekingTime
+      thisInput === "unpaidBreak"
+        ? previousUnpaidBrekingTime
+        : previousPaidBrekingTime
     );
     if (!isValid) {
-      form.setFieldValue("unpaidBreak", previousBrekingTime);
+      if (thisInput === "unpaidBreak") {
+        form.setFieldValue("unpaidBreak", previousUnpaidBrekingTime);
+      } else {
+        form.setFieldValue("paidBreak", previousPaidBrekingTime);
+      }
       notification({
         type: "error",
         message:
@@ -230,7 +250,9 @@ const TimesheetAllocation = ({
       });
       return;
     }
+    let isLabourHourExcess = false;
     let thisItem;
+    let resCal;
     for (let i = 0; i < allItems.length; i++) {
       thisItem = allItems[i];
       if (i === 0) {
@@ -246,8 +268,32 @@ const TimesheetAllocation = ({
           undefined
         );
         thisItem.remainingHours = result.value;
+        resCal = result.value;
         await allItems.splice(i, 1, thisItem); //update the item
       }
+      const transLabourHour = allItems[i].labourHours
+        ? transformTimeToMs(dayjs(allItems[i].labourHours).format(timeFormat))
+        : 0;
+      const transRemainingHour = transformTimeToMs(
+        i === 0 ? initialRemainingHours : resCal
+      );
+      if (transLabourHour > transRemainingHour) {
+        isLabourHourExcess = true;
+        notification({
+          type: "error",
+          message:
+            "Labour hour can not excess the remaining hour, Please try again",
+        });
+        break;
+      }
+    }
+    if (isLabourHourExcess) {
+      if (thisInput === "unpaidBreak") {
+        form.setFieldValue("unpaidBreak", previousUnpaidBrekingTime);
+      } else {
+        form.setFieldValue("paidBreak", previousPaidBrekingTime);
+      }
+      return;
     }
     if (lastItem.labourHours) {
       const thisLabourHours = dayjs(lastItem.labourHours).format(timeFormat);
@@ -261,7 +307,12 @@ const TimesheetAllocation = ({
       onSetRemaingHour(lastItem.remainingHours);
     }
     await form.setFieldsValue({ items: allItems });
-    setPreviousBrekingTime(value);
+
+    if (thisInput === "unpaidBreak") {
+      setPreviousUnpaidBrekingTime(value);
+    } else {
+      setPreviousPaidBrekingTime(value);
+    }
   };
 
   const initialValues = {
@@ -296,7 +347,7 @@ const TimesheetAllocation = ({
             rules={[
               {
                 required: true,
-                message: "Please select unbaid break",
+                message: "Please select paid break",
               },
             ]}
           >
@@ -316,7 +367,7 @@ const TimesheetAllocation = ({
             rules={[
               {
                 required: true,
-                message: "Please select unbaid break",
+                message: "Please select unpaid break",
               },
             ]}
           >

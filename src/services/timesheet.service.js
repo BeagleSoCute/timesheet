@@ -201,3 +201,9 @@ export const calculateNewRemainingTime = (remainingHours, totalBreak) => {
     .padStart(2, "0")}`;
   return newRemainingTime;
 };
+
+export const transformTimeToMs = (time) => {
+  const [hours, minutes] = time.split(":");
+  const timeInMs = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
+  return timeInMs;
+};
