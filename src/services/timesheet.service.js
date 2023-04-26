@@ -63,14 +63,17 @@ export const isValidBreakingTime = (
   totalBreakingTime,
   previousTotalBreakingTime
 ) => {
-  //ANCHOR isValidBreakingTime
-  //ANCHOR hours
+  const [remainingHours, remainingMinutes] = remainingTime.split(":");
+  const remainingTimeInMillis =
+    remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
+  const toltalBreakingTimeInMillis = totalBreakingTime * 60 * 1000;
+
   if (
     totalBreakingTime < previousTotalBreakingTime ||
     totalBreakingTime === previousTotalBreakingTime
   ) {
     return true;
-  } else if (remainingTime === "00:00") {
+  } else if (remainingTimeInMillis <= toltalBreakingTimeInMillis) {
     return false;
   } else {
     return true;
@@ -78,26 +81,18 @@ export const isValidBreakingTime = (
 };
 
 export const calculateActualRemain = async (remainingTime, lastLabourHours) => {
-  //ANCHOR bug
-  console.log("lastLabourHours", lastLabourHours);
   const labour = await dayjs(lastLabourHours).format("HH:mm");
-  console.log("labour", labour);
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const [labourHours, labourMinutes] = labour.split(":");
-
   const remainingTimeInMillis =
     remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
   const LabourInMillis =
     labourHours * 60 * 60 * 1000 + labourMinutes * 60 * 1000;
-
   const result = remainingTimeInMillis - LabourInMillis;
-
   const finalResult = dayjs.duration(result, "milliseconds").format("HH:mm");
-
   if (remainingTimeInMillis < LabourInMillis) {
     return "00:00";
   }
-
   return finalResult;
 };
 
@@ -131,10 +126,6 @@ export const calRemainFromLabourHour = (
     remainingTimeInMinutesAfterSubtraction =
       remainingTimeInMillis - currentSpentInMillis;
   }
-  console.log(
-    "remainingTimeInMinutesAfterSubtraction",
-    remainingTimeInMinutesAfterSubtraction
-  );
   const remainingTimeFormatted =
     remainingTimeInMinutesAfterSubtraction < 0
       ? { value: "00:00", isSuccess: false }
@@ -196,6 +187,10 @@ export const calculateNewRemainingTime = (remainingHours, totalBreak) => {
     totalBreak,
     "minutes"
   );
+  if (newRemainingDuration.asMinutes() < 0) {
+    return "00:00";
+  }
+
   // Format the new remaining time into "HH:mm" format
   const newRemainingTime = `${newRemainingDuration
     .hours()

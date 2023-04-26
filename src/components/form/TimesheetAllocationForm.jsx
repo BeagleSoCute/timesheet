@@ -206,6 +206,7 @@ const TimesheetAllocation = ({
   const handleChangeBreak = async (value, thisInput) => {
     //ANCHOR handleChangeBreak
     const allItems = form.getFieldsValue("items")["items"];
+    const lastItem = allItems[allItems.length - 1];
     const thisBreak =
       thisInput === "unpaidBreak"
         ? form.getFieldsValue().paidBreak
@@ -216,10 +217,9 @@ const TimesheetAllocation = ({
       totalBreak
     );
     const isValid = await isValidBreakingTime(
-      remainingHours,
+      actualTime,
       totalBreak,
-      previousBrekingTime,
-      actualTime
+      previousBrekingTime
     );
     if (!isValid) {
       form.setFieldValue("unpaidBreak", previousBrekingTime);
@@ -230,7 +230,6 @@ const TimesheetAllocation = ({
       });
       return;
     }
-
     let thisItem;
     for (let i = 0; i < allItems.length; i++) {
       thisItem = allItems[i];
@@ -250,7 +249,6 @@ const TimesheetAllocation = ({
         await allItems.splice(i, 1, thisItem); //update the item
       }
     }
-    const lastItem = allItems[allItems.length - 1];
     if (lastItem.labourHours) {
       const thisLabourHours = dayjs(lastItem.labourHours).format(timeFormat);
       const result = await calRemainFromLabourHour(
