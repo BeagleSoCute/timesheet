@@ -106,25 +106,7 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
           <InputNumber className="w-full" controls={false} />
         </Form.Item>
         <Message instructionMessage="This is your SIGN OUT screen, enter finish time below" />
-        <Form.Item
-          colon={false}
-          label={renderFieldTitle(
-            "Is the Start time correct",
-            "You can only change the time not the date of this field"
-          )}
-          name="isStartTimeCorrect"
-        >
-          <Radio.Group
-            className="is-time-correct"
-            onChange={(e) => setIsStartTimeCorrect(e.target.value)}
-            size="large"
-          >
-            <Radio.Button className="mx-2" value={true}>
-              Yes
-            </Radio.Button>
-            <Radio.Button value={false}>No</Radio.Button>
-          </Radio.Group>
-        </Form.Item>
+
         <Form.Item
           colon={false}
           label={renderFieldTitle(
@@ -154,6 +136,7 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
         >
           <DatePicker
             disabledDate={handleDisabledEndDate}
+            disabled={true}
             allowClear={false}
             onChange={() => form.resetFields(["finishTime"])}
             inputReadOnly
@@ -169,6 +152,7 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
           rules={[{ required: true, message: "Please input finish time!" }]}
         >
           <TimePicker
+            disabled={true}
             allowClear={false}
             showNow={false}
             inputReadOnly

@@ -9,23 +9,27 @@ import Button from "components/common/Button";
 import Message from "components/common/Message";
 
 const propTypes = {
+  finishDateTime: PropTypes.object,
   onFinish: PropTypes.func,
 };
 const defaultProps = {
   onFinish: () => {},
 };
 
-const SignInForm = ({ onFinish }) => {
+const SignoutForm = ({ data, onFinish }) => {
   const [form] = Form.useForm();
+
   const handleOnFinish = (value) => {
     onFinish(value);
   };
   const initialValues = {
-    startDate: dayjs(),
-    startTime: dayjs("08:00", timeFormat),
+    pin: data.pin,
+    startDateTime: data.startDateTime,
+    finishDate: dayjs(),
+    finishTime: dayjs(),
   };
   return (
-    <StyledDiv className="sigin-form">
+    <StyledDiv className="sigout-form">
       <Form
         form={form}
         name="basic"
@@ -45,8 +49,25 @@ const SignInForm = ({ onFinish }) => {
         >
           <InputNumber className="w-full" controls={false} />
         </Form.Item>
-        <Message instructionMessage="This is the Sign In screen enter your start time below" />
-        <Form.Item colon={false} label="Start Date" name="startDate">
+        <Message instructionMessage="This is the Sign out screen enter your start time below" />
+        <Form.Item
+          colon={false}
+          //   label={renderFieldTitle(
+          //     "Actual Start Date / Time",
+          //     "If you want to change your start time, you need to resubmit your timesheet. Enter No and resubmit"
+          //   )}
+          name="startDateTime"
+        >
+          <DatePicker
+            showTime
+            disabledDate={handleDisabledStartDate}
+            disabled={isStartTimeCorrect}
+            allowClear={false}
+            format="DD/MM/YYYY HH:mm"
+          />
+        </Form.Item>
+
+        <Form.Item colon={false} label="Finish Date" name="finishDate">
           <DatePicker
             disabled={true}
             inputReadOnly
@@ -54,7 +75,7 @@ const SignInForm = ({ onFinish }) => {
             allowClear={false}
           />
         </Form.Item>
-        <Form.Item colon={false} label="Start Time" name="startTime">
+        <Form.Item colon={false} label="Finish Time" name="finishTime">
           <TimePicker
             disabled={true}
             showNow={false}
@@ -76,7 +97,7 @@ const SignInForm = ({ onFinish }) => {
         </Form.Item>
 
         <Form.Item colon={false} className="flex justify-center mt-8 ">
-          <Button label="Sign In" type="primary" htmlType="submit" />
+          <Button label="Sign Out" type="primary" htmlType="submit" />
         </Form.Item>
       </Form>
     </StyledDiv>
@@ -84,10 +105,10 @@ const SignInForm = ({ onFinish }) => {
 };
 
 const StyledDiv = styled.div`
-  &.sigin-form {
+  &.sigout-form {
   }
 `;
 
-SignInForm.propTypes = propTypes;
-SignInForm.defaultProps = defaultProps;
-export default SignInForm;
+SignoutForm.propTypes = propTypes;
+SignoutForm.defaultProps = defaultProps;
+export default SignoutForm;
