@@ -4,6 +4,7 @@ import { AppProvider } from "contexts/app.context";
 import SigninPage from "smart/SigninPage";
 import TimesheetPage from "smart/TimesheetPage";
 import TimesheetAllocation from "smart/TimesheetAllocation";
+import SignoutPage from "smart/SignoutPage";
 import "index.css";
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
         path: "/",
         element: <SigninPage />,
       },
+      { path: "/signout", element: <SignoutPage /> },
       {
         path: "/timesheet-page",
         element: <TimesheetPage />,

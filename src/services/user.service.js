@@ -14,3 +14,5 @@ export const getUserDetails = async (id) => {
   const { success, payload: details } = await getUserDetailsApi(id);
   return { success, details };
 };
+
+

@@ -27,7 +27,7 @@ const StyledButton = ({ label, type, className, ...props }) => {
       ) : (
         <Button
           className={combineClassNames(
-            "default-button text-base w-32 h-12",
+            "default-buttons text-base w-32 h-12",
             className
           )}
           {...props}
@@ -45,7 +45,6 @@ const StyledDiv = styled.div`
       border-color: inherit !important;
     }
     .default-button.ant-btn:hover {
-      color: white !important;
       border-color: inherit !important;
     }
     .no-color-button.ant-btn:hover {

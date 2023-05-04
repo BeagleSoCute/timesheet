@@ -1,33 +1,52 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
-import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
+import { DatePicker, Form, InputNumber, TimePicker, Select, Row, Modal } from "antd";
 import dayjs from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
 
 const propTypes = {
-  finishDateTime: PropTypes.object,
+  startDateTime: PropTypes.object,
+  pin: PropTypes.number,
+  job: PropTypes.array,
   onFinish: PropTypes.func,
 };
 const defaultProps = {
+  isClockout: false,
   onFinish: () => {},
 };
 
-const SignoutForm = ({ data, onFinish }) => {
+const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
   const [form] = Form.useForm();
+  const [isClockout, setIsClockout] = useState(false);
 
   const handleOnFinish = (value) => {
-    onFinish(value);
+    Modal.success({
+      content: (
+        <p className="text-xl">
+          Are you sure to signout? Plese makesure your end date
+          and time are collect
+        </p>
+      ),
+      centered: true,
+      closable: true,
+      maskClosable: true,
+      onOk:() => onFinish(value),
+    });
   };
   const initialValues = {
-    pin: data.pin,
-    startDateTime: data.startDateTime,
-    finishDate: dayjs(),
-    finishTime: dayjs(),
+    pin,
+    startDateTime,
+    job,
   };
+  const handleClockout = () => {
+    setIsClockout(true);
+    form.setFieldsValue({ finishDate: dayjs(), finishTime: dayjs() });
+  };
+
   return (
     <StyledDiv className="sigout-form">
       <Form
@@ -35,7 +54,6 @@ const SignoutForm = ({ data, onFinish }) => {
         name="basic"
         requiredMark={false}
         initialValues={initialValues}
-        onFinish={handleOnFinish}
         autoComplete="off"
       >
         <Form.Item
@@ -52,38 +70,37 @@ const SignoutForm = ({ data, onFinish }) => {
         <Message instructionMessage="This is the Sign out screen enter your start time below" />
         <Form.Item
           colon={false}
-          //   label={renderFieldTitle(
-          //     "Actual Start Date / Time",
-          //     "If you want to change your start time, you need to resubmit your timesheet. Enter No and resubmit"
-          //   )}
+          label=" Start Date / Time"
           name="startDateTime"
         >
           <DatePicker
+            disabled={true}
             showTime
-            disabledDate={handleDisabledStartDate}
-            disabled={isStartTimeCorrect}
             allowClear={false}
             format="DD/MM/YYYY HH:mm"
           />
         </Form.Item>
-
-        <Form.Item colon={false} label="Finish Date" name="finishDate">
-          <DatePicker
-            disabled={true}
-            inputReadOnly
-            format={dateFormat}
-            allowClear={false}
-          />
-        </Form.Item>
-        <Form.Item colon={false} label="Finish Time" name="finishTime">
-          <TimePicker
-            disabled={true}
-            showNow={false}
-            inputReadOnly
-            format={timeFormat}
-            allowClear={false}
-          />
-        </Form.Item>
+        {isClockout && (
+          <>
+            <Form.Item colon={false} label="Finish Date" name="finishDate">
+              <DatePicker
+                disabled={true}
+                inputReadOnly
+                format={dateFormat}
+                allowClear={false}
+              />
+            </Form.Item>
+            <Form.Item colon={false} label="Finish Time" name="finishTime">
+              <TimePicker
+                disabled={true}
+                showNow={false}
+                inputReadOnly
+                format={timeFormat}
+                allowClear={false}
+              />
+            </Form.Item>
+          </>
+        )}
         <Form.Item
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
@@ -95,9 +112,28 @@ const SignoutForm = ({ data, onFinish }) => {
         >
           <Select mode="multiple" options={jobOptions} />
         </Form.Item>
-
         <Form.Item colon={false} className="flex justify-center mt-8 ">
-          <Button label="Sign Out" type="primary" htmlType="submit" />
+          {isClockout ? (
+            <Row>
+              <Button
+                label="Sign Out"
+                type="primary"
+                onClick={() => handleOnFinish()}
+              />
+              <Button
+                type="secondary"
+                label="Cancel Clock out"
+                className="w-full mx-5"
+                onClick={() => setIsClockout(false)}
+              />
+            </Row>
+          ) : (
+            <Button
+              label="Clock out"
+              type="primary"
+              onClick={() => handleClockout()}
+            />
+          )}
         </Form.Item>
       </Form>
     </StyledDiv>

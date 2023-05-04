@@ -19,7 +19,7 @@ const SigninPage = () => {
     };
     setAuth(transformValue);
     notification({ type: "success", message: "Sign in Success!" });
-    navigate("timesheet-page");
+    navigate("signout");
   };
   const propsSignInForm = {
     onFinish: handleSubmit,
