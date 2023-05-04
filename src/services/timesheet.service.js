@@ -4,6 +4,7 @@ dayjs.extend(duration);
 
 export const calculateRemainingHours = (value) => {
   const { startDateTime, finishDate, finishTime, breaksTime } = value;
+  console.log('value', value)
   const startDate = dayjs(startDateTime, "DD-MM-YYYY HH:mm");
   const finishDateTime = dayjs(
     finishDate + " " + finishTime,
@@ -26,6 +27,9 @@ export const calculateRemainingHours = (value) => {
     hours
   );
   const breakTimeInMs = (unpaidBreak + paidBreak) * 60 * 1000;
+  console.log('timeDiffInMs', timeDiffInMs)
+  console.log('timeDifbreakTimeInMsfInMs', breakTimeInMs)
+
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   if (remainingTimeInMs < 0) {
     return { isSuccess: false };

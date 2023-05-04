@@ -26,7 +26,6 @@ const formItemLayout = {
 
 const TimesheetForm = ({ form, data, onSubmit }) => {
   const [isBreak, setIsBreak] = useState(true);
-  const [isStartTimeCorrect, setIsStartTimeCorrect] = useState(true);
   const handleChangeIsBreak = (value) => {
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
@@ -119,8 +118,8 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
           <DatePicker
             showTime
             disabledDate={handleDisabledStartDate}
-            disabled={isStartTimeCorrect}
-            onChange={(value) => {
+            disabled={true}
+            onChange={() => {
               form.resetFields(["finishTime"]);
             }}
             allowClear={false}

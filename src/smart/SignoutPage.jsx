@@ -3,7 +3,6 @@ import { AppContext } from "contexts/app.context";
 import SignoutForm from "components/form/SignoutForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
-import dayjs from "dayjs";
 
 const SignoutPage = () => {
   const navigate = useNavigate();
@@ -15,11 +14,6 @@ const SignoutPage = () => {
     console.log('value',value)
     const transformValue = {
       ...value,
-    //   startDateTime: dayjs(
-    //     `${value.startDate.format("YYYY-MM-DD")} ${value.startTime.format(
-    //       "HH:mm"
-    //     )}`
-    //   ),
     };
     setTimesheetData(transformValue);
     notification({ type: "success", message: "Sign out Success!" });
