@@ -23,7 +23,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
   const [form] = Form.useForm();
   const [isClockout, setIsClockout] = useState(false);
 
-  const handleOnFinish = (value) => {
+  const handleOnFinish = () => {
     Modal.success({
       content: (
         <p className="text-xl">
@@ -34,7 +34,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
       centered: true,
       closable: true,
       maskClosable: true,
-      onOk:() => onFinish(value),
+      onOk:() => onFinish(form.getFieldsValue()),
     });
   };
   const initialValues = {
