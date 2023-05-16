@@ -38,6 +38,38 @@ code {
 .ant-col.ant-form-item-label{
   font-weight: bold;
 }
+
+/* Radio button */
+.ant-radio-button-wrapper.ant-radio-button-wrapper-in-form-item {
+  background-color: #cccccc;
+  border-color: #cccccc;
+}
+.ant-radio-button-wrapper:first-child {
+  border-start-start-radius: 0px !important;
+  border-end-start-radius: 0px!important;
+
+}
+.ant-radio-button-wrapper:last-child {
+  border-start-end-radius: 0px!important;
+  border-end-end-radius: 0px!important;
+}
+
+label.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item::before {
+  background-color: none !important;
+}
+
+label.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item::before {
+  background-color: transparent !important;
+}
+.ant-radio-button-wrapper span {
+    color: white;
+    font-weight: bold;
+}
+
+
+/* Radio button */
+
+
 @media screen and (max-width: 575px) {
 
   p,span{

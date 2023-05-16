@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
-import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
+import { DatePicker, Form, InputNumber, TimePicker, Select, Radio } from "antd";
 import dayjs from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
+import CustomRadioButton from "components/common/CustomRadioButton";
 
 const propTypes = {
   onFinish: PropTypes.func,
@@ -17,12 +18,21 @@ const defaultProps = {
 
 const SignInForm = ({ onFinish }) => {
   const [form] = Form.useForm();
+  const [isForget, setIsForget] = useState(false);
   const handleOnFinish = (value) => {
-    onFinish(value);
+    const startTime = isForget
+      ? form.getFieldValue("actualStartTime")
+      : form.getFieldValue("startTime");
+    onFinish({ ...value, startTime });
   };
+  const handleChangeIsForget = (value) => {
+    setIsForget(value);
+  };
+
   const initialValues = {
     startDate: dayjs(),
     startTime: dayjs(),
+    isFprgetSingin: false,
   };
   return (
     <StyledDiv className="sigin-form">
@@ -63,6 +73,31 @@ const SignInForm = ({ onFinish }) => {
             allowClear={false}
           />
         </Form.Item>
+        <Form.Item
+          colon={false}
+          label="Do you forget to sign in?"
+          name="isFprgetSingin"
+        >
+          <CustomRadioButton
+            defaultValue={false}
+            color="yellow"
+            onChange={handleChangeIsForget}
+          />
+        </Form.Item>
+        {isForget && (
+          <Form.Item
+            colon={false}
+            label="Actual Start time"
+            name="actualStartTime"
+          >
+            <TimePicker
+              showNow={false}
+              inputReadOnly
+              format={timeFormat}
+              allowClear={false}
+            />
+          </Form.Item>
+        )}
         <Form.Item
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
