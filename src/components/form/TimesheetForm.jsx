@@ -207,7 +207,7 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
             controls={false}
           />
         </Form.Item>
-        <Form.Item colon={false} className=" flex justify-center mt-8 ">
+        <Form.Item colon={false} className="flex justify-center mt-8 ">
           <Button
             className="mb-10 bg-blue-800 text-white font-bold "
             label="Allocate..."

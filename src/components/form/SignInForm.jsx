@@ -90,9 +90,11 @@ const SignInForm = ({ onFinish }) => {
         </Form.Item>
         {isForget && (
           <Form.Item
+            className="select-actual-start-time"
             colon={false}
             label="Actual Start time"
             name="actualStartTime"
+            rules={[{ required: true, message: "Please select start time!" }]}
           >
             <TimePicker
               showNow={false}
@@ -124,6 +126,10 @@ const SignInForm = ({ onFinish }) => {
 
 const StyledDiv = styled.div`
   &.sigin-form {
+    .select-actual-start-time.ant-form-item .ant-form-item-explain-error {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 `;
 

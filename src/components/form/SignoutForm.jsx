@@ -76,6 +76,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
         requiredMark={false}
         initialValues={initialValues}
         autoComplete="off"
+        onFinish={handleOnFinish}
       >
         <Form.Item
           className="full-content mb-0"
@@ -136,9 +137,13 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
             </Form.Item>
             {isForget && (
               <Form.Item
+                className="select-actual-finish-time"
                 colon={false}
                 label="Actual Finish time"
                 name="actualFinishTime"
+                rules={[
+                  { required: true, message: "Please select finish time!" },
+                ]}
               >
                 <TimePicker
                   showNow={false}
@@ -171,11 +176,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
         <Form.Item colon={false} className="flex justify-center mt-8 ">
           {isClockout ? (
             <Row>
-              <Button
-                label="Sign Out"
-                type="primary"
-                onClick={() => handleOnFinish()}
-              />
+              <Button label="Sign Out" htmlType="submit" type="primary" />
               <Button
                 type="secondary"
                 label="Cancel Clock out"
@@ -198,6 +199,10 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
 
 const StyledDiv = styled.div`
   &.sigout-form {
+    .select-actual-finish-time.ant-form-item .ant-form-item-explain-error {
+      display: flex;
+      justify-content: flex-end;
+    }
   }
 `;
 
