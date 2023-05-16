@@ -9,6 +9,7 @@ import styled from "styled-components";
 import Button from "components/common/Button";
 import { renderFieldTitle } from "helpers/form.helper";
 import { notification } from "helpers/notification.helper";
+import { preventSelectFinishTime } from "helpers/dateTime.helper";
 
 const propTypes = {
   data: PropTypes.object,
@@ -158,42 +159,13 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
             inputReadOnly
             format={timeFormat}
             onChange={(value) => handleErrorSelectFinishime(value)}
-            disabledTime={(current) => {
-              const startDate = form.getFieldValue("startDateTime");
-              const finishDate = form.getFieldValue("finishDate");
-              const startTime = form.getFieldValue("startDateTime");
-              const startHour = dayjs(startTime).hour();
-              const startMinute = dayjs(startTime).minute();
-              if (dayjs(startDate).isSame(finishDate, "date")) {
-                return {
-                  disabledHours: () => {
-                    const disabledHours = [];
-                    for (let i = 0; i < startHour; i++) {
-                      disabledHours.push(i);
-                    }
-                    return disabledHours;
-                  },
-                  disabledMinutes: (hour) => {
-                    if (hour === startHour) {
-                      const disabledMinutes = [];
-                      for (let i = 0; i <= startMinute; i++) {
-                        disabledMinutes.push(i);
-                      }
-                      return disabledMinutes;
-                    } else {
-                      return [];
-                    }
-                  },
-                  disabledSeconds: () => [],
-                };
-              } else {
-                return {
-                  disabledHours: () => [],
-                  disabledMinutes: () => [],
-                  disabledSeconds: () => [],
-                };
-              }
-            }}
+            disabledTime={() =>
+              preventSelectFinishTime(
+                form.getFieldValue("startDateTime"),
+                form.getFieldValue("finishDate"),
+                form.getFieldValue("startDateTime")
+              )
+            }
           />
         </Form.Item>
         <Form.Item
