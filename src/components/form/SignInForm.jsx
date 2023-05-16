@@ -3,11 +3,12 @@ import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
-import { DatePicker, Form, InputNumber, TimePicker, Select, Radio } from "antd";
+import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
 import dayjs from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
+import { renderFieldTitle } from "helpers/form.helper";
 
 const propTypes = {
   onFinish: PropTypes.func,
@@ -75,8 +76,11 @@ const SignInForm = ({ onFinish }) => {
         </Form.Item>
         <Form.Item
           colon={false}
-          label="Do you forget to sign in?"
-          name="isFprgetSingin"
+          label={renderFieldTitle(
+            "Do you forget to sign in?",
+            "If you forget to sign in, please select the acutal start time "
+          )}
+          name="isForgetSingin"
         >
           <CustomRadioButton
             defaultValue={false}

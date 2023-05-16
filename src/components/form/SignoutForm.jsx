@@ -3,10 +3,20 @@ import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
-import { DatePicker, Form, InputNumber, TimePicker, Select, Row, Modal } from "antd";
+import {
+  DatePicker,
+  Form,
+  InputNumber,
+  TimePicker,
+  Select,
+  Row,
+  Modal,
+} from "antd";
 import dayjs from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
+import CustomRadioButton from "components/common/CustomRadioButton";
+import { renderFieldTitle } from "helpers/form.helper";
 
 const propTypes = {
   startDateTime: PropTypes.object,
@@ -22,19 +32,29 @@ const defaultProps = {
 const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
   const [form] = Form.useForm();
   const [isClockout, setIsClockout] = useState(false);
-
+  const [isForget, setIsForget] = useState(false);
+  const handleChangeIsForget = (value) => {
+    setIsForget(value);
+  };
   const handleOnFinish = () => {
+    const transformData = {
+      ...form.getFieldsValue(),
+      finishTime: isForget
+        ? form.getFieldValue("actualFinishTime")
+        : form.getFieldValue("finishTime"),
+    };
     Modal.success({
       content: (
         <p className="text-xl">
-          Are you sure to signout? Plese makesure your end date
-          and time are collect
+          Are you sure to signout? Plese makesure your end date and time are
+          collect
         </p>
       ),
       centered: true,
       closable: true,
       maskClosable: true,
-      onOk:() => onFinish(form.getFieldsValue()),
+
+      onOk: () => onFinish(transformData),
     });
   };
   const initialValues = {
@@ -99,6 +119,34 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
                 allowClear={false}
               />
             </Form.Item>
+            <Form.Item
+              colon={false}
+              label={renderFieldTitle(
+                "Do you forget to sign out?",
+                "If you forget to sign out, please select the acutal end time "
+              )}
+              name="isForgetSingout"
+            >
+              <CustomRadioButton
+                defaultValue={false}
+                color="yellow"
+                onChange={handleChangeIsForget}
+              />
+            </Form.Item>
+            {isForget && (
+              <Form.Item
+                colon={false}
+                label="Actual Finish time"
+                name="actualFinishTime"
+              >
+                <TimePicker
+                  showNow={false}
+                  inputReadOnly
+                  format={timeFormat}
+                  allowClear={false}
+                />
+              </Form.Item>
+            )}
           </>
         )}
         <Form.Item

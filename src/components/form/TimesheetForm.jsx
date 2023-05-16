@@ -249,11 +249,6 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
 
 const StyledDiv = styled.div`
   &.timesheet-form {
-    .field-title {
-      span.description {
-        display: block;
-      }
-    }
     label.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button-wrapper-in-form-item::before {
       background-color: transparent !important;
     }
