@@ -9,6 +9,7 @@ import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
+import { preventSelectExcessTime } from "helpers/dateTime.helper";
 
 const propTypes = {
   onFinish: PropTypes.func,
@@ -101,6 +102,13 @@ const SignInForm = ({ onFinish }) => {
               inputReadOnly
               format={timeFormat}
               allowClear={false}
+              disabledTime={() =>
+                preventSelectExcessTime(
+                  form.getFieldValue("startDate"),
+                  form.getFieldValue("finishDate"),
+                  form.getFieldValue("startTime")
+                )
+              }
             />
           </Form.Item>
         )}

@@ -17,7 +17,7 @@ import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
-import { preventSelectFinishTime } from "helpers/dateTime.helper";
+import { preventActualTime } from "helpers/dateTime.helper";
 
 const propTypes = {
   startDateTime: PropTypes.object,
@@ -151,10 +151,11 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
                   format={timeFormat}
                   allowClear={false}
                   disabledTime={() =>
-                    preventSelectFinishTime(
+                    preventActualTime(
                       form.getFieldValue("startDateTime"),
                       form.getFieldValue("finishDate"),
-                      form.getFieldValue("startDateTime")
+                      form.getFieldValue("startDateTime"),
+                      form.getFieldValue("finishTime")
                     )
                   }
                 />
