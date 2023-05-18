@@ -14,10 +14,11 @@ const defaultProps = {
   defaultValue: true,
 };
 
-const CustomRadioButton = ({ color, onChange, defaultValue }) => {
+const CustomRadioButton = ({ color, onChange, defaultValue, ...props }) => {
   return (
     <StyledDiv className="custom-radio-button">
       <Radio.Group
+        {...props}
         defaultValue={defaultValue}
         className={`custom-radio-button ${color}`}
         onChange={(e) => onChange(e.target.value)}

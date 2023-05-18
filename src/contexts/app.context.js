@@ -1,6 +1,6 @@
 import { createContext, useMemo, useReducer, useEffect } from "react";
 import appReducer from "reducers/app.reducer";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useMatch } from "react-router-dom";
 import { notification } from "helpers/notification.helper";
 export const AppContext = createContext({
   loading: false,
@@ -16,11 +16,12 @@ export const AppContext = createContext({
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }) => {
   const navigate = useNavigate();
+  const isSupervisorpath = useMatch("/supervisor/*");
   const [reducerStates, dispatch] = useReducer(reducer, defaultValue);
   const { loading, isAuth, timesheetData, allocatedData } = reducerStates;
   useEffect(() => {
     const init = async () => {
-      if (!isAuth) {
+      if (!isAuth && isSupervisorpath?.pathnameBase !== "/supervisor") {
         navigate("/");
         notification({ type: "warning", message: "Please sign in first!" });
       }

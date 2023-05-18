@@ -44,7 +44,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
         ? form.getFieldValue("actualFinishTime")
         : form.getFieldValue("finishTime"),
     };
-    Modal.success({
+    Modal.confirm({
       content: (
         <p className="text-xl">
           Are you sure to signout? Plese makesure your end date and time are
@@ -52,9 +52,8 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
         </p>
       ),
       centered: true,
-      closable: true,
+      closable: false,
       maskClosable: true,
-
       onOk: () => onFinish(transformData),
     });
   };

@@ -2,14 +2,14 @@ import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
-export const calculateRemainingHours = (value) => {
-  const { startDateTime, finishDate, finishTime, breaksTime } = value;
-  console.log('value', value)
+export const calculateRemainingHours = (value, hasFinishDateTime = false) => {
+  const { startDateTime, breaksTime } = value;
+  console.log("valueee", value);
   const startDate = dayjs(startDateTime, "DD-MM-YYYY HH:mm");
-  const finishDateTime = dayjs(
-    finishDate + " " + finishTime,
-    "DD-MM-YYYY HH:mm"
-  );
+  const finishDateTime = hasFinishDateTime
+    ? dayjs(value.finishDateTime, "DD-MM-YYYY HH:mm")
+    : dayjs(value.finishDate + " " + value.finishTime, "DD-MM-YYYY HH:mm");
+
   let breakTimeInMinutes; //NOTE default here based on the legal break time
   const timeDiffInMs = finishDateTime.diff(startDate);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
@@ -27,8 +27,8 @@ export const calculateRemainingHours = (value) => {
     hours
   );
   const breakTimeInMs = (unpaidBreak + paidBreak) * 60 * 1000;
-  console.log('timeDiffInMs', timeDiffInMs)
-  console.log('timeDifbreakTimeInMsfInMs', breakTimeInMs)
+  console.log("timeDiffInMs", timeDiffInMs);
+  console.log("timeDifbreakTimeInMsfInMs", breakTimeInMs);
 
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   if (remainingTimeInMs < 0) {

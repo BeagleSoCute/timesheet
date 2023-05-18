@@ -1,4 +1,4 @@
-import React, {useContext} from 'react'
+import React, { useContext } from "react";
 import { AppContext } from "contexts/app.context";
 import SignoutForm from "components/form/SignoutForm";
 import { notification } from "helpers/notification.helper";
@@ -7,11 +7,9 @@ import { useNavigate } from "react-router-dom";
 const SignoutPage = () => {
   const navigate = useNavigate();
 
-  const { timesheetData, setTimesheetData } =
-  useContext(AppContext);
+  const { timesheetData, setTimesheetData } = useContext(AppContext);
 
   const handleSubmit = (value) => {
-    console.log('value',value)
     const transformValue = {
       ...value,
     };
