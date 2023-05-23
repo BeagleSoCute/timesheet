@@ -18,6 +18,7 @@ import Button from "components/common/Button";
 
 const AssignEmployeeTimesheetForm = ({
   isShowTimesheetForm,
+  isCompleteAllocation,
   onFinish,
   onCancel,
 }) => {
@@ -81,7 +82,7 @@ const AssignEmployeeTimesheetForm = ({
         >
           <DatePicker
             showTime
-            disabled={isShowTimesheetForm}
+            disabled={isShowTimesheetForm || isCompleteAllocation}
             disabledDate={handleDisabledStartDate}
             onChange={() => {
               form.resetFields(["finishTime"]);
@@ -101,7 +102,7 @@ const AssignEmployeeTimesheetForm = ({
         >
           <DatePicker
             showTime
-            disabled={isShowTimesheetForm}
+            disabled={isShowTimesheetForm || isCompleteAllocation}
             disabledDate={handleDisabledStartDate}
             onChange={() => {}}
             allowClear={false}
@@ -115,7 +116,7 @@ const AssignEmployeeTimesheetForm = ({
         >
           <CustomRadioButton
             defaultValue={true}
-            disabled={isShowTimesheetForm}
+            disabled={isShowTimesheetForm || isCompleteAllocation}
             color="yellow"
             onChange={handleChangeIsBreak}
           />
@@ -139,11 +140,11 @@ const AssignEmployeeTimesheetForm = ({
         >
           <InputNumber
             className="w-full mt-2"
-            disabled={!isBreak || isShowTimesheetForm}
+            disabled={!isBreak || isShowTimesheetForm || isCompleteAllocation}
             controls={false}
           />
         </Form.Item>
-        {!isShowTimesheetForm && (
+        {!isShowTimesheetForm && !isCompleteAllocation && (
           <Form.Item colon={false} className="flex justify-center mt-8 ">
             <Button
               className="mb-10 bg-blue-800 text-white font-bold "
@@ -152,7 +153,7 @@ const AssignEmployeeTimesheetForm = ({
             />
           </Form.Item>
         )}
-        {isShowTimesheetForm && (
+        {isShowTimesheetForm && !isCompleteAllocation && (
           <div className="flex justify-center ">
             <Button
               className="mb-10 bg-blue-800 text-white font-bold"

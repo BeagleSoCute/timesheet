@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { getEmployeeData } from "services/employee.service";
 import Message from "components/common/Message";
 import AssignEmployeeTimesheetForm from "components/form/AssignEmployeeTimesheetForm";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
-import { calculateRemainingHours } from "services/timesheet.service";
+import {
+  calculateRemainingHours,
+  trasformSubmitAllocatedHours,
+} from "services/timesheet.service";
 import { notification } from "helpers/notification.helper";
-import dayjs from "dayjs";
-import { dateFormat, timeFormat } from "constants/format";
+import AllocationData from "components/common/AllocationData";
+import Button from "components/common/Button";
 
 const renderDetails = (employee) => {
   return (
@@ -23,10 +26,13 @@ const renderDetails = (employee) => {
 
 const SupervisorPage = () => {
   const { employeeId } = useParams();
+  const navigate = useNavigate();
   const [employee, setEmployee] = useState(null);
   const [isShowTimesheetForm, setIsShowTimesheetForm] = useState(false);
   const [timesheetData, setTimesheetData] = useState(null);
   const [remainingHours, setRemainingHours] = useState();
+  const [allocatedData, setAllocatedData] = useState([]);
+  const [isCompleteAllocation, setIsCompleteAllocation] = useState(false);
   useEffect(() => {
     const init = () => {
       const result = getEmployeeData(employeeId);
@@ -34,7 +40,7 @@ const SupervisorPage = () => {
     };
     init();
   }, []);
-  const handleSubmit = async (value) => {
+  const handleSubmitTimesheetData = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value, true);
     if (!isSuccess) {
       notification({
@@ -42,7 +48,6 @@ const SupervisorPage = () => {
         message:
           "Your break time exceed the finish time, please input the break time again!",
       });
-      // form.resetFields(["breaksTime"]);
       return false;
     }
     const transformData = {
@@ -61,12 +66,32 @@ const SupervisorPage = () => {
     setIsShowTimesheetForm(false);
   };
 
-  const handleSubmitAllocation = (value) => {};
+  const handleSubmitAllocation = (value) => {
+    if (remainingHours !== "00:00") {
+      notification({
+        type: "error",
+        message:
+          "You still have Remaning Hours, Please allocate all of your work",
+      });
+      return false;
+    }
+    setAllocatedData(value.items);
+    setIsCompleteAllocation(true);
+  };
+
+  const handleSignout = () => {
+    notification({
+      type: "success",
+      message: "Sign out Success",
+    });
+    navigate("/");
+  };
 
   const propsAssignEmployeeTimesheetForm = {
     isShowTimesheetForm,
+    isCompleteAllocation,
     onCancel: handleCancel,
-    onFinish: handleSubmit,
+    onFinish: handleSubmitTimesheetData,
   };
   const propsTimesheetAllocationForm = {
     remainingHours,
@@ -82,8 +107,24 @@ const SupervisorPage = () => {
     <StyledDiv className="supervisor-page">
       {renderDetails(employee)}
       <AssignEmployeeTimesheetForm {...propsAssignEmployeeTimesheetForm} />
-      {isShowTimesheetForm && (
+      {isShowTimesheetForm && !isCompleteAllocation && (
         <TimesheetAllocationForm {...propsTimesheetAllocationForm} />
+      )}
+      {allocatedData.length !== 0 && (
+        <>
+          <div className="mt-20">
+            <AllocationData
+              data={trasformSubmitAllocatedHours(allocatedData)}
+            />
+          </div>
+          <div className="flex justify-center mb-10">
+            <Button
+              type="primary"
+              label="Sign out"
+              onClick={() => handleSignout()}
+            />
+          </div>
+        </>
       )}
     </StyledDiv>
   );
