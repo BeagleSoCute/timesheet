@@ -39,7 +39,7 @@ const SupervisorPage = () => {
       setEmployee(result);
     };
     init();
-  }, []);
+  }, [employeeId]);
   const handleSubmitTimesheetData = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value, true);
     if (!isSuccess) {

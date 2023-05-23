@@ -27,6 +27,7 @@ export const AppProvider = ({ children }) => {
       }
     };
     init();
+    // eslint-disable-next-line
   }, [navigate, isAuth]);
 
   const appContextValue = useMemo(() => {
