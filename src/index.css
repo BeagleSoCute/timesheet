@@ -106,6 +106,11 @@ label.ant-radio-button-wrapper.ant-radio-button-wrapper-checked.ant-radio-button
   border-radius: 0px!important;
 }
 
+.ant-modal-content button.ant-btn{
+  height: auto;
+}
+
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
