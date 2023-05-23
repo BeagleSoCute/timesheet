@@ -118,11 +118,20 @@ const SupervisorPage = () => {
             />
           </div>
           <div className="flex justify-center mb-10">
-            <Button
-              type="primary"
-              label="Sign out"
-              onClick={() => handleSignout()}
-            />
+            <div className="mr-5">
+              <Button
+                type=""
+                label="Approve another employee"
+                onClick={() => navigate("/supervisor/select-employee")}
+              />
+            </div>
+            <div>
+              <Button
+                type="primary"
+                label="Sign out"
+                onClick={() => handleSignout()}
+              />
+            </div>
           </div>
         </>
       )}

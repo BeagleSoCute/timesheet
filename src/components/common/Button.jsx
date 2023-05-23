@@ -27,7 +27,7 @@ const StyledButton = ({ label, type, className, ...props }) => {
       ) : (
         <Button
           className={combineClassNames(
-            "default-buttons text-base w-32 h-12",
+            "default-buttons text-base w-100 h-12",
             className
           )}
           {...props}

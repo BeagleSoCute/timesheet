@@ -9,7 +9,7 @@ import companyLogo from "assets/images/company_logo.png";
 const AppLayout = () => {
   const { loading } = useContext(AppContext);
   return (
-    <StyledLayout className="app-layout pb-50">
+    <StyledLayout className="app-layout ">
       <Row className="flex menu px-2  bg-indigo-200">
         <Col span={8}>
           <Row>
@@ -28,7 +28,7 @@ const AppLayout = () => {
         </Col>
         <Col span={8}></Col>
       </Row>
-      <div className="w-full px-2 2xl:px-64 xl:px-64 lg:px-5 md:px-5 sm:px-5 h-screen">
+      <div className="w-full px-2 2xl:px-64 xl:px-64 lg:px-5 md:px-5 sm:px-5 h-screen ">
         <img
           className="w-full h-64  object-contain "
           src={companyLogo}

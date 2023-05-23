@@ -1,20 +1,15 @@
 import React, { useState } from "react";
-import {
-  Form,
-  Input,
-  Checkbox,
-  DatePicker,
-  TimePicker,
-  Radio,
-  InputNumber,
-  Modal,
-} from "antd";
+import { Form, DatePicker, InputNumber, Modal } from "antd";
 import styled from "styled-components";
 import { dateFormat, timeFormat } from "constants/format";
 import { renderFieldTitle } from "helpers/form.helper";
 import dayjs from "dayjs";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import Button from "components/common/Button";
+import {
+  preventSelectExcessTime,
+  preventSelectFinishTime,
+} from "helpers/dateTime.helper";
 
 const AssignEmployeeTimesheetForm = ({
   isShowTimesheetForm,
@@ -39,8 +34,39 @@ const AssignEmployeeTimesheetForm = ({
     onFinish(transformValue);
   };
   const handleDisabledStartDate = (current) => {
-    const finishDate = form.getFieldValue("finishDate");
-    return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
+    const finishDate = form.getFieldValue("finishDateTime");
+    if (finishDate) {
+      return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
+    }
+  };
+  const handleDisabledEndDate = (current) => {
+    const startDateTime = form.getFieldValue("startDateTime");
+    if (startDateTime) {
+      return (
+        current && current.isBefore(dayjs(startDateTime).endOf("day"), "day")
+      );
+    }
+  };
+  const handleDisableStartTime = () => {
+    const finishDate = form.getFieldValue("finishDateTime");
+    console.log("---finishDate---", finishDate);
+    if (finishDate) {
+      return preventSelectExcessTime(
+        form.getFieldValue("startDateTime"),
+        form.getFieldValue("finishDateTime"),
+        form.getFieldValue("finishDateTime")
+      );
+    }
+  };
+  const handleDisableFinishTime = () => {
+    const startDateTime = form.getFieldValue("startDateTime");
+    if (startDateTime) {
+      return preventSelectFinishTime(
+        form.getFieldValue("startDateTime"),
+        form.getFieldValue("finishDateTime"),
+        form.getFieldValue("startDateTime")
+      );
+    }
   };
   const handleChangeIsBreak = (value) => {
     setIsBreak(value);
@@ -89,6 +115,7 @@ const AssignEmployeeTimesheetForm = ({
             }}
             allowClear={false}
             format="DD/MM/YYYY HH:mm"
+            disabledTime={() => handleDisableStartTime()}
           />
         </Form.Item>
         <Form.Item
@@ -103,7 +130,8 @@ const AssignEmployeeTimesheetForm = ({
           <DatePicker
             showTime
             disabled={isShowTimesheetForm || isCompleteAllocation}
-            disabledDate={handleDisabledStartDate}
+            disabledDate={handleDisabledEndDate}
+            disabledTime={() => handleDisableFinishTime()}
             onChange={() => {}}
             allowClear={false}
             format="DD/MM/YYYY HH:mm"
