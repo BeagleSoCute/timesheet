@@ -19,7 +19,7 @@ const SignoutPage = () => {
   };
   const propsSignInForm = {
     pin: timesheetData.pin,
-    startDateTime: timesheetData.startDateTime,
+    startDateTime: timesheetData.startTime,
     job: timesheetData.job,
     onFinish: handleSubmit,
   };

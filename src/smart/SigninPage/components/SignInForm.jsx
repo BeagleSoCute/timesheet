@@ -34,7 +34,7 @@ const SignInForm = ({ onFinish }) => {
   const initialValues = {
     startDate: dayjs(),
     startTime: dayjs(),
-    isFprgetSingin: false,
+    isForgetSingin: false,
   };
   return (
     <StyledDiv className="sigin-form">

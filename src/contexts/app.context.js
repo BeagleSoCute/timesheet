@@ -1,5 +1,5 @@
 import { createContext, useMemo, useReducer, useEffect } from "react";
-import appReducer from "reducers/app.reducer";
+import appReducer from "contexts/app.reducer";
 import { useNavigate, useMatch } from "react-router-dom";
 import { notification } from "helpers/notification.helper";
 export const AppContext = createContext({
