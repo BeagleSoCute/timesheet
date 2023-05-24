@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
+import { dateTimeFormat } from "constants/format";
 import styled from "styled-components";
 import {
   DatePicker,
@@ -26,7 +27,6 @@ const propTypes = {
   onFinish: PropTypes.func,
 };
 const defaultProps = {
-  isClockout: false,
   onFinish: () => {},
 };
 
@@ -48,7 +48,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
       content: (
         <p className="text-xl">
           Are you sure to signout? Plese makesure your end date and time are
-          collect
+          correct
         </p>
       ),
       centered: true,
@@ -98,7 +98,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
             disabled={true}
             showTime
             allowClear={false}
-            format="DD/MM/YYYY HH:mm"
+            format={dateTimeFormat}
           />
         </Form.Item>
         {isClockout && (
@@ -151,10 +151,8 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
                   allowClear={false}
                   disabledTime={() =>
                     preventActualTime(
-                      form.getFieldValue("startDateTime"),
-                      form.getFieldValue("finishDate"),
-                      form.getFieldValue("startDateTime"),
-                      form.getFieldValue("finishTime")
+                      form.getFieldValue("finishTime"),
+                      form.getFieldValue("startDateTime")
                     )
                   }
                 />

@@ -47,7 +47,6 @@ export const preventSelectExcessTime = (startDate, finishDate, currentTime) => {
         return disabledHours;
       },
       disabledMinutes: (hour) => {
-        console.log(startMinute);
         if (hour === startHour) {
           const disabledMinutes = [];
           for (let i = startMinute; i < 60; i++) {
@@ -69,24 +68,19 @@ export const preventSelectExcessTime = (startDate, finishDate, currentTime) => {
   }
 };
 
-export const preventActualTime = (
-  startDate,
-  finishDate,
-  startTime,
-  currentTime
-) => {
+export const preventActualTime = (finishTime, startTime) => {
   const startHour = dayjs(startTime).hour();
   const startMinute = dayjs(startTime).minute();
-  const currentHour = dayjs(currentTime).hour();
-  const currentMinute = dayjs(currentTime).minute();
-  if (dayjs(startDate).isSame(finishDate, "date")) {
+  const finishHour = dayjs(finishTime).hour();
+  const finishMiniute = dayjs(finishTime).minute();
+  if (dayjs(startTime).isSame(finishTime, "date")) {
     return {
       disabledHours: () => {
         const disabledHours = [];
         for (let i = 0; i < startHour; i++) {
           disabledHours.push(i);
         }
-        for (let i = currentHour + 1; i < 24; i++) {
+        for (let i = finishHour + 1; i < 24; i++) {
           disabledHours.push(i);
         }
         return disabledHours;
@@ -97,9 +91,10 @@ export const preventActualTime = (
           for (let i = 0; i <= startMinute; i++) {
             disabledMinutes.push(i);
           }
+          return disabledMinutes;
         }
-        if (hour === currentHour) {
-          for (let i = currentMinute; i < 60; i++) {
+        if (hour === finishHour) {
+          for (let i = finishMiniute; i < 60; i++) {
             disabledMinutes.push(i);
           }
           return disabledMinutes;

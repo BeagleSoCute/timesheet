@@ -6,14 +6,9 @@ import { useNavigate } from "react-router-dom";
 
 const SignoutPage = () => {
   const navigate = useNavigate();
-
   const { timesheetData, setTimesheetData } = useContext(AppContext);
-
   const handleSubmit = (value) => {
-    const transformValue = {
-      ...value,
-    };
-    setTimesheetData(transformValue);
+    setTimesheetData(value);
     notification({ type: "success", message: "Sign out Success!" });
     navigate("/timesheet-page");
   };
