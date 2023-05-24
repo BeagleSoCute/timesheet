@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router-dom";
 import AppLayout from "layouts/AppLayout";
 import { AppProvider } from "contexts/app.context";
-import SigninPage from "smart/SigninPage";
-import TimesheetPage from "smart/TimesheetPage";
-import TimesheetAllocation from "smart/TimesheetAllocation";
-import SignoutPage from "smart/SignoutPage";
-import SupervisorPage from "smart/SupervisorPage";
-import SelectEmployeePage from "smart/SelectEmployeePage";
+import SigninPage from "smart/SigninPage/smart/SigninPage";
+import TimesheetPage from "smart/TimesheetPage/smart/TimesheetPage";
+import TimesheetAllocationPage from "smart/AllocationPage/smart/TimesheetAllocationPage";
+import SignoutPage from "smart/SignoutPage/smart/SignoutPage";
+import SupervisorPage from "smart/SupervisorPage/smarts/SupervisorPage";
+import SelectEmployeePage from "smart/SupervisorPage/smarts/SelectEmployeePage";
 import "index.css";
 export const router = createBrowserRouter([
   {
@@ -28,7 +28,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/timesheet-allocation",
-        element: <TimesheetAllocation />,
+        element: <TimesheetAllocationPage />,
       },
       {
         path: "/supervisor/assign-timesheet/:employeeId",

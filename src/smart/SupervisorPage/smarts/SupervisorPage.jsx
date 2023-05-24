@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useParams, useNavigate } from "react-router-dom";
 import { getEmployeeData } from "services/employee.service";
 import Message from "components/common/Message";
-import AssignEmployeeTimesheetForm from "components/form/AssignEmployeeTimesheetForm";
+import AssignEmployeeTimesheetForm from "smart/TimesheetPage/components/AssignEmployeeTimesheetForm";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 import {
   calculateRemainingHours,

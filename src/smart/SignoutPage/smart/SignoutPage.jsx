@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "contexts/app.context";
-import SignoutForm from "components/form/SignoutForm";
+import SignoutForm from "smart/SignoutPage/components/SignoutForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
 

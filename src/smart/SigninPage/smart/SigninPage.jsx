@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { AppContext } from "contexts/app.context";
-import SignInForm from "components/form/SignInForm";
+import SignInForm from "smart/SigninPage/components/SignInForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
