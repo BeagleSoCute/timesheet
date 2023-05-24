@@ -19,7 +19,7 @@ import {
   isValidBreakingTime,
   transformTimeToMs,
 } from "services/timesheet.service";
-
+import { renderFieldTitleSameLine } from "helpers/form.helper";
 const propTypes = {
   remainingHours: PropTypes.string,
   paidBreak: PropTypes.number,
@@ -339,9 +339,13 @@ const TimesheetAllocation = ({
       >
         <div className="break-time-container mt-10 mb-5 p-2">
           <Form.Item
+            colon={false}
             labelCol={{ span: 15 }}
             wrapperCol={{ span: 9 }}
-            label="Paid break"
+            label={renderFieldTitleSameLine(
+              "Paid break",
+              `(Default paid break is ${paidBreak})`
+            )}
             name="paidBreak"
             validateStatus={validatePaidBreak()}
             rules={[
@@ -358,9 +362,13 @@ const TimesheetAllocation = ({
             />
           </Form.Item>
           <Form.Item
+            colon={false}
             labelCol={{ span: 15 }}
             wrapperCol={{ span: 9 }}
-            label="Unpaid break"
+            label={renderFieldTitleSameLine(
+              "Unpaid break",
+              `(Default unpaid break is ${unpaidBreak})`
+            )}
             name="unpaidBreak"
             className="mb-0"
             validateStatus={validateUnpaidBreak()}
