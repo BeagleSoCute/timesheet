@@ -27,6 +27,7 @@ const propTypes = {
   actualTime: PropTypes.string,
   isLegalBreak: PropTypes.bool,
   onSetRemaingHour: PropTypes.func,
+  defaultBreak: PropTypes.object,
   onSubmit: PropTypes.func,
 };
 const defaultProps = {
@@ -35,6 +36,7 @@ const defaultProps = {
   paidBreak: 0,
   unpaidBreak: 0,
   isLegalBreak: true,
+  defaultBreak: { paidBreak: 10, unpaidBreak: 30 },
   onSetRemaingHour: () => {},
   onSubmit: () => {},
 };
@@ -51,6 +53,7 @@ const TimesheetAllocation = ({
   unpaidBreak,
   isLegalBreak,
   onSetRemaingHour,
+  defaultBreak,
   onSubmit,
 }) => {
   const [form] = Form.useForm();
@@ -344,7 +347,7 @@ const TimesheetAllocation = ({
             wrapperCol={{ span: 9 }}
             label={renderFieldTitleSameLine(
               "Paid break",
-              `(Default paid break is ${paidBreak})`
+              `(Default paid break is ${defaultBreak?.paidBreak})`
             )}
             name="paidBreak"
             validateStatus={validatePaidBreak()}
@@ -367,7 +370,7 @@ const TimesheetAllocation = ({
             wrapperCol={{ span: 9 }}
             label={renderFieldTitleSameLine(
               "Unpaid break",
-              `(Default unpaid break is ${unpaidBreak})`
+              `(Default unpaid break is ${defaultBreak?.unpaidBreak})`
             )}
             name="unpaidBreak"
             className="mb-0"

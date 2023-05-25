@@ -68,12 +68,12 @@ export const preventSelectExcessTime = (startDate, finishDate, currentTime) => {
   }
 };
 
-export const preventActualTime = (finishTime, startTime) => {
-  const startHour = dayjs(startTime).hour();
-  const startMinute = dayjs(startTime).minute();
+export const preventActualTime = (finishDate, finishTime, startDateTime) => {
+  const startHour = dayjs(startDateTime).hour();
+  const startMinute = dayjs(startDateTime).minute();
   const finishHour = dayjs(finishTime).hour();
   const finishMiniute = dayjs(finishTime).minute();
-  if (dayjs(startTime).isSame(finishTime, "date")) {
+  if (dayjs(startDateTime).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {
         const disabledHours = [];

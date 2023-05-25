@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
-import TimesheetForm from "smart/SignoutPage/components/TimesheetForm";
+import TimesheetForm from "smart/TimesheetPage/components/TimesheetForm";
 import AllocationData from "components/common/AllocationData";
 import {
   calculateRemainingHours,
@@ -18,6 +18,7 @@ const TimesheetPage = () => {
     useContext(AppContext);
   const handleSubmit = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value);
+    console.log("res", res);
     if (!isSuccess) {
       notification({
         type: "error",
@@ -34,6 +35,7 @@ const TimesheetPage = () => {
       isLegalBreak: res.isLegalBreak,
       remainingHours: res.remainingTime,
       actualTime: res.actualTime,
+      defaultBreak: res.defaultBreak,
     });
     navigate("/timesheet-allocation");
   };

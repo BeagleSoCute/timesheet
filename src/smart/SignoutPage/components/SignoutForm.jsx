@@ -151,6 +151,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
                   allowClear={false}
                   disabledTime={() =>
                     preventActualTime(
+                      form.getFieldValue("finishDate"),
                       form.getFieldValue("finishTime"),
                       form.getFieldValue("startDateTime")
                     )

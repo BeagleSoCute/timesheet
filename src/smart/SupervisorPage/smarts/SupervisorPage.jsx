@@ -42,6 +42,7 @@ const SupervisorPage = () => {
   }, [employeeId]);
   const handleSubmitTimesheetData = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value, true);
+    console.log("------res-----", res);
     if (!isSuccess) {
       notification({
         type: "error",
@@ -56,6 +57,7 @@ const SupervisorPage = () => {
       isLegalBreak: res.isLegalBreak,
       remainingHours: res.remainingTime,
       actualTime: res.actualTime,
+      defaultBreak: res.defaultBreak,
     };
     setTimesheetData(transformData);
     setRemainingHours(res.remainingTime);
@@ -99,6 +101,7 @@ const SupervisorPage = () => {
     paidBreak: timesheetData?.paidBreak,
     unpaidBreak: timesheetData?.unpaidBreak,
     isLegalBreak: timesheetData?.isLegalBreak,
+    defaultBreak: timesheetData?.defaultBreak,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: (value) => setRemainingHours(value),
   };

@@ -10,6 +10,7 @@ import {
   preventSelectExcessTime,
   preventSelectFinishTime,
 } from "helpers/dateTime.helper";
+import { notification } from "helpers/notification.helper";
 
 const AssignEmployeeTimesheetForm = ({
   isShowTimesheetForm,
@@ -21,14 +22,19 @@ const AssignEmployeeTimesheetForm = ({
   const [isBreak, setIsBreak] = useState(true);
 
   const handleOnFinish = (value) => {
+    const finishDateTime = form.getFieldValue("finishDateTime");
+    const startDateTime = form.getFieldValue("startDateTime");
+    const isFinishAfterStart = finishDateTime.isAfter(startDateTime);
+    if (!isFinishAfterStart) {
+      notification({
+        type: "error",
+        message:
+          "You can not select a finish time that occurs before the start time. Please try again",
+      });
+      return;
+    }
     const transformValue = {
       ...value,
-      startDateTime: dayjs(value.startDateTime).format(
-        `${dateFormat} ${timeFormat}`
-      ),
-      finishDateTime: dayjs(value.finishDateTime).format(
-        `${dateFormat} ${timeFormat}`
-      ),
       breaksTime: isBreak ? value.breaksTime : 0,
     };
     onFinish(transformValue);
@@ -110,9 +116,6 @@ const AssignEmployeeTimesheetForm = ({
             showTime
             disabled={isShowTimesheetForm || isCompleteAllocation}
             disabledDate={handleDisabledStartDate}
-            onChange={() => {
-              form.resetFields(["finishTime"]);
-            }}
             allowClear={false}
             format="DD/MM/YYYY HH:mm"
             disabledTime={() => handleDisableStartTime()}

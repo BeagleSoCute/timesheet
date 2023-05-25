@@ -61,6 +61,7 @@ const TimesheetAllocation = () => {
     paidBreak: timesheetData.paidBreak,
     unpaidBreak: timesheetData.unpaidBreak,
     isLegalBreak: timesheetData.isLegalBreak,
+    defaultBreak: timesheetData.defaultBreak,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: handleSetRemaingHour,
   };

@@ -3,58 +3,36 @@ import duration from "dayjs/plugin/duration";
 dayjs.extend(duration);
 
 export const calculateRemainingHours = (value, hasFinishDateTime = false) => {
-  const { startDateTime, breaksTime } = value;
-  console.log("valueee", value);
-  const startDate = dayjs(startDateTime, "DD-MM-YYYY HH:mm");
-  const finishDateTime = hasFinishDateTime
-    ? dayjs(value.finishDateTime, "DD-MM-YYYY HH:mm")
-    : dayjs(value.finishDate + " " + value.finishTime, "DD-MM-YYYY HH:mm");
-
-  let breakTimeInMinutes; //NOTE default here based on the legal break time
-  const timeDiffInMs = finishDateTime.diff(startDate);
+  const { startDateTime, breaksTime, finishDateTime } = value;
+  const timeDiffInMs = finishDateTime.diff(startDateTime);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
-  const minutes = Math.floor((timeDiffInMs % (60 * 60 * 1000)) / (60 * 1000));
-  //NOTE set default for break time if not provided and check the deault legal break time
-  if (breaksTime === 0) {
-    const legalBreakingTime = hours >= 8 ? 50 : hours >= 6 ? 40 : 0;
-    breakTimeInMinutes = legalBreakingTime;
-  } else {
-    breakTimeInMinutes = breaksTime;
-  }
-
-  const { paidBreak, unpaidBreak, isLegalBreak } = transformBreakingTime(
-    breakTimeInMinutes,
-    hours
-  );
+  const minutes = Math.round((timeDiffInMs % (60 * 60 * 1000)) / (60 * 1000));
+  const { paidBreak, unpaidBreak, isLegalBreak, defaultBreak } =
+    transformBreakingTime(breaksTime, hours);
   const breakTimeInMs = (unpaidBreak + paidBreak) * 60 * 1000;
-  console.log("timeDiffInMs", timeDiffInMs);
-  console.log("timeDifbreakTimeInMsfInMs", breakTimeInMs);
-
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   if (remainingTimeInMs < 0) {
     return { isSuccess: false };
   }
   const finalRemainingTimeInMs = remainingTimeInMs > 0 ? remainingTimeInMs : 0;
   const remainingHours = Math.floor(finalRemainingTimeInMs / (60 * 60 * 1000));
-  const remainingMinutes = Math.floor(
+  const remainingMinutes = Math.round(
     (finalRemainingTimeInMs % (60 * 60 * 1000)) / (60 * 1000)
   );
   const remainingTime = `${padTime(remainingHours)}:${padTime(
     remainingMinutes
   )}`;
-
   const actualTime = `${padTime(hours)}:${padTime(minutes)}`;
-
   return {
     isSuccess: true,
     res: {
       remainingTime,
-      breakTime: breakTimeInMinutes,
       workingHours: hours,
       actualTime,
       paidBreak,
       unpaidBreak,
       isLegalBreak,
+      defaultBreak,
     },
   };
 };
@@ -71,7 +49,6 @@ export const isValidBreakingTime = (
   const remainingTimeInMillis =
     remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
   const toltalBreakingTimeInMillis = totalBreakingTime * 60 * 1000;
-
   if (
     totalBreakingTime < previousTotalBreakingTime ||
     totalBreakingTime === previousTotalBreakingTime
@@ -83,7 +60,6 @@ export const isValidBreakingTime = (
     return true;
   }
 };
-
 export const calculateActualRemain = async (remainingTime, lastLabourHours) => {
   const labour = await dayjs(lastLabourHours).format("HH:mm");
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
@@ -169,6 +145,7 @@ export const transformBreakingTime = (totalBreak, totalHours) => {
       paidBreak: 20,
       unpaidBreak: totalBreak < legal ? 30 : totalBreak - 20,
       isLegalBreak: totalBreak < legal ? false : true,
+      defaultBreak: { paidBreak: 20, unpaidBreak: 30 },
     };
   } else {
     const legal = 40;
@@ -176,6 +153,7 @@ export const transformBreakingTime = (totalBreak, totalHours) => {
       paidBreak: 10,
       unpaidBreak: totalBreak < legal ? 30 : totalBreak - 10,
       isLegalBreak: totalBreak < legal ? false : true,
+      defaultBreak: { paidBreak: 10, unpaidBreak: 30 },
     };
   }
 };
