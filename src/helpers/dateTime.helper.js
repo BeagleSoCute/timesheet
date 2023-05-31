@@ -112,3 +112,13 @@ export const preventActualTime = (finishDate, finishTime, startDateTime) => {
     };
   }
 };
+
+export const mergeDateAndTime = (finishDate, finishTime) => {
+  // Extract the date component from 'finishDate'
+  const date = finishDate.format("YYYY-MM-DD");
+  // Extract the time component from 'finishTime'
+  const time = finishTime.format("HH:mm:ss");
+  // Merge the date and time components into a new Day.js object
+  const finishDateTime = dayjs(date + " " + time, "YYYY-MM-DD HH:mm:ss");
+  return finishDateTime;
+};

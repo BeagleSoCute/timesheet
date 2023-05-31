@@ -42,7 +42,6 @@ const SupervisorPage = () => {
   }, [employeeId]);
   const handleSubmitTimesheetData = async (value) => {
     const { isSuccess, res } = await calculateRemainingHours(value, true);
-    console.log("------res-----", res);
     if (!isSuccess) {
       notification({
         type: "error",

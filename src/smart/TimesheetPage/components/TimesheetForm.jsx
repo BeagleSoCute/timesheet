@@ -3,13 +3,11 @@ import PropTypes from "prop-types";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
 import { DatePicker, Form, TimePicker, InputNumber } from "antd";
-import dayjs from "dayjs";
 import Message from "components/common/Message";
 import styled from "styled-components";
 import Button from "components/common/Button";
 import { renderFieldTitle } from "helpers/form.helper";
-import { notification } from "helpers/notification.helper";
-import { preventSelectFinishTime } from "helpers/dateTime.helper";
+import { mergeDateAndTime } from "helpers/dateTime.helper";
 
 const propTypes = {
   data: PropTypes.object,
@@ -34,6 +32,7 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
   const handleOnFinish = (value) => {
     const result = {
       ...value,
+      finishDateTime: mergeDateAndTime(data.finishDate, data.finishTime),
       breaksTime: isBreak ? value.breaksTime : 0,
     };
     onSubmit(result);
@@ -41,44 +40,12 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
   const initialValues = {
     pin: data.pin,
     startDateTime: data.startDateTime,
-    startDate: data.startDate,
     finishDate: data.finishDate,
     finishTime: data.finishTime,
-    startTime: dayjs(data.startTime, "HH:mm"),
     timeFormat,
-    isStartTimeCorrect: true,
     isTakenBreak: true,
   };
-  const handleDisabledEndDate = (current) => {
-    const startDateTime = form.getFieldValue("startDateTime");
-    return (
-      current && current.isBefore(dayjs(startDateTime).endOf("day"), "day")
-    );
-  };
-  const handleDisabledStartDate = (current) => {
-    const finishDate = form.getFieldValue("finishDate");
-    return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
-  };
-  const handleErrorSelectFinishime = (current) => {
-    const startDate = form.getFieldValue("startDateTime");
-    const finishDate = form.getFieldValue("finishDate");
-    const startTime = form.getFieldValue("startDateTime");
-    const startHour = dayjs(startTime).hour();
-    const startMinute = dayjs(startTime).minute();
-    const finishHour = dayjs(current).hour();
-    const finishMinute = dayjs(current).minute();
-    if (
-      dayjs(startDate).isSame(finishDate, "date") &&
-      startHour === finishHour &&
-      startMinute >= finishMinute
-    ) {
-      notification({
-        type: "error",
-        message: "Finish time must be greater than start time",
-      });
-      form.resetFields(["finishTime"]);
-    }
-  };
+
   return (
     <StyledDiv className="timesheet-form">
       <Form
@@ -112,7 +79,6 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
         >
           <DatePicker
             showTime
-            disabledDate={handleDisabledStartDate}
             disabled={true}
             onChange={() => {
               form.resetFields(["finishTime"]);
@@ -130,7 +96,6 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
           name="finishDate"
         >
           <DatePicker
-            disabledDate={handleDisabledEndDate}
             disabled={true}
             allowClear={false}
             onChange={() => form.resetFields(["finishTime"])}
@@ -152,14 +117,6 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
             showNow={false}
             inputReadOnly
             format={timeFormat}
-            onChange={(value) => handleErrorSelectFinishime(value)}
-            disabledTime={() =>
-              preventSelectFinishTime(
-                form.getFieldValue("startDateTime"),
-                form.getFieldValue("finishDate"),
-                form.getFieldValue("startDateTime")
-              )
-            }
           />
         </Form.Item>
         <Form.Item

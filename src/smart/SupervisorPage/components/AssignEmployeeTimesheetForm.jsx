@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { Form, DatePicker, InputNumber, Modal } from "antd";
 import styled from "styled-components";
-import { dateFormat, timeFormat } from "constants/format";
 import { renderFieldTitle } from "helpers/form.helper";
 import dayjs from "dayjs";
 import CustomRadioButton from "components/common/CustomRadioButton";
@@ -55,7 +54,6 @@ const AssignEmployeeTimesheetForm = ({
   };
   const handleDisableStartTime = () => {
     const finishDate = form.getFieldValue("finishDateTime");
-    console.log("---finishDate---", finishDate);
     if (finishDate) {
       return preventSelectExcessTime(
         form.getFieldValue("startDateTime"),

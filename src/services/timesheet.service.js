@@ -1,8 +1,10 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
+import { notification } from "helpers/notification.helper";
+
 dayjs.extend(duration);
 
-export const calculateRemainingHours = (value, hasFinishDateTime = false) => {
+export const calculateRemainingHours = (value) => {
   const { startDateTime, breaksTime, finishDateTime } = value;
   const timeDiffInMs = finishDateTime.diff(startDateTime);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
@@ -188,4 +190,37 @@ export const transformTimeToMs = (time) => {
   const [hours, minutes] = time.split(":");
   const timeInMs = hours * 60 * 60 * 1000 + minutes * 60 * 1000;
   return timeInMs;
+};
+
+//Functions below are functions on the TimesheetForm (Backup)
+
+export const handleErrorSelectFinishime = (current, form) => {
+  const startDate = form.getFieldValue("startDateTime");
+  const finishDate = form.getFieldValue("finishDate");
+  const startTime = form.getFieldValue("startDateTime");
+  const startHour = dayjs(startTime).hour();
+  const startMinute = dayjs(startTime).minute();
+  const finishHour = dayjs(current).hour();
+  const finishMinute = dayjs(current).minute();
+  if (
+    dayjs(startDate).isSame(finishDate, "date") &&
+    startHour === finishHour &&
+    startMinute >= finishMinute
+  ) {
+    notification({
+      type: "error",
+      message: "Finish time must be greater than start time",
+    });
+    form.resetFields(["finishTime"]);
+  }
+};
+
+export const handleDisabledEndDate = (current, form) => {
+  const startDateTime = form.getFieldValue("startDateTime");
+  return current && current.isBefore(dayjs(startDateTime).endOf("day"), "day");
+};
+
+export const handleDisabledStartDate = (current, form) => {
+  const finishDate = form.getFieldValue("finishDate");
+  return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
 };
