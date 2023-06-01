@@ -1,17 +1,15 @@
-import React from "react";
+import React from 'react'
 import { Button } from "antd";
-import PropTypes from "prop-types";
 import { combineClassNames } from "helpers/common.helper";
 import styled from "styled-components";
 
-const propTypes = {
-  type: PropTypes.string,
-};
-const defaultProps = {
-  // type: "",
-};
+interface propsType  {
+  label: string, 
+  type: string, 
+  className: string
+}
 
-const StyledButton = ({ label, type, className, ...props }) => {
+const StyledButton = ({ label, type, className, ...props }:propsType) => {
   return (
     <StyledDiv className="button">
       {type === "primary" ? (
@@ -53,6 +51,5 @@ const StyledDiv = styled.div`
     }
   }
 `;
-StyledButton.propTypes = propTypes;
-StyledButton.defaultProps = defaultProps;
+
 export default StyledButton;
