@@ -3,18 +3,15 @@ import styled from "styled-components";
 import { Radio } from "antd";
 import PropTypes from "prop-types";
 
-const propTypes = {
-  color: PropTypes.string,
-  onChange: PropTypes.func,
-  defaultValue: PropTypes.bool,
-};
-const defaultProps = {
-  color: "yellow",
-  onChange: () => {},
-  defaultValue: true,
-};
 
-const CustomRadioButton = ({ color, onChange, defaultValue, ...props }) => {
+
+interface CustomRadioButtonProps {
+  color?: string
+  onChange: (e:boolean) => void ,
+  defaultValue?: boolean,
+}
+
+const CustomRadioButton = ({ color="yellow", onChange, defaultValue=true, ...props }:CustomRadioButtonProps) => {
   return (
     <StyledDiv className="custom-radio-button">
       <Radio.Group
@@ -32,9 +29,6 @@ const CustomRadioButton = ({ color, onChange, defaultValue, ...props }) => {
     </StyledDiv>
   );
 };
-
-CustomRadioButton.propTypes = propTypes;
-CustomRadioButton.defaultProps = defaultProps;
 
 const StyledDiv = styled.div`
   &.custom-radio-button {

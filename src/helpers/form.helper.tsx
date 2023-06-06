@@ -1,4 +1,6 @@
-export const renderFieldTitle = (title, description) => {
+import React from 'react'
+
+export const renderFieldTitle = (title:string, description:string):JSX.Element  => {
   return (
     <div className="field-title">
       <span>{title}</span>
@@ -9,7 +11,7 @@ export const renderFieldTitle = (title, description) => {
   );
 };
 
-export const renderFieldTitleSameLine = (title, description) => {
+export const renderFieldTitleSameLine = (title:string, description:string) => {
   return (
     <div className="field-title">
       <span>{title}</span>

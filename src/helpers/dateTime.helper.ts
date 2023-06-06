@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 
-export const preventSelectFinishTime = (startDate, finishDate, startTime) => {
-  const startHour = dayjs(startTime).hour();
-  const startMinute = dayjs(startTime).minute();
+export const preventSelectFinishTime = (startDate:string, finishDate:string, startTime:string) => {
+  const startHour = <number> dayjs(startTime).hour();
+  const startMinute = <number> dayjs(startTime).minute();
   if (dayjs(startDate).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {
@@ -12,7 +12,7 @@ export const preventSelectFinishTime = (startDate, finishDate, startTime) => {
         }
         return disabledHours;
       },
-      disabledMinutes: (hour) => {
+      disabledMinutes: (hour:number) => {
         if (hour === startHour) {
           const disabledMinutes = [];
           for (let i = 0; i <= startMinute; i++) {
@@ -34,9 +34,9 @@ export const preventSelectFinishTime = (startDate, finishDate, startTime) => {
   }
 };
 
-export const preventSelectExcessTime = (startDate, finishDate, currentTime) => {
-  const startHour = dayjs(currentTime).hour();
-  const startMinute = dayjs(currentTime).minute();
+export const preventSelectExcessTime = (startDate:string, finishDate:string, currentTime:string) => {
+  const startHour = <number>dayjs(currentTime).hour();
+  const startMinute = <number> dayjs(currentTime).minute();
   if (dayjs(startDate).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {
@@ -46,7 +46,7 @@ export const preventSelectExcessTime = (startDate, finishDate, currentTime) => {
         }
         return disabledHours;
       },
-      disabledMinutes: (hour) => {
+      disabledMinutes: (hour:number) => {
         if (hour === startHour) {
           const disabledMinutes = [];
           for (let i = startMinute; i < 60; i++) {
@@ -68,7 +68,7 @@ export const preventSelectExcessTime = (startDate, finishDate, currentTime) => {
   }
 };
 
-export const preventActualTime = (finishDate, finishTime, startDateTime) => {
+export const preventActualTime = (finishDate:string, finishTime:string, startDateTime:string) => {
   const startHour = dayjs(startDateTime).hour();
   const startMinute = dayjs(startDateTime).minute();
   const finishHour = dayjs(finishTime).hour();
@@ -85,7 +85,7 @@ export const preventActualTime = (finishDate, finishTime, startDateTime) => {
         }
         return disabledHours;
       },
-      disabledMinutes: (hour) => {
+      disabledMinutes: (hour:number) => {
         const disabledMinutes = [];
         if (hour === startHour) {
           for (let i = 0; i <= startMinute; i++) {
@@ -113,7 +113,7 @@ export const preventActualTime = (finishDate, finishTime, startDateTime) => {
   }
 };
 
-export const mergeDateAndTime = (finishDate, finishTime) => {
+export const mergeDateAndTime = (finishDate:any, finishTime:any) => {
   // Extract the date component from 'finishDate'
   const date = finishDate.format("YYYY-MM-DD");
   // Extract the time component from 'finishTime'
