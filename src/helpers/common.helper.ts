@@ -3,7 +3,7 @@ export const redirect = ():void => {
 };
 
 export const randomString = ():string => {
-  let result:string
+  let result:string = ''
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const charactersLength = characters.length;
@@ -45,15 +45,15 @@ export const convertToOrdinalNumber = (n:number):string => {
     "eight",
     "ninet",
   ];
-  //uppercase every character special and deca
+  //uppercase every character special and decass
   if (n < 20) return special[n];
   if (n % 10 === 0) return deca[Math.floor(n / 10) - 2] + "ieth";
   return deca[Math.floor(n / 10) - 2] + "y-" + special[n % 10];
 };
 
-export const getClassName = (rootClass:string, ...names) => {
+export const getClassName = (rootClass:string, ...names:any) => {
   const result = names.reduce(
-    (result, text) => (text ? `${result} ${text}` : result),
+    (result:string, text:string) => (text ? `${result} ${text}` : result),
     rootClass
   );
   return result;
@@ -64,3 +64,4 @@ export const combineClassNames = (...names:string[]):string => {
   const result = names.filter(Boolean).join(" ");
   return result;
 };
+

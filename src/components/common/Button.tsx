@@ -1,12 +1,14 @@
 import React from 'react'
-import { Button } from "antd";
+import { Button} from "antd";
 import { combineClassNames } from "helpers/common.helper";
 import styled from "styled-components";
 
 interface propsType  {
   label: string, 
   type: string, 
-  className: string
+  className: string,
+  onClick?: () => void,
+  htmlType?: any
 }
 
 const StyledButton = ({ label, type, className, ...props }:propsType) => {

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
-import { dateFormat, timeFormat } from "constants/format";
-import { dateTimeFormat } from "constants/format";
+import { dateFormat, timeFormat, dateTimeFormat } from "constants/format";
 import styled from "styled-components";
 import {
   DatePicker,
@@ -20,24 +18,18 @@ import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventActualTime } from "helpers/dateTime.helper";
 
-const propTypes = {
-  startDateTime: PropTypes.object,
-  pin: PropTypes.number,
-  job: PropTypes.array,
-  onFinish: PropTypes.func,
-};
-const defaultProps = {
-  onFinish: () => {},
-};
-
-const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
+interface ComponentProps {
+  startDateTime: string
+  , pin: number, onFinish: (data:object) => void, job: string[],
+}
+const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, pin, onFinish,job }) => {
   const [form] = Form.useForm();
-  const [isClockout, setIsClockout] = useState(false);
-  const [isForget, setIsForget] = useState(false);
-  const handleChangeIsForget = (value) => {
+  const [isClockout, setIsClockout] = useState<boolean>(false);
+  const [isForget, setIsForget] = useState<boolean>(false);
+  const handleChangeIsForget = (value:boolean):void => {
     setIsForget(value);
   };
-  const handleOnFinish = () => {
+  const handleOnFinish = ():void => {
     const transformData = {
       ...form.getFieldsValue(),
       finishTime: isForget
@@ -62,7 +54,7 @@ const SignoutForm = ({ startDateTime, pin, onFinish, job }) => {
     startDateTime,
     job,
   };
-  const handleClockout = () => {
+  const handleClockout = ():void => {
     setIsClockout(true);
     form.setFieldsValue({ finishDate: dayjs(), finishTime: dayjs() });
   };
@@ -205,6 +197,5 @@ const StyledDiv = styled.div`
   }
 `;
 
-SignoutForm.propTypes = propTypes;
-SignoutForm.defaultProps = defaultProps;
+
 export default SignoutForm;
