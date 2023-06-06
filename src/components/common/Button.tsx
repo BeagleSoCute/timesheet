@@ -5,13 +5,13 @@ import styled from "styled-components";
 
 interface propsType  {
   label: string, 
-  type: string, 
-  className: string,
+  type?: "default"| "primary"| "ghost"| "dashed"| "link"| "text", 
+  className?: string,
   onClick?: () => void,
   htmlType?: any
 }
 
-const StyledButton = ({ label, type, className, ...props }:propsType) => {
+const StyledButton = ({ label, type, className="", ...props }:propsType) => {
   return (
     <StyledDiv className="button">
       {type === "primary" ? (

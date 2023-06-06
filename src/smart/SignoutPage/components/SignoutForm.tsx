@@ -169,7 +169,6 @@ const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, pin, onFinish,jo
             <Row>
               <Button label="Sign Out" htmlType="submit" type="primary" />
               <Button
-                type="secondary"
                 label="Cancel Clock out"
                 className="w-full mx-5"
                 onClick={() => setIsClockout(false)}
