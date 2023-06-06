@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const SigninPage = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AppContext);
-  const handleSubmit = (value) => {
+  const handleSubmit = (value:object) => {
     setAuth(value);
     notification({ type: "success", message: "Sign in Success!" });
     navigate("signout");

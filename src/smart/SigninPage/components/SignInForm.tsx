@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
@@ -11,23 +10,20 @@ import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
 
-const propTypes = {
-  onFinish: PropTypes.func,
-};
-const defaultProps = {
-  onFinish: () => {},
-};
+interface SignInFormProps {
+  onFinish: (data:object) => void
+}
 
-const SignInForm = ({ onFinish }) => {
+const SignInForm = ({ onFinish }:SignInFormProps) => {
   const [form] = Form.useForm();
   const [isForget, setIsForget] = useState(false);
-  const handleOnFinish = (value) => {
+  const handleOnFinish = (value:object) => {
     const startTime = isForget
       ? form.getFieldValue("actualStartTime")
       : form.getFieldValue("startTime");
     onFinish({ ...value, startTime });
   };
-  const handleChangeIsForget = (value) => {
+  const handleChangeIsForget = (value:boolean) => {
     setIsForget(value);
   };
 
@@ -141,6 +137,4 @@ const StyledDiv = styled.div`
   }
 `;
 
-SignInForm.propTypes = propTypes;
-SignInForm.defaultProps = defaultProps;
 export default SignInForm;
