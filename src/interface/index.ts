@@ -1,5 +1,5 @@
 export interface calculateRemainingHoursPropsType  {
-    startDateTime:any, breaksTime:any, finishDateTime:any
+    startDateTime:any, breaksTime:number, finishDateTime:any
 }
 export interface employeeType {
     id: string, 
