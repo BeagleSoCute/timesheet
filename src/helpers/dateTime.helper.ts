@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
 
 export const preventSelectFinishTime = (startDate:string, finishDate:string, startTime:string) => {
-  const startHour = <number> dayjs(startTime).hour();
-  const startMinute = <number> dayjs(startTime).minute();
+  const startHour =  dayjs(startTime).hour() as number;
+  const startMinute = dayjs(startTime).minute() as number;
   if (dayjs(startDate).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {
@@ -35,8 +35,8 @@ export const preventSelectFinishTime = (startDate:string, finishDate:string, sta
 };
 
 export const preventSelectExcessTime = (startDate:string, finishDate:string, currentTime:string) => {
-  const startHour = <number>dayjs(currentTime).hour();
-  const startMinute = <number> dayjs(currentTime).minute();
+  const startHour = dayjs(currentTime).hour() as number;
+  const startMinute =  dayjs(currentTime).minute() as number;
   if (dayjs(startDate).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {

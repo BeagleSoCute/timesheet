@@ -1,9 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 import { Radio } from "antd";
-import PropTypes from "prop-types";
-
-
 
 interface CustomRadioButtonProps {
   color?: string
