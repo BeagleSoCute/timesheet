@@ -20,6 +20,7 @@ import {
   transformTimeToMs,
 } from "services/timesheet.service";
 import { renderFieldTitleSameLine } from "helpers/form.helper";
+import {defaultPaidBreaek} from "interface/index"
 const propTypes = {
   remainingHours: PropTypes.string,
   paidBreak: PropTypes.number,
@@ -38,13 +39,24 @@ const defaultProps = {
   isLegalBreak: true,
   defaultBreak: { paidBreak: 10, unpaidBreak: 30 },
   onSetRemaingHour: () => {},
-  onSubmit: () => {},
+  onSubmit: (data:any) => {},
 };
 
 const formItemLayout = {
   labelCol: { span: 12 },
   wrapperCol: { span: 12 },
 };
+
+interface PropsType {
+  remainingHours:string,
+  actualTime:string,
+  paidBreak:number,
+  unpaidBreak:number,
+  isLegalBreak:boolean,
+  onSetRemaingHour: (data:string) => void,
+  defaultBreak:defaultPaidBreaek,
+  onSubmit: (data:any) => void,
+}
 
 const TimesheetAllocation = ({
   remainingHours,
@@ -55,7 +67,7 @@ const TimesheetAllocation = ({
   onSetRemaingHour,
   defaultBreak,
   onSubmit,
-}) => {
+}:PropsType) => {
   const [form] = Form.useForm();
   const [reasonCode, setReasonCode] = useState("");
   const [previousUnpaidBrekingTime, setPreviousUnpaidBrekingTime] =
@@ -63,12 +75,12 @@ const TimesheetAllocation = ({
   const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
     useState(paidBreak);
 
-  const handleOnFinish = (value) => {
+  const handleOnFinish = (value:any) => {
     onSubmit(value);
   };
-  const handleCalculateRemainHours = async (value, index) => {
-    const allItems = form.getFieldsValue("items")["items"];
-    let thisFormItem = form.getFieldsValue("items")["items"][index];
+  const handleCalculateRemainHours = async (value:any, index:number) => {
+    const allItems = form.getFieldsValue(true)["items"];
+    let thisFormItem = form.getFieldsValue(true)["items"][index];
     const previousLabourHour = thisFormItem.previousLabourHour;
     if (value.hour() === 0 && value.minute() === 0) {
       thisFormItem = {
