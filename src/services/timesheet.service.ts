@@ -1,11 +1,16 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { notification } from "helpers/notification.helper";
-import {calculateRemainingHoursPropsType, calRemainFromLabourHourReturnType} from "interface"
+import {
+  calculateRemainingHoursPropsType,
+  calRemainFromLabourHourReturnType,
+} from "interface";
 
 dayjs.extend(duration);
 
-export const calculateRemainingHours = (value:calculateRemainingHoursPropsType):any  => {
+export const calculateRemainingHours = (
+  value: calculateRemainingHoursPropsType
+): any => {
   const { startDateTime, breaksTime, finishDateTime } = value;
   const timeDiffInMs = finishDateTime.diff(startDateTime);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
@@ -25,7 +30,9 @@ export const calculateRemainingHours = (value:calculateRemainingHoursPropsType):
   const remainingTime = `${padTime(remainingHours.toString())}:${padTime(
     remainingMinutes.toString()
   )}`;
-  const actualTime = `${padTime(hours.toString())}:${padTime(minutes.toString())}`;
+  const actualTime = `${padTime(hours.toString())}:${padTime(
+    minutes.toString()
+  )}`;
   return {
     isSuccess: true,
     res: {
@@ -39,18 +46,19 @@ export const calculateRemainingHours = (value:calculateRemainingHoursPropsType):
     },
   };
 };
-const padTime = (time:string) => {
+const padTime = (time: string) => {
   return time.toString().padStart(2, "0");
 };
 
 export const isValidBreakingTime = (
-  remainingTime:string,
-  totalBreakingTime:number,
-  previousTotalBreakingTime:number
-):boolean => {
+  remainingTime: string,
+  totalBreakingTime: number,
+  previousTotalBreakingTime: number
+): boolean => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const remainingTimeInMillis =
-   parseInt(remainingHours) * 60 * 60 * 1000 + parseInt(remainingMinutes) * 60 * 1000;
+    parseInt(remainingHours) * 60 * 60 * 1000 +
+    parseInt(remainingMinutes) * 60 * 1000;
   const toltalBreakingTimeInMillis = totalBreakingTime * 60 * 1000;
   if (
     totalBreakingTime < previousTotalBreakingTime ||
@@ -63,14 +71,19 @@ export const isValidBreakingTime = (
     return true;
   }
 };
-export const calculateActualRemain = async (remainingTime:string, lastLabourHours:string) => {
-  const labour:string = await dayjs(lastLabourHours).format("HH:mm");
+export const calculateActualRemain = async (
+  remainingTime: string,
+  lastLabourHours: string
+) => {
+  const labour: string = await dayjs(lastLabourHours).format("HH:mm");
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
-  const [labourHours, labourMinutes] = labour.split(":") ;
+  const [labourHours, labourMinutes] = labour.split(":");
   const remainingTimeInMillis =
-  parseInt( remainingHours) * 60 * 60 * 1000 + parseInt(remainingMinutes) * 60 * 1000;
+    parseInt(remainingHours) * 60 * 60 * 1000 +
+    parseInt(remainingMinutes) * 60 * 1000;
   const LabourInMillis =
-  parseInt (labourHours) * 60 * 60 * 1000 + parseInt (labourMinutes) * 60 * 1000;
+    parseInt(labourHours) * 60 * 60 * 1000 +
+    parseInt(labourMinutes) * 60 * 1000;
   const result = remainingTimeInMillis - LabourInMillis;
   const finalResult = dayjs.duration(result, "milliseconds").format("HH:mm");
   if (remainingTimeInMillis < LabourInMillis) {
@@ -80,23 +93,26 @@ export const calculateActualRemain = async (remainingTime:string, lastLabourHour
 };
 
 export const calRemainFromLabourHour = (
-  remainingTime:string,
-  currentSpent:string,
-  previousSpent?:string,
-  isReset?:boolean
-):calRemainFromLabourHourReturnType => {
+  remainingTime: string,
+  currentSpent: string,
+  previousSpent?: string,
+  isReset?: boolean
+): calRemainFromLabourHourReturnType => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const [currentSpentHours, currentSpentMinutes] = currentSpent.split(":");
   const remainingTimeInMillis =
-  parseInt(remainingHours) * 60 * 60 * 1000 + parseInt(remainingMinutes) * 60 * 1000;
+    parseInt(remainingHours) * 60 * 60 * 1000 +
+    parseInt(remainingMinutes) * 60 * 1000;
   const currentSpentInMillis =
-  parseInt(currentSpentHours) * 60 * 60 * 1000 + parseInt(currentSpentMinutes) * 60 * 1000;
+    parseInt(currentSpentHours) * 60 * 60 * 1000 +
+    parseInt(currentSpentMinutes) * 60 * 1000;
   let remainingTimeInMinutesAfterSubtraction;
   if (previousSpent) {
     const [previousSpentHours, previousSpentMinutes] = previousSpent.split(":");
     const previousSpentInMillis =
       // previousSpentHours &&
-      parseInt( previousSpentHours) * 60 * 60 * 1000 + parseInt(previousSpentMinutes) * 60 * 1000;
+      parseInt(previousSpentHours) * 60 * 60 * 1000 +
+      parseInt(previousSpentMinutes) * 60 * 1000;
     remainingTimeInMinutesAfterSubtraction =
       currentSpentInMillis < previousSpentInMillis
         ? remainingTimeInMillis + (previousSpentInMillis - currentSpentInMillis)
@@ -121,12 +137,12 @@ export const calRemainFromLabourHour = (
   return remainingTimeFormatted;
 };
 
-export const arrayToString = (arr:[]) => {
+export const arrayToString = (arr: []) => {
   return arr.join(", ");
 };
 
-export const trasformSubmitAllocatedHours = (value:any) => {
-  return value.map((item:any, index:number) => {
+export const trasformSubmitAllocatedHours = (value: any) => {
+  return value.map((item: any, index: number) => {
     const formattedHours =
       dayjs(item.labourHours).minute() === 0
         ? dayjs(item.labourHours).format("H")
@@ -140,7 +156,10 @@ export const trasformSubmitAllocatedHours = (value:any) => {
   });
 };
 
-export const transformBreakingTime = (totalBreak:number, totalHours:number) => {
+export const transformBreakingTime = (
+  totalBreak: number,
+  totalHours: number
+) => {
   const hours = totalHours;
   if (hours >= 8) {
     const legal = 50;
@@ -161,7 +180,10 @@ export const transformBreakingTime = (totalBreak:number, totalHours:number) => {
   }
 };
 
-export const calculateNewRemainingTime = (remainingHours:string, totalBreak:number):string => {
+export const calculateNewRemainingTime = (
+  remainingHours: string,
+  totalBreak: number
+): string => {
   // Parse the remainingHours string into hours and minutes
   const [hours, minutes] = remainingHours.split(":").map(Number);
   // Create a duration object using hours and minutes
@@ -187,15 +209,16 @@ export const calculateNewRemainingTime = (remainingHours:string, totalBreak:numb
   return newRemainingTime;
 };
 
-export const transformTimeToMs = (time:string) => {
+export const transformTimeToMs = (time: string): number => {
   const [hours, minutes] = time.split(":");
-  const timeInMs = parseInt(hours) * 60 * 60 * 1000 + parseInt(minutes) * 60 * 1000;
+  const timeInMs =
+    parseInt(hours) * 60 * 60 * 1000 + parseInt(minutes) * 60 * 1000;
   return timeInMs;
 };
 
 //Functions below are functions on the TimesheetForm (Backup)
 
-export const handleErrorSelectFinishime = (current:any, form:any) => {
+export const handleErrorSelectFinishime = (current: any, form: any) => {
   const startDate = form.getFieldValue("startDateTime");
   const finishDate = form.getFieldValue("finishDate");
   const startTime = form.getFieldValue("startDateTime");
@@ -216,12 +239,12 @@ export const handleErrorSelectFinishime = (current:any, form:any) => {
   }
 };
 
-export const handleDisabledEndDate = (current:any, form:any) => {
+export const handleDisabledEndDate = (current: any, form: any) => {
   const startDateTime = form.getFieldValue("startDateTime");
   return current && current.isBefore(dayjs(startDateTime).endOf("day"), "day");
 };
 
-export const handleDisabledStartDate = (current:any, form:any) => {
+export const handleDisabledStartDate = (current: any, form: any) => {
   const finishDate = form.getFieldValue("finishDate");
   return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
 };

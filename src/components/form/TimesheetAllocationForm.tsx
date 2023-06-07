@@ -40,7 +40,7 @@ interface PropsType {
   isLegalBreak: boolean;
   onSetRemaingHour: (data: string) => void;
   defaultBreak: defaultPaidBreaekType;
-  onSubmit: (data: any) => void;
+  onSubmit: (data: timesheetAllocationFormType) => void;
 }
 
 const TimesheetAllocation = ({
@@ -59,13 +59,21 @@ const TimesheetAllocation = ({
     useState<number>(unpaidBreak);
   const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
     useState(paidBreak);
-  const handleOnFinish = (value: any) => {
+  const handleOnFinish = (value: timesheetAllocationFormType) => {
     onSubmit(value);
   };
-  const handleCalculateRemainHours = async (value: any, index: number) => {
-    const allItems = form.getFieldsValue(true)["items"];
-    let thisFormItem = form.getFieldsValue(true)["items"][index];
-    const previousLabourHour = thisFormItem.previousLabourHour;
+  const handleCalculateRemainHours = async (
+    value: Dayjs | null,
+    index: number
+  ) => {
+    if (!value) {
+      return;
+    }
+    const allItems: timesheetAllocationDataType[] =
+      form.getFieldsValue(true)["items"];
+    let thisFormItem: timesheetAllocationDataType =
+      form.getFieldsValue(true)["items"][index];
+    const previousLabourHour: Dayjs | null = thisFormItem.previousLabourHour;
     if (value.hour() === 0 && value.minute() === 0) {
       thisFormItem = {
         ...thisFormItem,
@@ -79,15 +87,16 @@ const TimesheetAllocation = ({
       });
       return;
     }
-    const modifyPreviousLabourHourD = previousLabourHour
+    const modifyPreviousLabourHourD: string = previousLabourHour
       ? dayjs(previousLabourHour).format(timeFormat)
       : "";
-    const labourHours = dayjs(value).format(timeFormat);
-    const result = await calRemainFromLabourHour(
-      remainingHours,
-      labourHours,
-      modifyPreviousLabourHourD
-    );
+    const labourHours: string = dayjs(value).format(timeFormat);
+    const result: calRemainFromLabourHourReturnType =
+      await calRemainFromLabourHour(
+        remainingHours,
+        labourHours,
+        modifyPreviousLabourHourD
+      );
     if (!result.isSuccess) {
       thisFormItem = {
         ...thisFormItem,
@@ -109,14 +118,15 @@ const TimesheetAllocation = ({
     await allItems.splice(index, 1, thisFormItem);
     //handle update remaining hour in other form item
     for (let i = index + 1; i < allItems.length; i++) {
-      const thisItem = allItems[i];
-      const thisLabourHours = dayjs(allItems[i - 1].labourHours).format(
+      const thisItem: timesheetAllocationDataType = allItems[i];
+      const thisLabourHours: string = dayjs(allItems[i - 1].labourHours).format(
         timeFormat
       );
-      const result = await calRemainFromLabourHour(
-        allItems[i - 1].remainingHours,
-        thisLabourHours
-      );
+      const result: calRemainFromLabourHourReturnType =
+        await calRemainFromLabourHour(
+          allItems[i - 1].remainingHours,
+          thisLabourHours
+        );
       thisItem.remainingHours = result.value;
       await allItems.splice(i, 1, thisItem); //update the item
     }
@@ -257,7 +267,7 @@ const TimesheetAllocation = ({
       return;
     }
     let isLabourHourExcess = false;
-    let thisItem;
+    let thisItem: timesheetAllocationDataType;
     let resCal = "";
     for (let i = 0; i < allItems.length; i++) {
       thisItem = allItems[i];
@@ -265,22 +275,23 @@ const TimesheetAllocation = ({
         thisItem.remainingHours = initialRemainingHours;
         await allItems.splice(i, 1, thisItem); //update the item
       } else {
-        const thisLabourHours = dayjs(allItems[i - 1].labourHours).format(
-          timeFormat
-        );
-        const result = await calRemainFromLabourHour(
-          allItems[i - 1].remainingHours,
-          thisLabourHours,
-          undefined
-        );
+        const thisLabourHours: string = dayjs(
+          allItems[i - 1].labourHours
+        ).format(timeFormat);
+        const result: calRemainFromLabourHourReturnType =
+          await calRemainFromLabourHour(
+            allItems[i - 1].remainingHours,
+            thisLabourHours,
+            undefined
+          );
         thisItem.remainingHours = result.value;
         resCal = result.value;
         await allItems.splice(i, 1, thisItem); //update the item
       }
-      const transLabourHour = allItems[i].labourHours
+      const transLabourHour: number = allItems[i].labourHours
         ? transformTimeToMs(dayjs(allItems[i].labourHours).format(timeFormat))
         : 0;
-      const transRemainingHour = transformTimeToMs(
+      const transRemainingHour: number = transformTimeToMs(
         i === 0 ? initialRemainingHours : resCal
       );
       if (transLabourHour > transRemainingHour) {
@@ -302,25 +313,26 @@ const TimesheetAllocation = ({
       return;
     }
     if (lastItem.labourHours) {
-      const thisLabourHours = dayjs(lastItem.labourHours).format(timeFormat);
-      const result = await calRemainFromLabourHour(
-        lastItem.remainingHours,
-        thisLabourHours,
-        undefined
+      const thisLabourHours: string = dayjs(lastItem.labourHours).format(
+        timeFormat
       );
+      const result: calRemainFromLabourHourReturnType =
+        await calRemainFromLabourHour(
+          lastItem.remainingHours,
+          thisLabourHours,
+          undefined
+        );
       onSetRemaingHour(result.value);
     } else {
       onSetRemaingHour(lastItem.remainingHours);
     }
     await form.setFieldsValue({ items: allItems });
-
     if (thisInput === "unpaidBreak") {
       setPreviousUnpaidBrekingTime(parseInt(value));
     } else {
       setPreviousPaidBrekingTime(parseInt(value));
     }
   };
-
   const initialValues = {
     paidBreak,
     unpaidBreak,
@@ -391,7 +403,6 @@ const TimesheetAllocation = ({
               controls={false}
             />
           </Form.Item>
-
           {!isLegalBreak && (
             <div className="mt-5">
               <Form.Item
@@ -424,129 +435,131 @@ const TimesheetAllocation = ({
             </div>
           )}
         </div>
-
         <Form.List name="items">
           {(
-            fields: any,
-            { add, remove }: { add: () => void; remove: (data: any) => void }
+            fields: [],
+            { add, remove }: { add: () => void; remove: (data: number) => void }
           ) => {
             return (
               <div>
-                {fields.map((field: any, index: number) => (
-                  <div className="form-item" key={field.key}>
-                    <div className="bg-blue-900  px-4 text-white flex justify-between ">
-                      <h1 className="text-2xl my-3	">
-                        {convertToOrdinalNumber(index)} ALLOCATION
-                      </h1>
-                      {fields.length > 1 && (
-                        <Form.Item className="my-auto px-1">
-                          <DefaultButton
-                            className="no-color-button w-full h-full "
-                            label="Remove
+                {fields.map(
+                  (
+                    field: {
+                      fieldKey: number;
+                      isListField: boolean;
+                      key: number;
+                      name: number;
+                    },
+                    index: number
+                  ) => (
+                    <div className="form-item" key={field.key}>
+                      <div className="bg-blue-900  px-4 text-white flex justify-between ">
+                        <h1 className="text-2xl my-3	">
+                          {convertToOrdinalNumber(index)} ALLOCATION
+                        </h1>
+                        {fields.length > 1 && (
+                          <Form.Item className="my-auto px-1">
+                            <DefaultButton
+                              className="no-color-button w-full h-full "
+                              label="Remove
                             "
-                            onClick={() => handleRemove(index, remove)}
+                              onClick={() => handleRemove(index, remove)}
+                            />
+                          </Form.Item>
+                        )}
+                      </div>
+                      <div>
+                        <Form.Item
+                          labelCol={{ span: 15 }}
+                          wrapperCol={{ span: 9 }}
+                          name={[index, "remainingHours"]}
+                          label="Remaining Hours to Allocate:"
+                          className="remain-hour mb-0 mt-1"
+                        >
+                          <Input className="col-span-4 text-right" readOnly />
+                        </Form.Item>
+                        <Form.Item
+                          className="full-content mb-0 "
+                          colon={false}
+                          label="Job *"
+                          name={[index, "job"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select your job!",
+                            },
+                          ]}
+                        >
+                          <Select options={jobOptions} />
+                        </Form.Item>
+                        <Form.Item
+                          className="full-content  mb-0 "
+                          label="Add Supervisor *"
+                          colon={false}
+                          name={[index, "supervisors"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select your supervisor!",
+                            },
+                          ]}
+                        >
+                          <Select mode="multiple" options={supervisorOptions} />
+                        </Form.Item>
+                        <Form.Item
+                          className="full-content  mb-0 "
+                          label="Op/Lab *"
+                          colon={false}
+                          name={[index, "lab"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select your Op/Lab!",
+                            },
+                          ]}
+                        >
+                          <Select options={labOptions} />
+                        </Form.Item>
+
+                        <Form.Item
+                          className="full-content mb-0 "
+                          colon={false}
+                          label="Description of work"
+                          name={[index, "description"]}
+                        >
+                          <Input.TextArea />
+                        </Form.Item>
+
+                        <Form.Item
+                          className="full-content mb-0 "
+                          colon={false}
+                          label="Labour Hour *"
+                          name={[index, "labourHours"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please input your labour hours!",
+                            },
+                          ]}
+                        >
+                          <TimePicker
+                            className="w-full"
+                            onChange={(value) =>
+                              handleCalculateRemainHours(
+                                value ? value : null,
+                                index
+                              )
+                            }
+                            allowClear={false}
+                            showNow={false}
+                            inputReadOnly
+                            format={timeFormat}
                           />
                         </Form.Item>
-                      )}
+                      </div>
                     </div>
-                    <div>
-                      <Form.Item
-                        labelCol={{ span: 15 }}
-                        wrapperCol={{ span: 9 }}
-                        name={[index, "remainingHours"]}
-                        label="Remaining Hours to Allocate:"
-                        className="remain-hour mb-0 mt-1"
-                      >
-                        {/* <span className="font-bold col-span-8 my-auto ">
-                          Remaining Hours to Allocate:
-                        </span> */}
-                        <Input
-                          className="col-span-4 text-right"
-                          readOnly
-                          // value={
-                          //   form.getFieldsValue("items")["items"][index]
-                          //     ?.remainingHours
-                          // }
-                        />
-                      </Form.Item>
-                      <Form.Item
-                        className="full-content mb-0 "
-                        colon={false}
-                        label="Job *"
-                        name={[index, "job"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select your job!",
-                          },
-                        ]}
-                      >
-                        <Select options={jobOptions} />
-                      </Form.Item>
-                      <Form.Item
-                        className="full-content  mb-0 "
-                        label="Add Supervisor *"
-                        colon={false}
-                        name={[index, "supervisors"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select your supervisor!",
-                          },
-                        ]}
-                      >
-                        <Select mode="multiple" options={supervisorOptions} />
-                      </Form.Item>
-                      <Form.Item
-                        className="full-content  mb-0 "
-                        label="Op/Lab *"
-                        colon={false}
-                        name={[index, "lab"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select your Op/Lab!",
-                          },
-                        ]}
-                      >
-                        <Select options={labOptions} />
-                      </Form.Item>
-
-                      <Form.Item
-                        className="full-content mb-0 "
-                        colon={false}
-                        label="Description of work"
-                        name={[index, "description"]}
-                      >
-                        <Input.TextArea />
-                      </Form.Item>
-
-                      <Form.Item
-                        className="full-content mb-0 "
-                        colon={false}
-                        label="Labour Hour *"
-                        name={[index, "labourHours"]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please input your labour hours!",
-                          },
-                        ]}
-                      >
-                        <TimePicker
-                          className="w-full"
-                          onChange={(value) =>
-                            handleCalculateRemainHours(value, index)
-                          }
-                          allowClear={false}
-                          showNow={false}
-                          inputReadOnly
-                          format={timeFormat}
-                        />
-                      </Form.Item>
-                    </div>
-                  </div>
-                ))}
+                  )
+                )}
                 {remainingHours !== "00:00" && (
                   <div className="flex justify-center">
                     <DefaultButton
