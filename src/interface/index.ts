@@ -5,8 +5,8 @@ export interface employeeType {
     id: string, 
     name: string
 }
-
 export interface defaultPaidBreaek {
      paidBreak: number, unpaidBreak: number
 }
+
 

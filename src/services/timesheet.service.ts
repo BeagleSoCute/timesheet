@@ -82,8 +82,8 @@ export const calculateActualRemain = async (remainingTime:string, lastLabourHour
 export const calRemainFromLabourHour = (
   remainingTime:string,
   currentSpent:string,
-  previousSpent:string,
-  isReset:boolean
+  previousSpent?:string,
+  isReset?:boolean
 ) => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const [currentSpentHours, currentSpentMinutes] = currentSpent.split(":");
