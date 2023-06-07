@@ -10,7 +10,7 @@ const TimesheetAllocation = () => {
   const { timesheetData, setAllocatedHours, setLoading } =
     useContext(AppContext);
   const [remainingHours, setRemainingHours] = useState(
-    timesheetData.remainingHours
+    timesheetData.remainingHours?  timesheetData.remainingHours:  "00:00"
   );
   const handleSubmitAllocation = async (value:any) => {
     if (remainingHours !== "00:00") {
@@ -52,7 +52,7 @@ const TimesheetAllocation = () => {
       }, 3000);
     });
   };
-  const handleSetRemaingHour = (value:string) => {
+  const handleSetRemaingHour = (value:string):void => {
     setRemainingHours(value);
   };
   const propsTimesheetAllocationForm = {
@@ -63,7 +63,7 @@ const TimesheetAllocation = () => {
     isLegalBreak: timesheetData.isLegalBreak,
     defaultBreak: timesheetData.defaultBreak,
     onSubmit: handleSubmitAllocation,
-    onSetRemaingHour: handleSetRemaingHour,
+    onSetRemaingHour:handleSetRemaingHour,
   };
   return (
     <div>

@@ -10,7 +10,6 @@ import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs from "dayjs";
 import { calRemainFromLabourHour } from "services/timesheet.service";
-import PropTypes from "prop-types";
 import { notification } from "helpers/notification.helper";
 import DefaultButton from "components/common/Button";
 import styled from "styled-components";
@@ -21,26 +20,7 @@ import {
 } from "services/timesheet.service";
 import { renderFieldTitleSameLine } from "helpers/form.helper";
 import {defaultPaidBreaekType} from "interface/index"
-const propTypes = {
-  remainingHours: PropTypes.string,
-  paidBreak: PropTypes.number,
-  unpaidBreak: PropTypes.number,
-  actualTime: PropTypes.string,
-  isLegalBreak: PropTypes.bool,
-  onSetRemaingHour: PropTypes.func,
-  defaultBreak: PropTypes.object,
-  onSubmit: PropTypes.func,
-};
-const defaultProps = {
-  remainingHours: "",
-  actualTime: "",
-  paidBreak: 0,
-  unpaidBreak: 0,
-  isLegalBreak: true,
-  defaultBreak: { paidBreak: 10, unpaidBreak: 30 },
-  onSetRemaingHour: () => {},
-  onSubmit: (data:any) => {},
-};
+
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -49,12 +29,12 @@ const formItemLayout = {
 
 interface PropsType {
   remainingHours:string,
-  actualTime:string,
-  paidBreak:number,
-  unpaidBreak:number,
-  isLegalBreak:boolean,
+  actualTime:string | undefined,
+  paidBreak:number | undefined,
+  unpaidBreak:number| undefined,
+  isLegalBreak:boolean| undefined,
   onSetRemaingHour: (data:string) => void,
-  defaultBreak:defaultPaidBreaekType,
+  defaultBreak:defaultPaidBreaekType | undefined,
   onSubmit: (data:any) => void,
 }
 
@@ -196,9 +176,10 @@ const TimesheetAllocation = ({
   };
   const handleAdd = async (index:number, add: () => void) => {
     await add();
+    const newFormItemValues = form.getFieldValue(["items", index + 1]);
+    const newFormItem = { ...newFormItemValues, remainingHours };
+    console.log('newFormItemqwdwad',newFormItem)
     const allItems = form.getFieldsValue(true)["items"];
-    const newFormItem = form.getFieldsValue(true)["items"][index + 1];
-    newFormItem.remainingHours = remainingHours;
     allItems.splice(index + 1, 1, newFormItem);
     form.setFieldsValue({ items: allItems });
   };
@@ -240,7 +221,7 @@ const TimesheetAllocation = ({
         : form.getFieldsValue().unpaidBreak;
     const totalBreak = parseInt(value) + parseInt(thisBreak);
     const initialRemainingHours = await calculateNewRemainingTime(
-      actualTime,
+      actualTime ? actualTime: '',
       totalBreak
     );
     const isValid = await isValidBreakingTime(
@@ -611,7 +592,5 @@ const StyledDiv = styled.div`
   }
 `;
 
-TimesheetAllocation.propTypes = propTypes;
-TimesheetAllocation.defaultProps = defaultProps;
 
 export default TimesheetAllocation;
