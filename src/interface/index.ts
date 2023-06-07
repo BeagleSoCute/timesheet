@@ -5,7 +5,7 @@ export interface employeeType {
     id: string, 
     name: string
 }
-export interface defaultPaidBreaek {
+export interface defaultPaidBreaekType {
      paidBreak: number, unpaidBreak: number
 }
 

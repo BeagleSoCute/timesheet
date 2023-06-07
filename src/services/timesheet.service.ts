@@ -1,11 +1,11 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { notification } from "helpers/notification.helper";
-import {calculateRemainingHoursPropsType} from "interface"
+import {calculateRemainingHoursPropsType,defaultPaidBreaekType} from "interface"
 
 dayjs.extend(duration);
 
-export const calculateRemainingHours = (value:calculateRemainingHoursPropsType) => {
+export const calculateRemainingHours = (value:calculateRemainingHoursPropsType):any  => {
   const { startDateTime, breaksTime, finishDateTime } = value;
   const timeDiffInMs = finishDateTime.diff(startDateTime);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));

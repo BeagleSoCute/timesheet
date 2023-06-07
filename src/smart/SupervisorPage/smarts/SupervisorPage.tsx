@@ -5,7 +5,7 @@ import { getEmployeeData } from "services/employee.service";
 import Message from "components/common/Message";
 import AssignEmployeeTimesheetForm from "smart/SupervisorPage/components/AssignEmployeeTimesheetForm";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
-import { calculateRemainingHoursPropsType } from "interface/index"
+import { calculateRemainingHoursPropsType, defaultPaidBreaekType } from "interface/index"
 import {
   calculateRemainingHours,
   trasformSubmitAllocatedHours,
@@ -20,7 +20,7 @@ interface timesheetDataType {
   paidBreak?: number,
   unpaidBreak?: number,
   isLegalBreak?: boolean,
-  defaultBreak?: number,
+  defaultBreak?: defaultPaidBreaekType,
 }
 
 

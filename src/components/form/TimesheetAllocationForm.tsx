@@ -20,7 +20,7 @@ import {
   transformTimeToMs,
 } from "services/timesheet.service";
 import { renderFieldTitleSameLine } from "helpers/form.helper";
-import {defaultPaidBreaek} from "interface/index"
+import {defaultPaidBreaekType} from "interface/index"
 const propTypes = {
   remainingHours: PropTypes.string,
   paidBreak: PropTypes.number,
@@ -54,7 +54,7 @@ interface PropsType {
   unpaidBreak:number,
   isLegalBreak:boolean,
   onSetRemaingHour: (data:string) => void,
-  defaultBreak:defaultPaidBreaek,
+  defaultBreak:defaultPaidBreaekType,
   onSubmit: (data:any) => void,
 }
 
