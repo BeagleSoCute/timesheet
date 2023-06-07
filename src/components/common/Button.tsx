@@ -17,6 +17,7 @@ const StyledButton = ({ label, type, className="", disabled=false, ...props }:pr
     <StyledDiv className="button">
       {type === "primary" ? (
         <Button
+        disabled={disabled}
           className={combineClassNames(
             "primary-button bg-yellow-400 text-black font-bold text-base w-32 h-12",
             className
@@ -27,6 +28,7 @@ const StyledButton = ({ label, type, className="", disabled=false, ...props }:pr
         </Button>
       ) : (
         <Button
+        disabled={disabled}
           className={combineClassNames(
             "default-buttons text-base w-100 h-12",
             className
