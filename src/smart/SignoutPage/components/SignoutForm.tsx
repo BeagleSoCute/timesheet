@@ -11,7 +11,7 @@ import {
   Row,
   Modal,
 } from "antd";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
@@ -19,17 +19,24 @@ import { renderFieldTitle } from "helpers/form.helper";
 import { preventActualTime } from "helpers/dateTime.helper";
 
 interface ComponentProps {
-  startDateTime: string
-  , pin: number, onFinish: (data:object) => void, job: string[],
+  startDateTime: object;
+  pin: number;
+  onFinish: (data: object) => void;
+  job: string[];
 }
-const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, pin, onFinish,job }) => {
+const SignoutForm: React.FC<ComponentProps> = ({
+  startDateTime,
+  pin,
+  onFinish,
+  job,
+}) => {
   const [form] = Form.useForm();
   const [isClockout, setIsClockout] = useState<boolean>(false);
   const [isForget, setIsForget] = useState<boolean>(false);
-  const handleChangeIsForget = (value:boolean):void => {
+  const handleChangeIsForget = (value: boolean): void => {
     setIsForget(value);
   };
-  const handleOnFinish = ():void => {
+  const handleOnFinish = (): void => {
     const transformData = {
       ...form.getFieldsValue(),
       finishTime: isForget
@@ -54,7 +61,7 @@ const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, pin, onFinish,jo
     startDateTime,
     job,
   };
-  const handleClockout = ():void => {
+  const handleClockout = (): void => {
     setIsClockout(true);
     form.setFieldsValue({ finishDate: dayjs(), finishTime: dayjs() });
   };
@@ -195,6 +202,5 @@ const StyledDiv = styled.div`
     }
   }
 `;
-
 
 export default SignoutForm;

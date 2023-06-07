@@ -6,21 +6,28 @@ import { useNavigate } from "react-router-dom";
 
 const SignoutPage = () => {
   const navigate = useNavigate();
-  const { timesheetData, setTimesheetData } = useContext(AppContext);
-  const handleSubmit = (value:object) => {
-    setTimesheetData(value);
+  const { signinData, setTimesheetData } = useContext(AppContext);
+  const handleSubmit = (value: any) => {
+    const transformData = {
+      pin: value.pin,
+      startDateTime: value.startDateTime,
+      job: value.job,
+      finishTime: value.finishTime,
+      finishDate: value.finishDate,
+    };
+    setTimesheetData(transformData);
     notification({ type: "success", message: "Sign out Success!" });
     navigate("/timesheet-page");
   };
-  const propsSignInForm = {
-    pin: timesheetData.pin,
-    startDateTime: timesheetData.startTime,
-    job: timesheetData.job,
+  const propsSignOutForm = {
+    pin: signinData.pin,
+    startDateTime: signinData.startDateTime,
+    job: signinData.job,
     onFinish: handleSubmit,
   };
   return (
     <div className="signoutPage">
-      <SignoutForm {...propsSignInForm} />
+      <SignoutForm {...propsSignOutForm} />
     </div>
   );
 };

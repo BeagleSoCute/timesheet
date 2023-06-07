@@ -7,7 +7,7 @@ import styled from "styled-components";
 import Button from "components/common/Button";
 import { renderFieldTitle } from "helpers/form.helper";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
-
+import { Dayjs } from "dayjs";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -15,35 +15,40 @@ const formItemLayout = {
 };
 
 interface propsType {
-  form: any,
-   data:{pin: number,
-   startDateTime?: string,
-   finishDate?: string,
-   finishTime?:string,
-   }
-   , 
-   onSubmit: (data:any) => void
+  form: any;
+  pin: number;
+  startDateTime: object;
+  finishDate: object;
+  finishTime: object;
+  onSubmit: (data: any) => void;
 }
 
-const TimesheetForm = ({ form, data, onSubmit }:propsType) => {
+const TimesheetForm = ({
+  form,
+  pin,
+  startDateTime,
+  finishDate,
+  finishTime,
+  onSubmit,
+}: propsType) => {
   const [isBreak, setIsBreak] = useState(true);
-  const handleChangeIsBreak = (value:boolean) => {
+  const handleChangeIsBreak = (value: boolean) => {
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
   };
-  const handleOnFinish = (value:any) => {
+  const handleOnFinish = (value: any) => {
     const result = {
       ...value,
-      finishDateTime: mergeDateAndTime(data.finishDate, data.finishTime),
+      finishDateTime: mergeDateAndTime(finishDate, finishTime),
       breaksTime: isBreak ? value.breaksTime : 0,
     };
     onSubmit(result);
   };
   const initialValues = {
-    pin: data.pin,
-    startDateTime: data.startDateTime,
-    finishDate: data.finishDate,
-    finishTime: data.finishTime,
+    pin,
+    startDateTime,
+    finishDate,
+    finishTime,
     timeFormat,
     isTakenBreak: true,
   };
@@ -147,12 +152,16 @@ const TimesheetForm = ({ form, data, onSubmit }:propsType) => {
             "No break time is included in your allocations, but your paid break will be added back in at sign off stage for payroll."
           )}
           name="breaksTime"
-          rules={isBreak?[
-              {
-              required: true,
-              message: "Please input total minutes of breaks!",
-            },
-          ]:[]}
+          rules={
+            isBreak
+              ? [
+                  {
+                    required: true,
+                    message: "Please input total minutes of breaks!",
+                  },
+                ]
+              : []
+          }
         >
           <InputNumber
             className="w-full mt-2"

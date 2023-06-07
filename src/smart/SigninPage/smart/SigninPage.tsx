@@ -3,11 +3,19 @@ import { AppContext } from "contexts/app.context";
 import SignInForm from "smart/SigninPage/components/SignInForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
+import { mergeDateAndTime } from "helpers/dateTime.helper";
+
 const SigninPage = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AppContext);
-  const handleSubmit = (value:object) => {
-    setAuth(value);
+  const handleSubmit = (value: any) => {
+    console.log("sign in", value);
+    const transformData = {
+      pin: value.pin,
+      startDateTime: mergeDateAndTime(value.startDate, value.startTime),
+      job: value.job,
+    };
+    setAuth(transformData);
     notification({ type: "success", message: "Sign in Success!" });
     navigate("signout");
   };

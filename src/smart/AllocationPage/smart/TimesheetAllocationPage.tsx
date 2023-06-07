@@ -4,15 +4,19 @@ import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 import { notification } from "helpers/notification.helper";
 import { AppContext } from "contexts/app.context";
 import { Modal } from "antd";
+import { timesheetAllocationFormType } from "interface";
 
 const TimesheetAllocation = () => {
   const navigate = useNavigate();
-  const { timesheetData, setAllocatedHours, setLoading } =
+  const { timesheetAllocationData, setAllocatedHours, setLoading } =
     useContext(AppContext);
-  const [remainingHours, setRemainingHours] = useState(
-    timesheetData.remainingHours?  timesheetData.remainingHours:  "00:00"
+  const [remainingHours, setRemainingHours] = useState<string>(
+    timesheetAllocationData.remainingHours
+      ? timesheetAllocationData.remainingHours
+      : "00:00"
   );
-  const handleSubmitAllocation = async (value:any) => {
+  const handleSubmitAllocation = async (value: timesheetAllocationFormType) => {
+    console.log("handleSubmitAllocation", value);
     if (remainingHours !== "00:00") {
       notification({
         type: "error",
@@ -52,18 +56,18 @@ const TimesheetAllocation = () => {
       }, 3000);
     });
   };
-  const handleSetRemaingHour = (value:string):void => {
+  const handleSetRemaingHour = (value: string): void => {
     setRemainingHours(value);
   };
   const propsTimesheetAllocationForm = {
     remainingHours,
-    actualTime: timesheetData.actualTime,
-    paidBreak: timesheetData.paidBreak,
-    unpaidBreak: timesheetData.unpaidBreak,
-    isLegalBreak: timesheetData.isLegalBreak,
-    defaultBreak: timesheetData.defaultBreak,
+    actualTime: timesheetAllocationData.actualTime,
+    paidBreak: timesheetAllocationData.paidBreak,
+    unpaidBreak: timesheetAllocationData.unpaidBreak,
+    isLegalBreak: timesheetAllocationData.isLegalBreak,
+    defaultBreak: timesheetAllocationData.defaultBreak,
     onSubmit: handleSubmitAllocation,
-    onSetRemaingHour:handleSetRemaingHour,
+    onSetRemaingHour: handleSetRemaingHour,
   };
   return (
     <div>

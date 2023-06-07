@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { notification } from "helpers/notification.helper";
-import {calculateRemainingHoursPropsType} from "interface"
+import {calculateRemainingHoursPropsType, calRemainFromLabourHourReturnType} from "interface"
 
 dayjs.extend(duration);
 
@@ -44,13 +44,13 @@ const padTime = (time:string) => {
 };
 
 export const isValidBreakingTime = (
-  remainingTime:any,
-  totalBreakingTime:any,
-  previousTotalBreakingTime:any
-) => {
+  remainingTime:string,
+  totalBreakingTime:number,
+  previousTotalBreakingTime:number
+):boolean => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const remainingTimeInMillis =
-    remainingHours * 60 * 60 * 1000 + remainingMinutes * 60 * 1000;
+   parseInt(remainingHours) * 60 * 60 * 1000 + parseInt(remainingMinutes) * 60 * 1000;
   const toltalBreakingTimeInMillis = totalBreakingTime * 60 * 1000;
   if (
     totalBreakingTime < previousTotalBreakingTime ||
@@ -84,7 +84,7 @@ export const calRemainFromLabourHour = (
   currentSpent:string,
   previousSpent?:string,
   isReset?:boolean
-) => {
+):calRemainFromLabourHourReturnType => {
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
   const [currentSpentHours, currentSpentMinutes] = currentSpent.split(":");
   const remainingTimeInMillis =
@@ -161,7 +161,7 @@ export const transformBreakingTime = (totalBreak:number, totalHours:number) => {
   }
 };
 
-export const calculateNewRemainingTime = (remainingHours:string, totalBreak:number) => {
+export const calculateNewRemainingTime = (remainingHours:string, totalBreak:number):string => {
   // Parse the remainingHours string into hours and minutes
   const [hours, minutes] = remainingHours.split(":").map(Number);
   // Create a duration object using hours and minutes

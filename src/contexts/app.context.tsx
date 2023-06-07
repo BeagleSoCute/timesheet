@@ -1,16 +1,27 @@
-import React, { createContext, useMemo, useReducer, useEffect,ReactNode } from "react";
+import React, {
+  createContext,
+  useMemo,
+  useReducer,
+  useEffect,
+  ReactNode,
+} from "react";
 import appReducer from "contexts/app.reducer";
 import { useNavigate, useMatch } from "react-router-dom";
 import { notification } from "helpers/notification.helper";
-import {ReducerType} from 'contexts/types'
-import {defaultTimesheetData} from 'defaultValue'
+import { ReducerType } from "contexts/types";
+import {
+  defaultTimesheetData,
+  defaultTimesheetAllocationData,
+  defaultSigninData,
+} from "defaultValue";
 
 interface AppContextType extends ReducerType {
-  setLoading: (data:boolean) => void,
-  setAuth: (data:object) => void,
-  setAllocatedHours: (data:Array<object>) => void,
-  clearTimesheetData: () => void,
-  setTimesheetData: (data:object) => void,
+  setLoading: (data: boolean) => void;
+  setAuth: (data: object) => void;
+  setAllocatedHours: (data: Array<object>) => void;
+  clearTimesheetData: () => void;
+  setTimesheetData: (data: object) => void;
+  setTimesheetAllocationData: (data: object) => void;
 }
 
 interface AppProviderProps {
@@ -20,20 +31,30 @@ interface AppProviderProps {
 export const AppContext = createContext<AppContextType>({
   loading: false,
   isAuth: false,
+  signinData: defaultSigninData,
   timesheetData: defaultTimesheetData,
+  timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: [],
   setLoading: () => {},
   setAuth: () => {},
   setAllocatedHours: () => {},
   clearTimesheetData: () => {},
   setTimesheetData: () => {},
+  setTimesheetAllocationData: () => {},
 });
 export const { reducer, defaultValue, TYPES } = appReducer;
-export const AppProvider = ({ children }:AppProviderProps) => {
+export const AppProvider = ({ children }: AppProviderProps) => {
   const navigate = useNavigate();
-  const isSupervisorpath = useMatch("/supervisor/*"); 
+  const isSupervisorpath = useMatch("/supervisor/*");
   const [reducerStates, dispatch] = useReducer(reducer, defaultValue);
-  const { loading, isAuth, timesheetData, allocatedData } = reducerStates as ReducerType;
+  const {
+    loading,
+    isAuth,
+    signinData,
+    timesheetData,
+    timesheetAllocationData,
+    allocatedData,
+  } = reducerStates as ReducerType;
   useEffect(() => {
     const init = async () => {
       if (!isAuth && isSupervisorpath?.pathnameBase !== "/supervisor") {
@@ -49,25 +70,40 @@ export const AppProvider = ({ children }:AppProviderProps) => {
     return {
       loading,
       isAuth,
+      signinData,
       timesheetData,
+      timesheetAllocationData,
       allocatedData,
-      setLoading: (data:boolean) => {
+      setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
-      setAuth: (data:object) => {
+      setAuth: (data: object) => {
+        console.log("data setAuth", data);
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
-      setTimesheetData: (data:object) => {
+      setTimesheetData: (data: object) => {
+        console.log("data setTimesheetData", data);
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
       },
-      setAllocatedHours: (data:Array<object>) => {
+      setAllocatedHours: (data: Array<object>) => {
         dispatch({ type: TYPES.SET_ALLOCATED_HOURS, payload: data });
       },
+      setTimesheetAllocationData: (data: object) => {
+        dispatch({ type: TYPES.SET_TIMESHEET_ALLOCATION_DATA, payload: data });
+      },
       clearTimesheetData: () => {
-        dispatch({ type: TYPES.CLEAR_TIMESHEET_DATA});
+        dispatch({ type: TYPES.CLEAR_TIMESHEET_DATA });
       },
     };
-  }, [loading, isAuth, timesheetData, allocatedData, dispatch]);
+  }, [
+    loading,
+    isAuth,
+    signinData,
+    timesheetData,
+    timesheetAllocationData,
+    allocatedData,
+    dispatch,
+  ]);
   return (
     <AppContext.Provider value={appContextValue}>
       {children}
