@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { notification } from "helpers/notification.helper";
-import {calculateRemainingHoursPropsType,defaultPaidBreaekType} from "interface"
+import {calculateRemainingHoursPropsType} from "interface"
 
 dayjs.extend(duration);
 

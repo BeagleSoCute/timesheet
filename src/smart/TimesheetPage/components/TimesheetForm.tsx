@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
 import { DatePicker, Form, TimePicker, InputNumber } from "antd";
@@ -9,27 +8,30 @@ import Button from "components/common/Button";
 import { renderFieldTitle } from "helpers/form.helper";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
 
-const propTypes = {
-  data: PropTypes.object,
-  onOpenModal: PropTypes.func,
-};
-const defaultProps = {
-  data: {},
-  onOpenModal: () => {},
-};
 
 const formItemLayout = {
   labelCol: { span: 12 },
   wrapperCol: { span: 12 },
 };
 
-const TimesheetForm = ({ form, data, onSubmit }) => {
+interface propsType {
+  form: any,
+   data:{pin: number,
+   startDateTime?: string,
+   finishDate?: string,
+   finishTime?:string,
+   }
+   , 
+   onSubmit: (data:any) => void
+}
+
+const TimesheetForm = ({ form, data, onSubmit }:propsType) => {
   const [isBreak, setIsBreak] = useState(true);
-  const handleChangeIsBreak = (value) => {
+  const handleChangeIsBreak = (value:boolean) => {
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
   };
-  const handleOnFinish = (value) => {
+  const handleOnFinish = (value:any) => {
     const result = {
       ...value,
       finishDateTime: mergeDateAndTime(data.finishDate, data.finishTime),
@@ -145,12 +147,12 @@ const TimesheetForm = ({ form, data, onSubmit }) => {
             "No break time is included in your allocations, but your paid break will be added back in at sign off stage for payroll."
           )}
           name="breaksTime"
-          rules={[
-            isBreak && {
+          rules={isBreak?[
+              {
               required: true,
               message: "Please input total minutes of breaks!",
             },
-          ]}
+          ]:[]}
         >
           <InputNumber
             className="w-full mt-2"
@@ -211,7 +213,4 @@ const StyledDiv = styled.div`
     }
   }
 `;
-
-TimesheetForm.propTypes = propTypes;
-TimesheetForm.defaultProps = defaultProps;
 export default TimesheetForm;

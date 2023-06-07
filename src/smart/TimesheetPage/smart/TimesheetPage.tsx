@@ -10,13 +10,14 @@ import {
 import { notification } from "helpers/notification.helper";
 import Button from "components/common/Button";
 import { Form } from "antd";
+import {calculateRemainingHoursPropsType} from "interface"
 
 const TimesheetPage = () => {
   const [form] = Form.useForm();
   const navigate = useNavigate();
   const { timesheetData, allocatedData, clearTimesheetData, setTimesheetData } =
     useContext(AppContext);
-  const handleSubmit = async (value) => {
+  const handleSubmit = async (value:calculateRemainingHoursPropsType) => {
     const { isSuccess, res } = await calculateRemainingHours(value);
     console.log("res", res);
     if (!isSuccess) {
