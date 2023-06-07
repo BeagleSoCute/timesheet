@@ -3,6 +3,7 @@ import appReducer from "contexts/app.reducer";
 import { useNavigate, useMatch } from "react-router-dom";
 import { notification } from "helpers/notification.helper";
 import {ReducerType} from 'contexts/types'
+import {defaultTimesheetData} from 'defaultValue'
 
 interface AppContextType extends ReducerType {
   setLoading: (data:boolean) => void,
@@ -19,7 +20,7 @@ interface AppProviderProps {
 export const AppContext = createContext<AppContextType>({
   loading: false,
   isAuth: false,
-  timesheetData: {pin: 0, startTime: "", job:[]},
+  timesheetData: defaultTimesheetData,
   allocatedData: [],
   setLoading: () => {},
   setAuth: () => {},
