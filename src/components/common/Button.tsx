@@ -7,11 +7,12 @@ interface propsType  {
   label: string, 
   type?: "default"| "primary"| "ghost"| "dashed"| "link"| "text", 
   className?: string,
+  disabled?: boolean
   onClick?: () => void,
   htmlType?: any
 }
 
-const StyledButton = ({ label, type, className="", ...props }:propsType) => {
+const StyledButton = ({ label, type, className="", disabled=false, ...props }:propsType) => {
   return (
     <StyledDiv className="button">
       {type === "primary" ? (

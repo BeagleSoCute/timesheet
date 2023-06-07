@@ -5,6 +5,7 @@ import { getEmployeeData } from "services/employee.service";
 import Message from "components/common/Message";
 import AssignEmployeeTimesheetForm from "smart/SupervisorPage/components/AssignEmployeeTimesheetForm";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
+import { calculateRemainingHoursPropsType } from "interface/index"
 import {
   calculateRemainingHours,
   trasformSubmitAllocatedHours,
@@ -12,8 +13,18 @@ import {
 import { notification } from "helpers/notification.helper";
 import AllocationData from "components/common/AllocationData";
 import Button from "components/common/Button";
+import {employeeType} from "interface/index"
 
-const renderDetails = (employee) => {
+interface timesheetDataType {
+  actualTime?: string,
+  paidBreak?: number,
+  unpaidBreak?: number,
+  isLegalBreak?: boolean,
+  defaultBreak?: number,
+}
+
+
+const renderDetails = (employee:employeeType) => {
   return (
     <div>
       <p>
@@ -25,23 +36,27 @@ const renderDetails = (employee) => {
 };
 
 const SupervisorPage = () => {
-  const { employeeId } = useParams();
+  const { employeeId } =  useParams();
   const navigate = useNavigate();
-  const [employee, setEmployee] = useState(null);
+  const [employee, setEmployee] = useState<employeeType>({name:'', id:""});
   const [isShowTimesheetForm, setIsShowTimesheetForm] = useState(false);
-  const [timesheetData, setTimesheetData] = useState(null);
-  const [remainingHours, setRemainingHours] = useState();
+  const [timesheetData, setTimesheetData] = useState<timesheetDataType>({});
+  const [remainingHours, setRemainingHours] = useState<string>();
   const [allocatedData, setAllocatedData] = useState([]);
   const [isCompleteAllocation, setIsCompleteAllocation] = useState(false);
   useEffect(() => {
     const init = () => {
-      const result = getEmployeeData(employeeId);
-      setEmployee(result);
+      if(employeeId){
+        const result = getEmployeeData(employeeId);
+        if(result){
+          setEmployee(result);
+        }
+      }
     };
     init();
   }, [employeeId]);
-  const handleSubmitTimesheetData = async (value) => {
-    const { isSuccess, res } = await calculateRemainingHours(value, true);
+  const handleSubmitTimesheetData = async (value:calculateRemainingHoursPropsType) => {
+    const { isSuccess, res } = await calculateRemainingHours(value);
     if (!isSuccess) {
       notification({
         type: "error",
@@ -67,7 +82,7 @@ const SupervisorPage = () => {
     setIsShowTimesheetForm(false);
   };
 
-  const handleSubmitAllocation = (value) => {
+  const handleSubmitAllocation = (value:{items:[]}) => {
     if (remainingHours !== "00:00") {
       notification({
         type: "error",
@@ -102,7 +117,7 @@ const SupervisorPage = () => {
     isLegalBreak: timesheetData?.isLegalBreak,
     defaultBreak: timesheetData?.defaultBreak,
     onSubmit: handleSubmitAllocation,
-    onSetRemaingHour: (value) => setRemainingHours(value),
+    onSetRemaingHour: (value:string) => setRemainingHours(value),
   };
 
   return (
@@ -122,7 +137,6 @@ const SupervisorPage = () => {
           <div className="flex justify-center mb-10">
             <div className="mr-5">
               <Button
-                type=""
                 label="Approve another employee"
                 onClick={() => navigate("/supervisor/select-employee")}
               />

@@ -7,11 +7,12 @@ import PropTypes from "prop-types";
 
 interface CustomRadioButtonProps {
   color?: string
+  disabled?: boolean,
   onChange: (e:boolean) => void ,
   defaultValue?: boolean,
 }
 
-const CustomRadioButton = ({ color="yellow", onChange, defaultValue=true, ...props }:CustomRadioButtonProps) => {
+const CustomRadioButton = ({ color="yellow", onChange, defaultValue=true, disabled=false, ...props }:CustomRadioButtonProps) => {
   return (
     <StyledDiv className="custom-radio-button">
       <Radio.Group
