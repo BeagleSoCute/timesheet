@@ -17,12 +17,13 @@ import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventActualTime } from "helpers/dateTime.helper";
-import { handleSubmitSignoutValueProps } from "interface";
+import { signoutFormProps } from "interface";
+import { FormInstance } from "antd/lib/form";
 
 interface ComponentProps {
   startDateTime: Dayjs;
   pin: number;
-  onFinish: (data: handleSubmitSignoutValueProps) => void;
+  onFinish: (data: signoutFormProps) => void;
   job: string[];
 }
 const SignoutForm: React.FC<ComponentProps> = ({
@@ -31,7 +32,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
   onFinish,
   job,
 }) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm() as [FormInstance<signoutFormProps>];
   const [isClockout, setIsClockout] = useState<boolean>(false);
   const [isForget, setIsForget] = useState<boolean>(false);
   const handleChangeIsForget = (value: boolean): void => {

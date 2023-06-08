@@ -3,12 +3,12 @@ import { AppContext } from "contexts/app.context";
 import SignoutForm from "smart/SignoutPage/components/SignoutForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
-import { handleSubmitSignoutValueProps } from "interface";
+import { signoutFormProps } from "interface";
 
 const SignoutPage = () => {
   const navigate = useNavigate();
   const { signinData, setTimesheetData } = useContext(AppContext);
-  const handleSubmit = (value: handleSubmitSignoutValueProps) => {
+  const handleSubmit = (value: signoutFormProps) => {
     const transformData = {
       pin: value.pin,
       startDateTime: value.startDateTime,

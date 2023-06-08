@@ -38,11 +38,11 @@ export interface calRemainFromLabourHourReturnType {
   isSuccess: boolean;
 }
 
-export interface handleSubmitSignoutValueProps extends timeSheetType {
+export interface signoutFormProps extends timeSheetType {
   isForgetSingout: boolean;
 }
 
-export interface handleSubmitSigninValueProps {
+export interface signinFormProps {
   actualStartTime: Dayjs;
   isForgetSignin: boolean;
   job: string[];

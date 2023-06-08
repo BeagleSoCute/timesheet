@@ -9,16 +9,17 @@ import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
-import { handleSubmitSigninValueProps } from "interface";
+import { signinFormProps } from "interface";
+import { FormInstance } from "antd/lib/form";
 
 interface SignInFormProps {
-  onFinish: (data: handleSubmitSigninValueProps) => void;
+  onFinish: (data: signinFormProps) => void;
 }
 
 const SignInForm = ({ onFinish }: SignInFormProps) => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm() as [FormInstance<signinFormProps>];
   const [isForget, setIsForget] = useState(false);
-  const handleOnFinish = (value: handleSubmitSigninValueProps) => {
+  const handleOnFinish = (value: signinFormProps) => {
     const startTime: Dayjs = isForget
       ? form.getFieldValue("actualStartTime")
       : form.getFieldValue("startTime");

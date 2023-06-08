@@ -4,12 +4,12 @@ import SignInForm from "smart/SigninPage/components/SignInForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
-import { handleSubmitSigninValueProps } from "interface";
+import { signinFormProps } from "interface";
 
 const SigninPage = () => {
   const navigate = useNavigate();
   const { setAuth } = useContext(AppContext);
-  const handleSubmit = (value: handleSubmitSigninValueProps) => {
+  const handleSubmit = (value: signinFormProps) => {
     const transformData = {
       pin: value.pin,
       startDateTime: mergeDateAndTime(value.startDate, value.startTime),
