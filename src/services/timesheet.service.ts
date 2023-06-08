@@ -1,9 +1,10 @@
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import duration from "dayjs/plugin/duration";
 import { notification } from "helpers/notification.helper";
 import {
   calculateRemainingHoursPropsType,
   calRemainFromLabourHourReturnType,
+  timesheetAllocationAfterCompleteDataType,
 } from "interface";
 
 dayjs.extend(duration);
@@ -73,7 +74,7 @@ export const isValidBreakingTime = (
 };
 export const calculateActualRemain = async (
   remainingTime: string,
-  lastLabourHours: string
+  lastLabourHours: Dayjs
 ) => {
   const labour: string = await dayjs(lastLabourHours).format("HH:mm");
   const [remainingHours, remainingMinutes] = remainingTime.split(":");
@@ -137,29 +138,51 @@ export const calRemainFromLabourHour = (
   return remainingTimeFormatted;
 };
 
-export const arrayToString = (arr: []) => {
+export const arrayToString = (arr: string[]): string => {
   return arr.join(", ");
 };
 
-export const trasformSubmitAllocatedHours = (value: any) => {
-  return value.map((item: any, index: number) => {
-    const formattedHours =
-      dayjs(item.labourHours).minute() === 0
-        ? dayjs(item.labourHours).format("H")
-        : dayjs(item.labourHours).format("H.mm");
-    return {
-      ...item,
-      key: index,
-      labourHours: formattedHours,
-      supervisors: arrayToString(item.supervisors),
-    };
-  });
+interface trasformSubmitAllocatedHoursReturnType {
+  job: string;
+  supervisors: string;
+  lab: string;
+  asset: string;
+  labourHours: string;
+}
+interface trasformSubmitAllocatedHoursPropsType
+  extends timesheetAllocationAfterCompleteDataType {
+  asset?: string;
+}
+export const trasformSubmitAllocatedHours = (
+  value: trasformSubmitAllocatedHoursPropsType[]
+): trasformSubmitAllocatedHoursReturnType[] => {
+  return value.map(
+    (item: trasformSubmitAllocatedHoursPropsType, index: number) => {
+      const formattedHours =
+        dayjs(item.labourHours).minute() === 0
+          ? dayjs(item.labourHours).format("H")
+          : dayjs(item.labourHours).format("H.mm");
+      return {
+        ...item,
+        //key: index,
+        lab: item.lab,
+        asset: item.asset ? item.asset : "",
+        labourHours: formattedHours,
+        supervisors: arrayToString(item.supervisors),
+      };
+    }
+  );
 };
-
+interface transformBreakingTimeReturnType {
+  paidBreak: number;
+  unpaidBreak: number;
+  isLegalBreak: boolean;
+  defaultBreak: { paidBreak: number; unpaidBreak: number };
+}
 export const transformBreakingTime = (
   totalBreak: number,
   totalHours: number
-) => {
+): transformBreakingTimeReturnType => {
   const hours = totalHours;
   if (hours >= 8) {
     const legal = 50;
@@ -217,7 +240,7 @@ export const transformTimeToMs = (time: string): number => {
 };
 
 //Functions below are functions on the TimesheetForm (Backup)
-
+//Not use!!
 export const handleErrorSelectFinishime = (current: any, form: any) => {
   const startDate = form.getFieldValue("startDateTime");
   const finishDate = form.getFieldValue("finishDate");

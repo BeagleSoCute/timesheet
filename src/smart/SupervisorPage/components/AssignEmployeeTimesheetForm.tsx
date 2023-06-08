@@ -12,10 +12,10 @@ import {
 import { notification } from "helpers/notification.helper";
 
 interface PropsType {
-  isShowTimesheetForm: boolean,
-  isCompleteAllocation: boolean,
-  onFinish: (data:object) => void,
-  onCancel: () => void,
+  isShowTimesheetForm: boolean;
+  isCompleteAllocation: boolean;
+  onFinish: (data: object) => void;
+  onCancel: () => void;
 }
 
 const AssignEmployeeTimesheetForm = ({
@@ -23,11 +23,11 @@ const AssignEmployeeTimesheetForm = ({
   isCompleteAllocation,
   onFinish,
   onCancel,
-}:PropsType) => {
+}: PropsType) => {
   const [form] = Form.useForm();
   const [isBreak, setIsBreak] = useState(true);
 
-  const handleOnFinish = (value:{breaksTime:number}) => {
+  const handleOnFinish = (value: { breaksTime: number }) => {
     const finishDateTime = form.getFieldValue("finishDateTime");
     const startDateTime = form.getFieldValue("startDateTime");
     const isFinishAfterStart = finishDateTime.isAfter(startDateTime);
@@ -45,13 +45,13 @@ const AssignEmployeeTimesheetForm = ({
     };
     onFinish(transformValue);
   };
-  const handleDisabledStartDate = (current:any) => {
+  const handleDisabledStartDate = (current: any) => {
     const finishDate = form.getFieldValue("finishDateTime");
     if (finishDate) {
       return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
     }
   };
-  const handleDisabledEndDate = (current:any) => {
+  const handleDisabledEndDate = (current: any) => {
     const startDateTime = form.getFieldValue("startDateTime");
     if (startDateTime) {
       return (
@@ -59,7 +59,7 @@ const AssignEmployeeTimesheetForm = ({
       );
     }
   };
-  const handleDisableStartTime = ():any => {
+  const handleDisableStartTime = (): any => {
     const finishDate = form.getFieldValue("finishDateTime");
     if (finishDate) {
       return preventSelectExcessTime(
@@ -69,7 +69,7 @@ const AssignEmployeeTimesheetForm = ({
       );
     }
   };
-  const handleDisableFinishTime = ():any => {
+  const handleDisableFinishTime = (): any => {
     const startDateTime = form.getFieldValue("startDateTime");
     if (startDateTime) {
       return preventSelectFinishTime(
@@ -79,7 +79,7 @@ const AssignEmployeeTimesheetForm = ({
       );
     }
   };
-  const handleChangeIsBreak = (value:boolean) => {
+  const handleChangeIsBreak = (value: boolean) => {
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
   };
@@ -167,12 +167,16 @@ const AssignEmployeeTimesheetForm = ({
             "No break time is included in their allocations, but their paid break will be added back in at sign off stage for payroll."
           )}
           name="breaksTime"
-          rules={isBreak ?[
-              {
-              required: true,
-              message: "Please input total minutes of breaks!",
-            },
-          ]: []}
+          rules={
+            isBreak
+              ? [
+                  {
+                    required: true,
+                    message: "Please input total minutes of breaks!",
+                  },
+                ]
+              : []
+          }
         >
           <InputNumber
             className="w-full mt-2"
