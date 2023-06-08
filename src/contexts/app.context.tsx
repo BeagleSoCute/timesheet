@@ -16,13 +16,20 @@ import {
   defaultSigninData,
   defaultAfterCompleteAllocatedData,
 } from "defaultValue";
+import { Dayjs } from "dayjs";
+import { timeSheetType } from "contexts/types";
 
+interface AuthPropsType {
+  pin: number;
+  startDateTime: Dayjs;
+  job: string[];
+}
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
-  setAuth: (data: object) => void;
+  setAuth: (data: AuthPropsType) => void;
   setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => void;
   clearTimesheetData: () => void;
-  setTimesheetData: (data: object) => void;
+  setTimesheetData: (data: timeSheetType) => void;
   setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
 }
 
@@ -79,11 +86,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
-      setAuth: (data: object) => {
-        console.log("data setAuth", data);
+      setAuth: (data: AuthPropsType) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
-      setTimesheetData: (data: object) => {
+      setTimesheetData: (data: timeSheetType) => {
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
       },
       setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => {
