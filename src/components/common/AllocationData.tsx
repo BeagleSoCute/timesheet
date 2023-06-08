@@ -1,15 +1,16 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-const propTypes = {
-  data: PropTypes.array,
-};
-
-const defaultProps = {
-  data: [],
-};
-
-const AllocationData = ({ data }:{data:{job:string,supervisors:string, lab:string, asset:string, labourHours:string}[]}) => {
+const AllocationData = ({
+  data,
+}: {
+  data: {
+    job: string;
+    supervisors: string;
+    lab: string;
+    asset: string;
+    labourHours: string;
+  }[];
+}) => {
   return (
     <div className="allocation-data font-bold mb-10">
       <div className="header-wrapper bg-blue-800  text-white p-3">
@@ -30,8 +31,5 @@ const AllocationData = ({ data }:{data:{job:string,supervisors:string, lab:strin
     </div>
   );
 };
-
-AllocationData.propTypes = propTypes;
-AllocationData.defaultProps = defaultProps;
 
 export default AllocationData;

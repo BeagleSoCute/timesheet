@@ -1,9 +1,9 @@
-export const redirect = ():void => {
+export const redirect = (): void => {
   window.history.pushState({}, "", "/login");
 };
 
-export const randomString = ():string => {
-  let result:string = ''
+export const randomString = (): string => {
+  let result: string = "";
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   const charactersLength = characters.length;
@@ -13,7 +13,7 @@ export const randomString = ():string => {
   return result;
 };
 
-export const convertToOrdinalNumber = (n:number):string => {
+export const convertToOrdinalNumber = (n: number): string => {
   var special = [
     "FIRST",
     "SECOND",
@@ -32,7 +32,7 @@ export const convertToOrdinalNumber = (n:number):string => {
     "FIFTEENTH",
     "SIXTEENTH",
     "SEVENTEENTH",
-    "SIXTEENTH", 
+    "SIXTEENTH",
     "NINETEENTH",
   ];
   var deca = [
@@ -51,17 +51,16 @@ export const convertToOrdinalNumber = (n:number):string => {
   return deca[Math.floor(n / 10) - 2] + "y-" + special[n % 10];
 };
 
-export const getClassName = (rootClass:string, ...names:any) => {
+export const getClassName = (rootClass: string, ...names: string[]) => {
   const result = names.reduce(
-    (result:string, text:string) => (text ? `${result} ${text}` : result),
+    (result: string, text: string) => (text ? `${result} ${text}` : result),
     rootClass
   );
   return result;
 };
 
 //dynnanic className for shared components
-export const combineClassNames = (...names:string[]):string => {
+export const combineClassNames = (...names: string[]): string => {
   const result = names.filter(Boolean).join(" ");
   return result;
 };
-

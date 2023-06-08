@@ -1,12 +1,12 @@
 import dayjs, { Dayjs } from "dayjs";
 
 export const preventSelectFinishTime = (
-  startDate: string,
-  finishDate: string,
-  startTime: string
+  startDate: Dayjs,
+  finishDate: Dayjs,
+  startTime: Dayjs
 ) => {
-  const startHour = dayjs(startTime).hour() as number;
-  const startMinute = dayjs(startTime).minute() as number;
+  const startHour: number = dayjs(startTime).hour();
+  const startMinute: number = dayjs(startTime).minute();
   if (dayjs(startDate).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {
@@ -39,12 +39,12 @@ export const preventSelectFinishTime = (
 };
 
 export const preventSelectExcessTime = (
-  startDate: string,
-  finishDate: string,
-  currentTime: string
+  startDate: Dayjs,
+  finishDate: Dayjs,
+  currentTime: Dayjs
 ) => {
-  const startHour = dayjs(currentTime).hour() as number;
-  const startMinute = dayjs(currentTime).minute() as number;
+  const startHour: number = dayjs(currentTime).hour();
+  const startMinute: number = dayjs(currentTime).minute();
   if (dayjs(startDate).isSame(finishDate, "date")) {
     return {
       disabledHours: () => {
@@ -77,9 +77,9 @@ export const preventSelectExcessTime = (
 };
 
 export const preventActualTime = (
-  finishDate: string,
-  finishTime: string,
-  startDateTime: string
+  finishDate: Dayjs,
+  finishTime: Dayjs,
+  startDateTime: Dayjs
 ) => {
   const startHour = dayjs(startDateTime).hour();
   const startMinute = dayjs(startDateTime).minute();
@@ -125,7 +125,10 @@ export const preventActualTime = (
   }
 };
 
-export const mergeDateAndTime = (finishDate: Dayjs, finishTime: Dayjs) => {
+export const mergeDateAndTime = (
+  finishDate: Dayjs,
+  finishTime: Dayjs
+): Dayjs => {
   // Extract the date component from 'finishDate'
   const date = finishDate.format("YYYY-MM-DD");
   // Extract the time component from 'finishTime'
