@@ -12,6 +12,7 @@ import {
   calculateRemainingHoursPropsType,
   timesheetPageFormType,
 } from "interface";
+import { FormInstance } from "antd/lib/form";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -19,7 +20,7 @@ const formItemLayout = {
 };
 
 interface propsType {
-  form: any;
+  form: FormInstance<timesheetPageFormType>;
   pin: number;
   startDateTime: Dayjs;
   finishDate: Dayjs;
