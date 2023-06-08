@@ -8,6 +8,10 @@ import Button from "components/common/Button";
 import { renderFieldTitle } from "helpers/form.helper";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
 import { Dayjs } from "dayjs";
+import {
+  calculateRemainingHoursPropsType,
+  timesheetPageFormType,
+} from "interface";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -17,10 +21,10 @@ const formItemLayout = {
 interface propsType {
   form: any;
   pin: number;
-  startDateTime: object;
-  finishDate: object;
-  finishTime: object;
-  onSubmit: (data: any) => void;
+  startDateTime: Dayjs;
+  finishDate: Dayjs;
+  finishTime: Dayjs;
+  onSubmit: (data: calculateRemainingHoursPropsType) => void;
 }
 
 const TimesheetForm = ({
@@ -36,9 +40,9 @@ const TimesheetForm = ({
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
   };
-  const handleOnFinish = (value: any) => {
+  const handleOnFinish = (value: timesheetPageFormType) => {
     const result = {
-      ...value,
+      startDateTime: value.startDateTime,
       finishDateTime: mergeDateAndTime(finishDate, finishTime),
       breaksTime: isBreak ? value.breaksTime : 0,
     };
@@ -52,7 +56,6 @@ const TimesheetForm = ({
     timeFormat,
     isTakenBreak: true,
   };
-
   return (
     <StyledDiv className="timesheet-form">
       <Form

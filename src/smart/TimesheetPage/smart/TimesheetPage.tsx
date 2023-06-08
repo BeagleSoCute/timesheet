@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import TimesheetForm from "smart/TimesheetPage/components/TimesheetForm";
 import AllocationData from "components/common/AllocationData";
+import { FormInstance } from "antd/lib/form";
 import {
   calculateRemainingHours,
   trasformSubmitAllocatedHours,
@@ -10,10 +11,13 @@ import {
 import { notification } from "helpers/notification.helper";
 import Button from "components/common/Button";
 import { Form } from "antd";
-import { calculateRemainingHoursPropsType } from "interface";
+import {
+  calculateRemainingHoursPropsType,
+  timesheetPageFormType,
+} from "interface";
 
 const TimesheetPage = () => {
-  const [form] = Form.useForm();
+  const [form] = Form.useForm() as [FormInstance<timesheetPageFormType>];
   const navigate = useNavigate();
   const {
     timesheetData,
@@ -22,6 +26,7 @@ const TimesheetPage = () => {
     setTimesheetAllocationData,
   } = useContext(AppContext);
   const handleSubmit = async (value: calculateRemainingHoursPropsType) => {
+    console.log("valieeeee", value);
     const { isSuccess, res } = await calculateRemainingHours(value);
     console.log("res", res);
     if (!isSuccess) {

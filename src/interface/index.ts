@@ -50,3 +50,13 @@ export interface handleSubmitSigninValueProps {
   startDate: Dayjs;
   startTime: Dayjs;
 }
+
+export interface timesheetPageFormType {
+  breaksTime: number;
+  startDateTime: Dayjs;
+  finishDate: Dayjs;
+  finishTime: Dayjs;
+  finishDateTime: Dayjs;
+  isTakenBreak: boolean;
+  pin: number;
+}
