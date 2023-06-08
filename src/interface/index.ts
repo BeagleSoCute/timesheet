@@ -15,7 +15,7 @@ export interface defaultPaidBreaekType {
   unpaidBreak: number;
 }
 
-export interface timesheetAllocationDataType {
+export interface timesheetAllocationAfterCompleteDataType {
   description: string;
   job: string;
   lab: string;
@@ -26,7 +26,7 @@ export interface timesheetAllocationDataType {
 }
 
 export interface timesheetAllocationFormType {
-  items: timesheetAllocationDataType[];
+  items: timesheetAllocationAfterCompleteDataType[];
   paidBreak: number;
   reason: string;
   reasonCode: string;

@@ -22,3 +22,14 @@ export const defaultTimesheetAllocationData = {
   isLegalBreak: false,
   defaultBreak: { paidBreak: 0, unpaidBreak: 0 },
 };
+export const defaultAfterCompleteAllocatedData = [
+  {
+    description: "",
+    job: "",
+    lab: "",
+    labourHours: dayjs(),
+    previousLabourHour: dayjs(),
+    remainingHours: "",
+    supervisors: [""],
+  },
+];

@@ -3,6 +3,7 @@ import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
   defaultSigninData,
+  defaultAfterCompleteAllocatedData,
 } from "defaultValue";
 
 enum EnumTYPES {
@@ -27,7 +28,7 @@ const defaultValue: ReducerType = {
   signinData: defaultSigninData,
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
-  allocatedData: [],
+  allocatedData: defaultAfterCompleteAllocatedData,
 };
 
 const reducer = (state: ReducerType, action: ActionType) => {

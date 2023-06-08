@@ -23,7 +23,7 @@ import { renderFieldTitleSameLine } from "helpers/form.helper";
 import {
   defaultPaidBreaekType,
   timesheetAllocationFormType,
-  timesheetAllocationDataType,
+  timesheetAllocationAfterCompleteDataType,
   calRemainFromLabourHourReturnType,
 } from "interface/index";
 
@@ -38,8 +38,8 @@ interface PropsType {
   paidBreak: number;
   unpaidBreak: number;
   isLegalBreak: boolean;
-  onSetRemaingHour: (data: string) => void;
   defaultBreak: defaultPaidBreaekType;
+  onSetRemaingHour: (data: string) => void;
   onSubmit: (data: timesheetAllocationFormType) => void;
 }
 
@@ -69,9 +69,9 @@ const TimesheetAllocation = ({
     if (!value) {
       return;
     }
-    const allItems: timesheetAllocationDataType[] =
+    const allItems: timesheetAllocationAfterCompleteDataType[] =
       form.getFieldsValue(true)["items"];
-    let thisFormItem: timesheetAllocationDataType =
+    let thisFormItem: timesheetAllocationAfterCompleteDataType =
       form.getFieldsValue(true)["items"][index];
     const previousLabourHour: Dayjs | null = thisFormItem.previousLabourHour;
     if (value.hour() === 0 && value.minute() === 0) {
@@ -118,7 +118,7 @@ const TimesheetAllocation = ({
     await allItems.splice(index, 1, thisFormItem);
     //handle update remaining hour in other form item
     for (let i = index + 1; i < allItems.length; i++) {
-      const thisItem: timesheetAllocationDataType = allItems[i];
+      const thisItem: timesheetAllocationAfterCompleteDataType = allItems[i];
       const thisLabourHours: string = dayjs(allItems[i - 1].labourHours).format(
         timeFormat
       );
@@ -139,11 +139,11 @@ const TimesheetAllocation = ({
   ) => {
     const thisIndex = index;
     const replacingIndex = index + 1;
-    const allItems: timesheetAllocationDataType[] =
+    const allItems: timesheetAllocationAfterCompleteDataType[] =
       form.getFieldsValue(true)["items"];
-    let thisFormItem: timesheetAllocationDataType =
+    let thisFormItem: timesheetAllocationAfterCompleteDataType =
       form.getFieldsValue(true)["items"][thisIndex];
-    let nextFormItem: timesheetAllocationDataType =
+    let nextFormItem: timesheetAllocationAfterCompleteDataType =
       form.getFieldsValue(true)["items"][replacingIndex];
     const currentLabourHours: Dayjs | null =
       form.getFieldsValue(true)["items"][index].labourHours;
@@ -180,7 +180,7 @@ const TimesheetAllocation = ({
     form.setFieldsValue({ items: allItems });
     // After replacing form item, the recalculate the remaing hour for each item
     for (let i = replacingIndex + 1; i < allItems.length; i++) {
-      const thisItem: timesheetAllocationDataType = allItems[i];
+      const thisItem: timesheetAllocationAfterCompleteDataType = allItems[i];
       const thisLabourHours: string = dayjs(allItems[i - 1].labourHours).format(
         timeFormat
       );
@@ -234,9 +234,10 @@ const TimesheetAllocation = ({
       });
       return;
     }
-    const allItems: timesheetAllocationDataType[] =
+    const allItems: timesheetAllocationAfterCompleteDataType[] =
       form.getFieldsValue(true)["items"];
-    const lastItem: timesheetAllocationDataType = allItems[allItems.length - 1];
+    const lastItem: timesheetAllocationAfterCompleteDataType =
+      allItems[allItems.length - 1];
     const thisBreak: number =
       thisInput === "unpaidBreak"
         ? form.getFieldsValue().paidBreak
@@ -267,7 +268,7 @@ const TimesheetAllocation = ({
       return;
     }
     let isLabourHourExcess = false;
-    let thisItem: timesheetAllocationDataType;
+    let thisItem: timesheetAllocationAfterCompleteDataType;
     let resCal = "";
     for (let i = 0; i < allItems.length; i++) {
       thisItem = allItems[i];

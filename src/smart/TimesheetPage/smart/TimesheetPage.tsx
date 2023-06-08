@@ -26,9 +26,7 @@ const TimesheetPage = () => {
     setTimesheetAllocationData,
   } = useContext(AppContext);
   const handleSubmit = async (value: calculateRemainingHoursPropsType) => {
-    console.log("valieeeee", value);
     const { isSuccess, res } = await calculateRemainingHours(value);
-    console.log("res", res);
     if (!isSuccess) {
       notification({
         type: "error",

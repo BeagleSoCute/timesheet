@@ -8,20 +8,22 @@ import React, {
 import appReducer from "contexts/app.reducer";
 import { useNavigate, useMatch } from "react-router-dom";
 import { notification } from "helpers/notification.helper";
-import { ReducerType } from "contexts/types";
+import { ReducerType, timesheetAllocationDataType } from "contexts/types";
+import { timesheetAllocationAfterCompleteDataType } from "interface";
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
   defaultSigninData,
+  defaultAfterCompleteAllocatedData,
 } from "defaultValue";
 
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
   setAuth: (data: object) => void;
-  setAllocatedHours: (data: Array<object>) => void;
+  setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => void;
   clearTimesheetData: () => void;
   setTimesheetData: (data: object) => void;
-  setTimesheetAllocationData: (data: object) => void;
+  setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
 }
 
 interface AppProviderProps {
@@ -34,7 +36,7 @@ export const AppContext = createContext<AppContextType>({
   signinData: defaultSigninData,
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
-  allocatedData: [],
+  allocatedData: defaultAfterCompleteAllocatedData,
   setLoading: () => {},
   setAuth: () => {},
   setAllocatedHours: () => {},
@@ -82,13 +84,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
       setTimesheetData: (data: object) => {
-        console.log("data setTimesheetData", data);
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
       },
-      setAllocatedHours: (data: Array<object>) => {
+      setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => {
         dispatch({ type: TYPES.SET_ALLOCATED_HOURS, payload: data });
       },
-      setTimesheetAllocationData: (data: object) => {
+      setTimesheetAllocationData: (data: timesheetAllocationDataType) => {
         dispatch({ type: TYPES.SET_TIMESHEET_ALLOCATION_DATA, payload: data });
       },
       clearTimesheetData: () => {

@@ -14,26 +14,26 @@ const employees = [
 ];
 
 const SelectEmployeePage = () => {
-  const [employee, setEmployee] = useState(null);
+  const [employeeId, setEmployeeId] = useState<string>();
   const navigate = useNavigate();
   return (
     <StyledDiv className="select-employee-page p-5 mt-10 	">
-      <Row className=" w-100  	">
+      <Row className="w-100">
         <Col span={24}>
           <Select
             placeholder="Select a employee"
             className="w-full"
             options={employees}
-            onChange={(value) => setEmployee(value)}
+            onChange={(value) => setEmployeeId(value)}
           ></Select>
           <div className="mt-10 flex justify-center items-center">
             <Button
-              disabled={!employee}
+              disabled={!employeeId}
               label="Select"
               onClick={() =>
-                navigate(`/supervisor/assign-timesheet/${employee}`)
+                navigate(`/supervisor/assign-timesheet/${employeeId}`)
               }
-            />{" "}
+            />
           </div>
         </Col>
       </Row>

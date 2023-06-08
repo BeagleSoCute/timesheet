@@ -5,7 +5,10 @@ import { getEmployeeData } from "services/employee.service";
 import Message from "components/common/Message";
 import AssignEmployeeTimesheetForm from "smart/SupervisorPage/components/AssignEmployeeTimesheetForm";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
-import { calculateRemainingHoursPropsType, defaultPaidBreaekType } from "interface/index"
+import {
+  calculateRemainingHoursPropsType,
+  timesheetAllocationFormType,
+} from "interface/index";
 import {
   calculateRemainingHours,
   trasformSubmitAllocatedHours,
@@ -13,18 +16,11 @@ import {
 import { notification } from "helpers/notification.helper";
 import AllocationData from "components/common/AllocationData";
 import Button from "components/common/Button";
-import {employeeType} from "interface/index"
+import { employeeType } from "interface";
+import { defaultTimesheetAllocationData } from "defaultValue";
+import { timesheetAllocationDataType } from "contexts/types";
 
-interface timesheetDataType {
-  actualTime?: string,
-  paidBreak?: number,
-  unpaidBreak?: number,
-  isLegalBreak?: boolean,
-  defaultBreak?: defaultPaidBreaekType,
-}
-
-
-const renderDetails = (employee:employeeType) => {
+const renderDetails = (employee: employeeType) => {
   return (
     <div>
       <p>
@@ -36,26 +32,29 @@ const renderDetails = (employee:employeeType) => {
 };
 
 const SupervisorPage = () => {
-  const { employeeId } =  useParams();
+  const { employeeId } = useParams();
   const navigate = useNavigate();
-  const [employee, setEmployee] = useState<employeeType>({name:'', id:""});
+  const [employee, setEmployee] = useState<employeeType>({ name: "", id: "" });
   const [isShowTimesheetForm, setIsShowTimesheetForm] = useState(false);
-  const [timesheetData, setTimesheetData] = useState<timesheetDataType>({});
-  const [remainingHours, setRemainingHours] = useState<string>();
-  const [allocatedData, setAllocatedData] = useState([]);
+  const [timesheetData, setTimesheetData] =
+    useState<timesheetAllocationDataType>(defaultTimesheetAllocationData);
+  const [remainingHours, setRemainingHours] = useState<string>("");
+  const [allocatedData, setAllocatedData] = useState<any>([]);
   const [isCompleteAllocation, setIsCompleteAllocation] = useState(false);
   useEffect(() => {
     const init = () => {
-      if(employeeId){
+      if (employeeId) {
         const result = getEmployeeData(employeeId);
-        if(result){
+        if (result) {
           setEmployee(result);
         }
       }
     };
     init();
   }, [employeeId]);
-  const handleSubmitTimesheetData = async (value:calculateRemainingHoursPropsType) => {
+  const handleSubmitTimesheetData = async (
+    value: calculateRemainingHoursPropsType
+  ) => {
     const { isSuccess, res } = await calculateRemainingHours(value);
     if (!isSuccess) {
       notification({
@@ -82,7 +81,7 @@ const SupervisorPage = () => {
     setIsShowTimesheetForm(false);
   };
 
-  const handleSubmitAllocation = (value:{items:[]}) => {
+  const handleSubmitAllocation = (value: timesheetAllocationFormType) => {
     if (remainingHours !== "00:00") {
       notification({
         type: "error",
@@ -111,13 +110,13 @@ const SupervisorPage = () => {
   };
   const propsTimesheetAllocationForm = {
     remainingHours,
-    actualTime: timesheetData?.actualTime,
-    paidBreak: timesheetData?.paidBreak,
-    unpaidBreak: timesheetData?.unpaidBreak,
-    isLegalBreak: timesheetData?.isLegalBreak,
-    defaultBreak: timesheetData?.defaultBreak,
+    actualTime: timesheetData.actualTime,
+    paidBreak: timesheetData.paidBreak,
+    unpaidBreak: timesheetData.unpaidBreak,
+    isLegalBreak: timesheetData.isLegalBreak,
+    defaultBreak: timesheetData.defaultBreak,
     onSubmit: handleSubmitAllocation,
-    onSetRemaingHour: (value:string) => setRemainingHours(value),
+    onSetRemaingHour: (value: string) => setRemainingHours(value),
   };
 
   return (
