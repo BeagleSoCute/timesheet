@@ -3,16 +3,16 @@ import { Dayjs } from "dayjs";
 
 export interface signinDataType {
   pin: number;
-  startDateTime: object;
+  startDateTime: Dayjs;
   job: string[];
 }
 
-interface timeSheetType {
+export interface timeSheetType {
   pin: number;
-  startDateTime: object;
+  startDateTime: Dayjs;
   job: string[];
-  finishDate: object;
-  finishTime: object;
+  finishDate: Dayjs;
+  finishTime: Dayjs;
 }
 interface timesheetAllocationDataType {
   actualTime: string;

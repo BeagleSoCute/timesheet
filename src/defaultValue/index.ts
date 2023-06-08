@@ -1,16 +1,16 @@
-import { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 export const defaultTimesheetData = {
   pin: 0,
-  startDateTime: Dayjs,
+  startDateTime: dayjs(),
   job: [""],
-  finishDate: Dayjs,
-  finishTime: Dayjs,
+  finishDate: dayjs(),
+  finishTime: dayjs(),
 };
 
 export const defaultSigninData = {
   pin: 0,
-  startDateTime: Dayjs,
+  startDateTime: dayjs(),
   job: [""],
 };
 

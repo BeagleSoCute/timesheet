@@ -16,7 +16,6 @@ const TimesheetAllocation = () => {
       : "00:00"
   );
   const handleSubmitAllocation = async (value: timesheetAllocationFormType) => {
-    console.log("handleSubmitAllocation", value);
     if (remainingHours !== "00:00") {
       notification({
         type: "error",

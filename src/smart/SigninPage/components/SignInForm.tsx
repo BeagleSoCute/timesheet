@@ -3,27 +3,28 @@ import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
 import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
+import { handleSubmitSigninValueProps } from "interface";
 
 interface SignInFormProps {
-  onFinish: (data:object) => void
+  onFinish: (data: handleSubmitSigninValueProps) => void;
 }
 
-const SignInForm = ({ onFinish }:SignInFormProps) => {
+const SignInForm = ({ onFinish }: SignInFormProps) => {
   const [form] = Form.useForm();
   const [isForget, setIsForget] = useState(false);
-  const handleOnFinish = (value:object) => {
-    const startTime = isForget
+  const handleOnFinish = (value: handleSubmitSigninValueProps) => {
+    const startTime: Dayjs = isForget
       ? form.getFieldValue("actualStartTime")
       : form.getFieldValue("startTime");
     onFinish({ ...value, startTime });
   };
-  const handleChangeIsForget = (value:boolean) => {
+  const handleChangeIsForget = (value: boolean) => {
     setIsForget(value);
   };
 

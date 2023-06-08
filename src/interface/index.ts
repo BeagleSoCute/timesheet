@@ -1,9 +1,10 @@
 import { Dayjs } from "dayjs";
+import { timeSheetType } from "contexts/types";
 
 export interface calculateRemainingHoursPropsType {
-  startDateTime: any;
+  startDateTime: Dayjs;
   breaksTime: number;
-  finishDateTime: any;
+  finishDateTime: Dayjs;
 }
 export interface employeeType {
   id: string;
@@ -18,8 +19,8 @@ export interface timesheetAllocationDataType {
   description: string;
   job: string;
   lab: string;
-  labourHours: Dayjs | null;
-  previousLabourHour: Dayjs | null;
+  labourHours: Dayjs;
+  previousLabourHour: Dayjs;
   remainingHours: string;
   supervisors: string[];
 }
@@ -35,4 +36,17 @@ export interface timesheetAllocationFormType {
 export interface calRemainFromLabourHourReturnType {
   value: string;
   isSuccess: boolean;
+}
+
+export interface handleSubmitSignoutValueProps extends timeSheetType {
+  isForgetSingout: boolean;
+}
+
+export interface handleSubmitSigninValueProps {
+  actualStartTime: Dayjs;
+  isForgetSignin: boolean;
+  job: string[];
+  pin: number;
+  startDate: Dayjs;
+  startTime: Dayjs;
 }
