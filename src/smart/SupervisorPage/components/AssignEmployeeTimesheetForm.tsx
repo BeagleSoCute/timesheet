@@ -10,12 +10,15 @@ import {
   preventSelectFinishTime,
 } from "helpers/dateTime.helper";
 import { notification } from "helpers/notification.helper";
-import { disableDateTimeType } from "interface";
+import {
+  disableDateTimeType,
+  calculateRemainingHoursPropsType,
+} from "interface";
 
 interface PropsType {
   isShowTimesheetForm: boolean;
   isCompleteAllocation: boolean;
-  onFinish: (data: object) => void;
+  onFinish: (data: calculateRemainingHoursPropsType) => void;
   onCancel: () => void;
 }
 
@@ -41,7 +44,8 @@ const AssignEmployeeTimesheetForm = ({
       return;
     }
     const transformValue = {
-      ...value,
+      finishDateTime,
+      startDateTime,
       breaksTime: isBreak ? value.breaksTime : 0,
     };
     onFinish(transformValue);
