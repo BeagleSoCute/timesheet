@@ -1,23 +1,29 @@
-import React from 'react'
-import { Button} from "antd";
+import React from "react";
+import { Button } from "antd";
 import { combineClassNames } from "helpers/common.helper";
 import styled from "styled-components";
 
-interface propsType  {
-  label: string, 
-  type?: "default"| "primary"| "ghost"| "dashed"| "link"| "text", 
-  className?: string,
-  disabled?: boolean
-  onClick?: () => void,
-  htmlType?: any
+interface propsType {
+  label: string;
+  type?: "default" | "primary" | "ghost" | "dashed" | "link" | "text";
+  className?: string;
+  disabled?: boolean;
+  onClick?: () => void;
+  htmlType?: "button" | "submit" | "reset" | undefined;
 }
 
-const StyledButton = ({ label, type, className="", disabled=false, ...props }:propsType) => {
+const StyledButton = ({
+  label,
+  type,
+  className = "",
+  disabled = false,
+  ...props
+}: propsType) => {
   return (
     <StyledDiv className="button">
       {type === "primary" ? (
         <Button
-        disabled={disabled}
+          disabled={disabled}
           className={combineClassNames(
             "primary-button bg-yellow-400 text-black font-bold text-base w-32 h-12",
             className
@@ -28,7 +34,7 @@ const StyledButton = ({ label, type, className="", disabled=false, ...props }:pr
         </Button>
       ) : (
         <Button
-        disabled={disabled}
+          disabled={disabled}
           className={combineClassNames(
             "default-buttons text-base w-100 h-12",
             className

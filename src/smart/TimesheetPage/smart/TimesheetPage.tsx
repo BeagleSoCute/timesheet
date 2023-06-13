@@ -36,15 +36,22 @@ const TimesheetPage = () => {
       form.resetFields(["breaksTime"]);
       return false;
     }
-    setTimesheetAllocationData({
-      paidBreak: res.paidBreak,
-      unpaidBreak: res.unpaidBreak,
-      isLegalBreak: res.isLegalBreak,
-      remainingHours: res.remainingTime,
-      actualTime: res.actualTime,
-      defaultBreak: res.defaultBreak,
-    });
-    navigate("/timesheet-allocation");
+    if (res) {
+      setTimesheetAllocationData({
+        paidBreak: res.paidBreak,
+        unpaidBreak: res.unpaidBreak,
+        isLegalBreak: res.isLegalBreak,
+        remainingHours: res.remainingTime,
+        actualTime: res.actualTime,
+        defaultBreak: res.defaultBreak,
+      });
+      navigate("/timesheet-allocation");
+    } else {
+      notification({
+        type: "error",
+        message: "There is an error in the system, Please try again later",
+      });
+    }
   };
   const handleSignout = () => {
     notification({

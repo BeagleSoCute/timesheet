@@ -16,7 +16,7 @@ import {
 import { notification } from "helpers/notification.helper";
 import AllocationData from "components/common/AllocationData";
 import Button from "components/common/Button";
-import { employeeType } from "interface";
+import { employeeType, trasformSubmitAllocatedHoursPropsType } from "interface";
 import { defaultTimesheetAllocationData } from "defaultValue";
 import { timesheetAllocationDataType } from "contexts/types";
 
@@ -39,7 +39,9 @@ const SupervisorPage = () => {
   const [timesheetData, setTimesheetData] =
     useState<timesheetAllocationDataType>(defaultTimesheetAllocationData);
   const [remainingHours, setRemainingHours] = useState<string>("");
-  const [allocatedData, setAllocatedData] = useState<any>([]);
+  const [allocatedData, setAllocatedData] = useState<
+    trasformSubmitAllocatedHoursPropsType[]
+  >([]);
   const [isCompleteAllocation, setIsCompleteAllocation] = useState(false);
   useEffect(() => {
     const init = () => {
@@ -64,17 +66,25 @@ const SupervisorPage = () => {
       });
       return false;
     }
-    const transformData = {
-      paidBreak: res.paidBreak,
-      unpaidBreak: res.unpaidBreak,
-      isLegalBreak: res.isLegalBreak,
-      remainingHours: res.remainingTime,
-      actualTime: res.actualTime,
-      defaultBreak: res.defaultBreak,
-    };
-    setTimesheetData(transformData);
-    setRemainingHours(res.remainingTime);
-    setIsShowTimesheetForm(true);
+    let transformData;
+    if (res) {
+      transformData = {
+        paidBreak: res.paidBreak,
+        unpaidBreak: res.unpaidBreak,
+        isLegalBreak: res.isLegalBreak,
+        remainingHours: res.remainingTime,
+        actualTime: res.actualTime,
+        defaultBreak: res.defaultBreak,
+      };
+      setTimesheetData(transformData);
+      setRemainingHours(res ? res.remainingTime : "00");
+      setIsShowTimesheetForm(true);
+    } else {
+      notification({
+        type: "error",
+        message: "There is an error in the system, Please try again later",
+      });
+    }
   };
 
   const handleCancel = () => {

@@ -1,17 +1,30 @@
 import dayjs, { Dayjs } from "dayjs";
 import duration from "dayjs/plugin/duration";
-import { notification } from "helpers/notification.helper";
 import {
   calculateRemainingHoursPropsType,
   calRemainFromLabourHourReturnType,
-  timesheetAllocationAfterCompleteDataType,
+  trasformSubmitAllocatedHoursPropsType,
 } from "interface";
 
 dayjs.extend(duration);
 
+interface calculateRemainingHoursReturnType {
+  isSuccess: boolean;
+  res:
+    | {
+        remainingTime: string;
+        workingHours: number;
+        actualTime: string;
+        paidBreak: number;
+        unpaidBreak: number;
+        isLegalBreak: boolean;
+        defaultBreak: { paidBreak: number; unpaidBreak: number };
+      }
+    | undefined;
+}
 export const calculateRemainingHours = (
   value: calculateRemainingHoursPropsType
-): any => {
+): calculateRemainingHoursReturnType => {
   const { startDateTime, breaksTime, finishDateTime } = value;
   const timeDiffInMs = finishDateTime.diff(startDateTime);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
@@ -21,7 +34,7 @@ export const calculateRemainingHours = (
   const breakTimeInMs = (unpaidBreak + paidBreak) * 60 * 1000;
   const remainingTimeInMs = timeDiffInMs - breakTimeInMs;
   if (remainingTimeInMs < 0) {
-    return { isSuccess: false };
+    return { isSuccess: false, res: undefined };
   }
   const finalRemainingTimeInMs = remainingTimeInMs > 0 ? remainingTimeInMs : 0;
   const remainingHours = Math.floor(finalRemainingTimeInMs / (60 * 60 * 1000));
@@ -149,10 +162,6 @@ interface trasformSubmitAllocatedHoursReturnType {
   asset: string;
   labourHours: string;
 }
-interface trasformSubmitAllocatedHoursPropsType
-  extends timesheetAllocationAfterCompleteDataType {
-  asset?: string;
-}
 export const trasformSubmitAllocatedHours = (
   value: trasformSubmitAllocatedHoursPropsType[]
 ): trasformSubmitAllocatedHoursReturnType[] => {
@@ -237,37 +246,4 @@ export const transformTimeToMs = (time: string): number => {
   const timeInMs =
     parseInt(hours) * 60 * 60 * 1000 + parseInt(minutes) * 60 * 1000;
   return timeInMs;
-};
-
-//Functions below are functions on the TimesheetForm (Backup)
-//Not use!!
-export const handleErrorSelectFinishime = (current: any, form: any) => {
-  const startDate = form.getFieldValue("startDateTime");
-  const finishDate = form.getFieldValue("finishDate");
-  const startTime = form.getFieldValue("startDateTime");
-  const startHour = dayjs(startTime).hour();
-  const startMinute = dayjs(startTime).minute();
-  const finishHour = dayjs(current).hour();
-  const finishMinute = dayjs(current).minute();
-  if (
-    dayjs(startDate).isSame(finishDate, "date") &&
-    startHour === finishHour &&
-    startMinute >= finishMinute
-  ) {
-    notification({
-      type: "error",
-      message: "Finish time must be greater than start time",
-    });
-    form.resetFields(["finishTime"]);
-  }
-};
-
-export const handleDisabledEndDate = (current: any, form: any) => {
-  const startDateTime = form.getFieldValue("startDateTime");
-  return current && current.isBefore(dayjs(startDateTime).endOf("day"), "day");
-};
-
-export const handleDisabledStartDate = (current: any, form: any) => {
-  const finishDate = form.getFieldValue("finishDate");
-  return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
 };

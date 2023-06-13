@@ -60,3 +60,14 @@ export interface timesheetPageFormType {
   isTakenBreak: boolean;
   pin: number;
 }
+
+export interface disableDateTimeType {
+  disabledHours: () => number[];
+  disabledMinutes: (hour: number) => number[];
+  disabledSeconds: () => never[];
+}
+
+export interface trasformSubmitAllocatedHoursPropsType
+  extends timesheetAllocationAfterCompleteDataType {
+  asset?: string;
+}

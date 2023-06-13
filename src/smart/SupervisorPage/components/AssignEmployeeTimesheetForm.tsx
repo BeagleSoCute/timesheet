@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, DatePicker, InputNumber, Modal } from "antd";
 import styled from "styled-components";
 import { renderFieldTitle } from "helpers/form.helper";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import Button from "components/common/Button";
 import {
@@ -10,6 +10,7 @@ import {
   preventSelectFinishTime,
 } from "helpers/dateTime.helper";
 import { notification } from "helpers/notification.helper";
+import { disableDateTimeType } from "interface";
 
 interface PropsType {
   isShowTimesheetForm: boolean;
@@ -45,21 +46,26 @@ const AssignEmployeeTimesheetForm = ({
     };
     onFinish(transformValue);
   };
-  const handleDisabledStartDate = (current: any) => {
+  const handleDisabledStartDate = (current: Dayjs): boolean => {
     const finishDate = form.getFieldValue("finishDateTime");
     if (finishDate) {
       return current && current.isAfter(dayjs(finishDate).endOf("day"), "day");
+    } else {
+      return false;
     }
   };
-  const handleDisabledEndDate = (current: any) => {
+  const handleDisabledEndDate = (current: Dayjs): boolean => {
     const startDateTime = form.getFieldValue("startDateTime");
     if (startDateTime) {
       return (
         current && current.isBefore(dayjs(startDateTime).endOf("day"), "day")
       );
+    } else {
+      return false;
     }
   };
-  const handleDisableStartTime = (): any => {
+
+  const handleDisableStartTime = (): disableDateTimeType => {
     const finishDate = form.getFieldValue("finishDateTime");
     if (finishDate) {
       return preventSelectExcessTime(
@@ -68,8 +74,13 @@ const AssignEmployeeTimesheetForm = ({
         form.getFieldValue("finishDateTime")
       );
     }
+    return {
+      disabledHours: () => [],
+      disabledMinutes: (hour: number) => [],
+      disabledSeconds: () => [],
+    };
   };
-  const handleDisableFinishTime = (): any => {
+  const handleDisableFinishTime = (): disableDateTimeType => {
     const startDateTime = form.getFieldValue("startDateTime");
     if (startDateTime) {
       return preventSelectFinishTime(
@@ -78,6 +89,11 @@ const AssignEmployeeTimesheetForm = ({
         form.getFieldValue("startDateTime")
       );
     }
+    return {
+      disabledHours: () => [],
+      disabledMinutes: (hour: number) => [],
+      disabledSeconds: () => [],
+    };
   };
   const handleChangeIsBreak = (value: boolean) => {
     setIsBreak(value);
@@ -120,7 +136,7 @@ const AssignEmployeeTimesheetForm = ({
           <DatePicker
             showTime
             disabled={isShowTimesheetForm || isCompleteAllocation}
-            disabledDate={handleDisabledStartDate}
+            disabledDate={(current: Dayjs) => handleDisabledStartDate(current)}
             allowClear={false}
             format="DD/MM/YYYY HH:mm"
             disabledTime={() => handleDisableStartTime()}
@@ -138,7 +154,7 @@ const AssignEmployeeTimesheetForm = ({
           <DatePicker
             showTime
             disabled={isShowTimesheetForm || isCompleteAllocation}
-            disabledDate={handleDisabledEndDate}
+            disabledDate={(current: Dayjs) => handleDisabledEndDate(current)}
             disabledTime={() => handleDisableFinishTime()}
             onChange={() => {}}
             allowClear={false}
