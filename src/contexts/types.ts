@@ -1,4 +1,7 @@
-import { timesheetAllocationAfterCompleteDataType } from "interface";
+import {
+  timesheetAllocationAfterCompleteDataType,
+  defaultPaidBreaekType,
+} from "interface";
 import { Dayjs } from "dayjs";
 
 export interface signinDataType {
@@ -14,11 +17,10 @@ export interface timeSheetType {
   finishDate: Dayjs;
   finishTime: Dayjs;
 }
-export interface timesheetAllocationDataType {
+export interface timesheetAllocationDataType extends defaultPaidBreaekType {
   actualTime: string;
   remainingHours: string;
-  paidBreak: number;
-  unpaidBreak: number;
+  // unpaidBreak: number;
   isLegalBreak: boolean;
   defaultBreak: { paidBreak: number; unpaidBreak: number };
 }

@@ -25,12 +25,10 @@ export interface timesheetAllocationAfterCompleteDataType {
   supervisors: string[];
 }
 
-export interface timesheetAllocationFormType {
+export interface timesheetAllocationFormType extends defaultPaidBreaekType {
   items: timesheetAllocationAfterCompleteDataType[];
-  paidBreak: number;
   reason: string;
   reasonCode: string;
-  unpaidBreak: number;
 }
 
 export interface calRemainFromLabourHourReturnType {
