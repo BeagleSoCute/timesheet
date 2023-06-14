@@ -19,7 +19,10 @@ import {
   isValidBreakingTime,
   transformTimeToMs,
 } from "services/timesheet.service";
-import { renderFieldTitleSameLine } from "helpers/form.helper";
+import {
+  renderFieldTitleSameLine,
+  similarFormPropsForAllApp,
+} from "helpers/form.helper";
 import {
   defaultPaidBreaekType,
   timesheetAllocationFormType,
@@ -343,6 +346,13 @@ const TimesheetAllocation = ({
       },
     ],
   };
+  const formItemProps = {
+    ...similarFormPropsForAllApp,
+  };
+  const halfFormItem = {
+    labelCol: { span: 15 },
+    wrapperCol: { span: 9 },
+  };
   return (
     <StyledDiv className="timesheet-allocation-form">
       <Form
@@ -358,9 +368,8 @@ const TimesheetAllocation = ({
       >
         <div className="break-time-container mt-10 mb-5 p-2">
           <Form.Item
-            colon={false}
-            labelCol={{ span: 15 }}
-            wrapperCol={{ span: 9 }}
+            {...formItemProps}
+            {...halfFormItem}
             label={renderFieldTitleSameLine(
               "Paid break",
               `(Default paid break is ${defaultBreak?.paidBreak})`
@@ -381,9 +390,8 @@ const TimesheetAllocation = ({
             />
           </Form.Item>
           <Form.Item
-            colon={false}
-            labelCol={{ span: 15 }}
-            wrapperCol={{ span: 9 }}
+            {...formItemProps}
+            {...halfFormItem}
             label={renderFieldTitleSameLine(
               "Unpaid break",
               `(Default unpaid break is ${defaultBreak?.unpaidBreak})`
@@ -471,8 +479,7 @@ const TimesheetAllocation = ({
                       </div>
                       <div>
                         <Form.Item
-                          labelCol={{ span: 15 }}
-                          wrapperCol={{ span: 9 }}
+                          {...halfFormItem}
                           name={[index, "remainingHours"]}
                           label="Remaining Hours to Allocate:"
                           className="remain-hour mb-0 mt-1"
@@ -480,8 +487,8 @@ const TimesheetAllocation = ({
                           <Input className="col-span-4 text-right" readOnly />
                         </Form.Item>
                         <Form.Item
+                          {...formItemProps}
                           className="full-content mb-0 "
-                          colon={false}
                           label="Job *"
                           name={[index, "job"]}
                           rules={[
@@ -494,9 +501,9 @@ const TimesheetAllocation = ({
                           <Select options={jobOptions} />
                         </Form.Item>
                         <Form.Item
-                          className="full-content  mb-0 "
+                          {...formItemProps}
+                          className="full-content mb-0 "
                           label="Add Supervisor *"
-                          colon={false}
                           name={[index, "supervisors"]}
                           rules={[
                             {
@@ -508,9 +515,9 @@ const TimesheetAllocation = ({
                           <Select mode="multiple" options={supervisorOptions} />
                         </Form.Item>
                         <Form.Item
+                          {...formItemProps}
                           className="full-content  mb-0 "
                           label="Op/Lab *"
-                          colon={false}
                           name={[index, "lab"]}
                           rules={[
                             {
@@ -523,8 +530,8 @@ const TimesheetAllocation = ({
                         </Form.Item>
 
                         <Form.Item
+                          {...formItemProps}
                           className="full-content mb-0 "
-                          colon={false}
                           label="Description of work"
                           name={[index, "description"]}
                         >
@@ -532,8 +539,8 @@ const TimesheetAllocation = ({
                         </Form.Item>
 
                         <Form.Item
+                          {...formItemProps}
                           className="full-content mb-0 "
-                          colon={false}
                           label="Labour Hour *"
                           name={[index, "labourHours"]}
                           rules={[
@@ -582,7 +589,6 @@ const TimesheetAllocation = ({
             );
           }}
         </Form.List>
-
         <div className="my-0">
           {remainingHours === "00:00" && (
             <p className="lable-bg-color p-2 my-0">

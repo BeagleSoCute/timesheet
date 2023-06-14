@@ -14,6 +14,10 @@ import {
   disableDateTimeType,
   calculateRemainingHoursPropsType,
 } from "interface";
+import {
+  formWithFullWidth,
+  similarFormPropsForAllApp,
+} from "helpers/form.helper";
 
 interface PropsType {
   isShowTimesheetForm: boolean;
@@ -118,19 +122,21 @@ const AssignEmployeeTimesheetForm = ({
       onOk: () => onCancel(),
     });
   };
+  const formProps = {
+    ...similarFormPropsForAllApp,
+  };
   return (
     <StyledDiv className="assign-employee-timesheet-form ">
       <Form
         form={form}
         name="basic"
         requiredMark={false}
-        // initialValues={initialValues}
         onFinish={handleOnFinish}
         autoComplete="off"
       >
         <Form.Item
+          {...formProps}
           className="right-input"
-          colon={false}
           label="Start Date / Time"
           name="startDateTime"
           rules={[
@@ -147,8 +153,8 @@ const AssignEmployeeTimesheetForm = ({
           />
         </Form.Item>
         <Form.Item
+          {...formProps}
           className="right-input"
-          colon={false}
           label="Finish Date / Time"
           name="finishDateTime"
           rules={[
@@ -166,7 +172,7 @@ const AssignEmployeeTimesheetForm = ({
           />
         </Form.Item>
         <Form.Item
-          colon={false}
+          {...formProps}
           label="Have your employee taken a break?"
           name="isTakenBreak"
         >
@@ -178,10 +184,9 @@ const AssignEmployeeTimesheetForm = ({
           />
         </Form.Item>
         <Form.Item
+          {...formProps}
+          {...formWithFullWidth}
           className="full-content"
-          colon={false}
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
           label={renderFieldTitle(
             "Total miniutes of breaks that your employee taken this day? Include paid and unpaid breaks",
             "No break time is included in their allocations, but their paid break will be added back in at sign off stage for payroll."
@@ -205,7 +210,7 @@ const AssignEmployeeTimesheetForm = ({
           />
         </Form.Item>
         {!isShowTimesheetForm && !isCompleteAllocation && (
-          <Form.Item colon={false} className="flex justify-center mt-8 ">
+          <Form.Item {...formProps} className="flex justify-center mt-8 ">
             <Button
               className="mb-10 bg-blue-800 text-white font-bold "
               label="Confirm"

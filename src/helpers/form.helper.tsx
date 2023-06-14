@@ -27,3 +27,12 @@ export const renderFieldTitleSameLine = (
     </div>
   );
 };
+
+export const formWithFullWidth = {
+  labelCol: { span: 24 },
+  wrapperCol: { span: 24 },
+};
+
+export const similarFormPropsForAllApp = {
+  colon: false,
+};

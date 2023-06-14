@@ -5,7 +5,11 @@ import { DatePicker, Form, TimePicker, InputNumber } from "antd";
 import Message from "components/common/Message";
 import styled from "styled-components";
 import Button from "components/common/Button";
-import { renderFieldTitle } from "helpers/form.helper";
+import {
+  formWithFullWidth,
+  renderFieldTitle,
+  similarFormPropsForAllApp,
+} from "helpers/form.helper";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
 import { Dayjs } from "dayjs";
 import {
@@ -57,21 +61,23 @@ const TimesheetForm = ({
     timeFormat,
     isTakenBreak: true,
   };
+  const formItemProps = {
+    ...similarFormPropsForAllApp,
+  };
   return (
     <StyledDiv className="timesheet-form">
       <Form
-        form={form}
         {...formItemLayout}
+        form={form}
         name="basic"
         requiredMark={false}
         initialValues={initialValues}
         onFinish={handleOnFinish}
       >
         <Form.Item
+          {...formItemProps}
+          {...formWithFullWidth}
           className="full-content mb-0"
-          colon={false}
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
           label="Enter Pin *"
           name="pin"
           rules={[{ required: true, message: "Please input your pin!" }]}
@@ -81,7 +87,7 @@ const TimesheetForm = ({
         <Message instructionMessage="This is your SIGN OUT screen, enter finish time below" />
 
         <Form.Item
-          colon={false}
+          {...formItemProps}
           label={renderFieldTitle(
             "Actual Start Date / Time",
             "If you want to change your start time, you need to resubmit your timesheet. Enter No and resubmit"
@@ -99,7 +105,7 @@ const TimesheetForm = ({
           />
         </Form.Item>
         <Form.Item
-          colon={false}
+          {...formItemProps}
           label={renderFieldTitle(
             "Finish Date",
             "You can not back date this date, if you have forgotten your timesheet you must contact your manager"
@@ -116,8 +122,8 @@ const TimesheetForm = ({
         </Form.Item>
 
         <Form.Item
+          {...formItemProps}
           className="fit-error"
-          colon={false}
           label="Finish Time *"
           name="finishTime"
           rules={[{ required: true, message: "Please input finish time!" }]}
@@ -131,7 +137,7 @@ const TimesheetForm = ({
           />
         </Form.Item>
         <Form.Item
-          colon={false}
+          {...formItemProps}
           label="Have you taken a break?"
           name="isTakenBreak"
         >
@@ -147,8 +153,8 @@ const TimesheetForm = ({
           </Radio.Group>
         </Form.Item>
         <Form.Item
+          {...formItemProps}
           className="full-content"
-          colon={false}
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
           label={renderFieldTitle(
@@ -173,7 +179,7 @@ const TimesheetForm = ({
             controls={false}
           />
         </Form.Item>
-        <Form.Item colon={false} className="flex justify-center mt-8 ">
+        <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           <Button
             className="mb-10 bg-blue-800 text-white font-bold "
             label="Allocate..."

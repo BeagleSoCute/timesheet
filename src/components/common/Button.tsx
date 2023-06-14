@@ -21,29 +21,18 @@ const StyledButton = ({
 }: propsType) => {
   return (
     <StyledDiv className="button">
-      {type === "primary" ? (
-        <Button
-          disabled={disabled}
-          className={combineClassNames(
-            "primary-button bg-yellow-400 text-black font-bold text-base w-32 h-12",
-            className
-          )}
-          {...props}
-        >
-          {label}
-        </Button>
-      ) : (
-        <Button
-          disabled={disabled}
-          className={combineClassNames(
-            "default-buttons text-base w-100 h-12",
-            className
-          )}
-          {...props}
-        >
-          {label}
-        </Button>
-      )}
+      <Button
+        disabled={disabled}
+        className={combineClassNames(
+          type === "primary"
+            ? "primary-button bg-yellow-400 text-black font-bold text-base w-32 h-12"
+            : "default-buttons text-base w-100 h-12",
+          className
+        )}
+        {...props}
+      >
+        {label}
+      </Button>
     </StyledDiv>
   );
 };

@@ -19,6 +19,10 @@ import { renderFieldTitle } from "helpers/form.helper";
 import { preventActualTime } from "helpers/dateTime.helper";
 import { signoutFormProps } from "interface";
 import { FormInstance } from "antd/lib/form";
+import {
+  formWithFullWidth,
+  similarFormPropsForAllApp,
+} from "helpers/form.helper";
 
 interface ComponentProps {
   startDateTime: Dayjs;
@@ -69,6 +73,9 @@ const SignoutForm: React.FC<ComponentProps> = ({
     form.setFieldsValue({ finishDate: dayjs(), finishTime: dayjs() });
   };
 
+  const formItemProps = {
+    ...similarFormPropsForAllApp,
+  };
   return (
     <StyledDiv className="sigout-form">
       <Form
@@ -80,11 +87,10 @@ const SignoutForm: React.FC<ComponentProps> = ({
         onFinish={handleOnFinish}
       >
         <Form.Item
+          {...formItemProps}
           className="full-content mb-0"
-          colon={false}
           label="Enter Pin *"
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
+          {...formWithFullWidth}
           name="pin"
           rules={[{ required: true, message: "Please input your pin!" }]}
         >
@@ -92,7 +98,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
         </Form.Item>
         <Message instructionMessage="This is the Sign out screen enter your start time below" />
         <Form.Item
-          colon={false}
+          {...formItemProps}
           label=" Start Date / Time"
           name="startDateTime"
         >
@@ -105,7 +111,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
         </Form.Item>
         {isClockout && (
           <>
-            <Form.Item colon={false} label="Finish Date" name="finishDate">
+            <Form.Item {...formItemProps} label="Finish Date" name="finishDate">
               <DatePicker
                 disabled={true}
                 inputReadOnly
@@ -113,7 +119,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
                 allowClear={false}
               />
             </Form.Item>
-            <Form.Item colon={false} label="Finish Time" name="finishTime">
+            <Form.Item {...formItemProps} label="Finish Time" name="finishTime">
               <TimePicker
                 disabled={true}
                 showNow={false}
@@ -123,7 +129,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
               />
             </Form.Item>
             <Form.Item
-              colon={false}
+              {...formItemProps}
               label={renderFieldTitle(
                 "Do you forget to sign out?",
                 "If you forget to sign out, please select the acutal end time "
@@ -138,8 +144,8 @@ const SignoutForm: React.FC<ComponentProps> = ({
             </Form.Item>
             {isForget && (
               <Form.Item
+                {...formItemProps}
                 className="select-actual-finish-time"
-                colon={false}
                 label="Actual Finish time"
                 name="actualFinishTime"
                 rules={[
@@ -164,17 +170,16 @@ const SignoutForm: React.FC<ComponentProps> = ({
           </>
         )}
         <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
+          {...formItemProps}
+          {...formWithFullWidth}
           className="full-content"
-          colon={false}
           label="Select Job *"
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >
           <Select mode="multiple" options={jobOptions} />
         </Form.Item>
-        <Form.Item colon={false} className="flex justify-center mt-8 ">
+        <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           {isClockout ? (
             <Row>
               <Button label="Sign Out" htmlType="submit" type="primary" />

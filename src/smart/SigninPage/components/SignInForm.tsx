@@ -11,6 +11,10 @@ import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
 import { signinFormProps } from "interface";
 import { FormInstance } from "antd/lib/form";
+import {
+  formWithFullWidth,
+  similarFormPropsForAllApp,
+} from "helpers/form.helper";
 
 interface SignInFormProps {
   onFinish: (data: signinFormProps) => void;
@@ -34,6 +38,9 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
     startTime: dayjs(),
     isForgetSingin: false,
   };
+  const formItemProps = {
+    ...similarFormPropsForAllApp,
+  };
   return (
     <StyledDiv className="sigin-form">
       <Form
@@ -45,18 +52,17 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
         autoComplete="off"
       >
         <Form.Item
+          {...formItemProps}
+          {...formWithFullWidth}
           className="full-content mb-0"
-          colon={false}
           label="Enter Pin *"
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
           name="pin"
           rules={[{ required: true, message: "Please input your pin!" }]}
         >
           <InputNumber className="w-full" controls={false} />
         </Form.Item>
         <Message instructionMessage="This is the Sign In screen enter your start time below" />
-        <Form.Item colon={false} label="Start Date" name="startDate">
+        <Form.Item {...formItemProps} label="Start Date" name="startDate">
           <DatePicker
             disabled={true}
             inputReadOnly
@@ -64,7 +70,7 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
             allowClear={false}
           />
         </Form.Item>
-        <Form.Item colon={false} label="Start Time" name="startTime">
+        <Form.Item {...formItemProps} label="Start Time" name="startTime">
           <TimePicker
             disabled={true}
             showNow={false}
@@ -74,7 +80,7 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
           />
         </Form.Item>
         <Form.Item
-          colon={false}
+          {...formItemProps}
           label={renderFieldTitle(
             "Do you forget to sign in?",
             "If you forget to sign in, please select the acutal start time "
@@ -89,8 +95,8 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
         </Form.Item>
         {isForget && (
           <Form.Item
+            {...formItemProps}
             className="select-actual-start-time"
-            colon={false}
             label="Actual Start time"
             name="actualStartTime"
             rules={[{ required: true, message: "Please select start time!" }]}
@@ -111,10 +117,9 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
           </Form.Item>
         )}
         <Form.Item
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
+          {...formItemProps}
+          {...formWithFullWidth}
           className="full-content"
-          colon={false}
           label="Select Job *"
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
@@ -122,7 +127,7 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
           <Select mode="multiple" options={jobOptions} />
         </Form.Item>
 
-        <Form.Item colon={false} className="flex justify-center mt-8 ">
+        <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           <Button label="Sign In" type="primary" htmlType="submit" />
         </Form.Item>
       </Form>
