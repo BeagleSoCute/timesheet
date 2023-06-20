@@ -4,14 +4,12 @@ import { LoginRequest, LoginResolveResponse } from "../interface/api.interface";
 import { AxiosResponse } from "axios";
 
 export const login = async ({ userName, password }: LoginRequest) => {
-  const res: AxiosResponse<LoginResolveResponse> = await loginAPI({
+  const { success, payload }: LoginResolveResponse = await loginAPI({
     userName,
     password,
   });
-  const { success, payload } = res.data; // Access the response data
   console.log("success", success);
   console.log("payload", payload);
-
   if (success) {
     notification({ type: "success", message: "Login Success" });
     return true;

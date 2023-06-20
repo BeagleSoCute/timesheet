@@ -15,6 +15,10 @@ const apiInstance = axios.create({
 const onRequestFulfilled = (configs = {}) => {
   return configs;
 };
+interface TransformedAxiosResponseType {
+  payload: any;
+  success: boolean;
+}
 const onResponseFulfilled = (response: any): any => {
   return transformAxiosResponse(response);
 };
