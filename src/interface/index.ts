@@ -72,6 +72,7 @@ export interface trasformSubmitAllocatedHoursPropsType
 export interface jobType {
   jobCode: string;
   jobName: string;
+  customerName: string;
 }
 export interface jobListsType {
   jobLists: jobType[];

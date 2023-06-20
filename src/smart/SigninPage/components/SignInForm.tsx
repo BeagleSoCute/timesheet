@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { jobOptions } from "data/options";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
 import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
@@ -9,14 +8,13 @@ import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
-import { signinFormProps, jobListsType } from "interface";
+import { signinFormProps, jobListsType, jobType } from "interface";
 import { FormInstance } from "antd/lib/form";
 import {
   formWithFullWidth,
   similarFormPropsForAllApp,
 } from "helpers/form.helper";
-import SelectJobOptions from "components/common/SelectJobOptions";
-
+import { jobOptions, handleFilter } from "helpers/select.helper";
 interface SignInFormPropsType {
   jobLists: [];
   onFinish: (data: signinFormProps) => void;
@@ -126,8 +124,11 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >
-          {/* //<Select mode="multiple" options={jobOptions} /> */}
-          <SelectJobOptions jobLists={jobLists} />
+          <Select
+            mode="multiple"
+            filterOption={handleFilter}
+            options={jobOptions(jobLists)}
+          />
         </Form.Item>
 
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">

@@ -8,8 +8,8 @@ export const getJobLists = async (): Promise<jobListsAPiReturnType> => {
     return {
       jobCode: item.job_code,
       jobName: item.job_name,
+      customerName: item.customer_name,
     };
   });
-
   return { success: res.success, payload: transformData };
 };
