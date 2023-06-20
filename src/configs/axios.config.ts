@@ -1,8 +1,9 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import {
   transformAxiosResponse,
   transformErrorResponse,
 } from "../helpers/axios.helper";
+import { ErrorResponse } from "../interface/api.interface";
 
 const apiInstance = axios.create({
   // baseURL: "/api",
@@ -15,17 +16,12 @@ const apiInstance = axios.create({
 const onRequestFulfilled = (configs = {}) => {
   return configs;
 };
-interface TransformedAxiosResponseType {
-  payload: any;
-  success: boolean;
-}
-const onResponseFulfilled = (response: any): any => {
+
+const onResponseFulfilled = (response: AxiosResponse): any => {
   return transformAxiosResponse(response);
 };
 
-const onResponseRejected = async (error: any) => {
-  //const statusError = error.response.status;
-  console.log("error", error);
+const onResponseRejected = async (error: ErrorResponse) => {
   return transformErrorResponse(error);
 };
 apiInstance.interceptors.request.use(onRequestFulfilled);

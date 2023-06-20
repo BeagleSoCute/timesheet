@@ -1,3 +1,10 @@
+export interface ErrorResponse {
+  response: {
+    data: any;
+  };
+  message: string;
+}
+
 export interface LoginResponsePayload {
   id: number;
   user_code: string;

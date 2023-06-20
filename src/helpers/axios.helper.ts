@@ -1,5 +1,6 @@
 import { notification } from "./notification.helper";
 import { AxiosResponse } from "axios"; // Import AxiosResponse from your Axios library
+import { ErrorResponse } from "../interface/api.interface";
 
 interface TransformedAxiosResponseType {
   payload: any;
@@ -14,19 +15,6 @@ export const transformAxiosResponse = (
     success: true,
   };
 };
-interface ErrorResponse {
-  response: {
-    //  status: number;
-    data: any;
-  };
-  message: string;
-}
-
-interface TransformedErrorResponse {
-  payload: any;
-  errorMessage: string;
-  success: boolean;
-}
 
 export const transformErrorResponse = (
   errResponse: ErrorResponse
