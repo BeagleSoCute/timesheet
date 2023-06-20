@@ -28,9 +28,9 @@ interface TransformedErrorResponse {
   success: boolean;
 }
 
-export const transformErrorResponse = async (
+export const transformErrorResponse = (
   errResponse: ErrorResponse
-): Promise<TransformedAxiosResponseType> => {
+): TransformedAxiosResponseType => {
   const { response, message } = errResponse;
   let payload: any;
   payload = response ? response.data : {};

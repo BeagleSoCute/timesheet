@@ -14,14 +14,13 @@ const SigninPage = () => {
   const navigate = useNavigate();
   const { setAuth, setJobLists } = useContext(AppContext);
   useEffect(() => {
-    console.log("useEffect work");
     const init = async () => {
       const { success, payload }: jobListsAPiReturnType = await getJobLists();
       setJobLists(payload);
       setJobs(payload);
-      setLoading(false);
     };
-    init();
+    // init();
+    setLoading(false);
   }, []);
   const handleSubmit = (value: signinFormProps) => {
     const transformData = {

@@ -7,6 +7,7 @@ import TimesheetAllocationPage from "smart/AllocationPage/smart/TimesheetAllocat
 import SignoutPage from "smart/SignoutPage/smart/SignoutPage";
 import SupervisorPage from "smart/SupervisorPage/smarts/SupervisorPage";
 import SelectEmployeePage from "smart/SupervisorPage/smarts/SelectEmployeePage";
+import LoginPage from "smart/login/smart/LoginPage";
 import "index.css";
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        element: <LoginPage />,
+      },
+      {
+        path: "/clockin-page",
         element: <SigninPage />,
       },
       { path: "/signout", element: <SignoutPage /> },

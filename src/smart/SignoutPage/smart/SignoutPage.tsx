@@ -7,7 +7,7 @@ import { signoutFormProps } from "interface";
 
 const SignoutPage = () => {
   const navigate = useNavigate();
-  const { signinData, setTimesheetData } = useContext(AppContext);
+  const { clockinData, jobLists, setTimesheetData } = useContext(AppContext);
   const handleSubmit = (value: signoutFormProps) => {
     const transformData = {
       pin: value.pin,
@@ -21,9 +21,10 @@ const SignoutPage = () => {
     navigate("/timesheet-page");
   };
   const propsSignOutForm = {
-    pin: signinData.pin,
-    startDateTime: signinData.startDateTime,
-    job: signinData.job,
+    pin: clockinData.pin,
+    startDateTime: clockinData.startDateTime,
+    job: clockinData.job,
+    jobLists: jobLists,
     onFinish: handleSubmit,
   };
   return (

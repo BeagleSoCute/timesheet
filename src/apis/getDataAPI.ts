@@ -1,5 +1,4 @@
 import { apiInstance } from "configs/axios.config";
-import axios from "axios";
 export const getJobListsAPI = () =>
   apiInstance.get("http://192.168.69.21:8080/api/v1/job/list");
 export const getOneJobAPI = (jobCode: number) =>

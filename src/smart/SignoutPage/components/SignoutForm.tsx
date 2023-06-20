@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { jobOptions } from "data/options";
 import { dateFormat, timeFormat, dateTimeFormat } from "constants/format";
 import styled from "styled-components";
 import {
@@ -17,22 +16,25 @@ import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventActualTime } from "helpers/dateTime.helper";
-import { signoutFormProps } from "interface";
+import { signoutFormProps, jobType } from "interface";
 import { FormInstance } from "antd/lib/form";
 import {
   formWithFullWidth,
   similarFormPropsForAllApp,
 } from "helpers/form.helper";
+import { jobOptions, handleFilter } from "helpers/select.helper";
 
 interface ComponentProps {
   startDateTime: Dayjs;
   pin: number;
   onFinish: (data: signoutFormProps) => void;
   job: string[];
+  jobLists: jobType[];
 }
 const SignoutForm: React.FC<ComponentProps> = ({
   startDateTime,
   pin,
+  jobLists,
   onFinish,
   job,
 }) => {
@@ -177,7 +179,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >
-          <Select mode="multiple" options={jobOptions} />
+          <Select mode="multiple" options={jobOptions(jobLists)} />
         </Form.Item>
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           {isClockout ? (

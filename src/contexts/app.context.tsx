@@ -16,7 +16,7 @@ import {
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
-  defaultSigninData,
+  defaultClockinData,
   defaultAfterCompleteAllocatedData,
 } from "defaultValue";
 import { Dayjs } from "dayjs";
@@ -44,11 +44,12 @@ interface AppProviderProps {
 export const AppContext = createContext<AppContextType>({
   loading: false,
   isAuth: false,
-  signinData: defaultSigninData,
+  clockinData: defaultClockinData,
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,
   jobLists: [],
+  userData: {},
   setLoading: () => {},
   setAuth: () => {},
   setAllocatedHours: () => {},
@@ -65,11 +66,12 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   const {
     loading,
     isAuth,
-    signinData,
+    clockinData,
     timesheetData,
     timesheetAllocationData,
     allocatedData,
     jobLists,
+    userData,
   } = reducerStates as ReducerType;
   useEffect(() => {
     const init = async () => {
@@ -86,16 +88,20 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     return {
       loading,
       isAuth,
-      signinData,
+      clockinData,
       timesheetData,
       timesheetAllocationData,
       allocatedData,
       jobLists,
+      userData,
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
       setAuth: (data: AuthPropsType) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
+      },
+      clockIn: (data: AuthPropsType) => {
+        dispatch({ type: TYPES.CLOCK_IN, payload: data });
       },
       setTimesheetData: (data: timeSheetType) => {
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
@@ -116,7 +122,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   }, [
     loading,
     isAuth,
-    signinData,
+    clockinData,
     timesheetData,
     timesheetAllocationData,
     allocatedData,

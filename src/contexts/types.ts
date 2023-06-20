@@ -27,9 +27,10 @@ export interface timesheetAllocationDataType extends defaultPaidBreaekType {
 export interface ReducerType {
   loading: boolean;
   isAuth: boolean;
-  signinData: signinDataType;
+  clockinData: signinDataType;
   timesheetData: timeSheetType;
   allocatedData: timesheetAllocationAfterCompleteDataType[];
   timesheetAllocationData: timesheetAllocationDataType;
   jobLists: [];
+  userData: {};
 }

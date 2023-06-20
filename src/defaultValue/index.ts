@@ -8,7 +8,7 @@ export const defaultTimesheetData = {
   finishTime: dayjs(),
 };
 
-export const defaultSigninData = {
+export const defaultClockinData = {
   pin: 0,
   startDateTime: dayjs(),
   job: [""],

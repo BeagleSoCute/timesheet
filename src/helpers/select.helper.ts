@@ -3,6 +3,9 @@ import { jobType } from "../interface/index";
 export const jobOptions = (
   jobLists: jobType[]
 ): { value: string; label: string }[] => {
+  if (!jobLists) {
+    return [];
+  }
   return jobLists.map((item: jobType) => {
     return {
       value: item.jobCode,
