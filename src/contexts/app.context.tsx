@@ -9,7 +9,10 @@ import appReducer from "contexts/app.reducer";
 import { useNavigate, useMatch } from "react-router-dom";
 import { notification } from "helpers/notification.helper";
 import { ReducerType, timesheetAllocationDataType } from "contexts/types";
-import { timesheetAllocationAfterCompleteDataType } from "interface";
+import {
+  timesheetAllocationAfterCompleteDataType,
+  jobListsType,
+} from "interface";
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
@@ -31,6 +34,7 @@ interface AppContextType extends ReducerType {
   clearTimesheetData: () => void;
   setTimesheetData: (data: timeSheetType) => void;
   setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
+  setJobLists: (data: jobListsType) => void;
 }
 
 interface AppProviderProps {
@@ -44,12 +48,14 @@ export const AppContext = createContext<AppContextType>({
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,
+  jobLists: [],
   setLoading: () => {},
   setAuth: () => {},
   setAllocatedHours: () => {},
   clearTimesheetData: () => {},
   setTimesheetData: () => {},
   setTimesheetAllocationData: () => {},
+  setJobLists: () => {},
 });
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }: AppProviderProps) => {
@@ -63,6 +69,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     timesheetData,
     timesheetAllocationData,
     allocatedData,
+    jobLists,
   } = reducerStates as ReducerType;
   useEffect(() => {
     const init = async () => {
@@ -83,6 +90,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       timesheetData,
       timesheetAllocationData,
       allocatedData,
+      jobLists,
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
@@ -100,6 +108,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       },
       clearTimesheetData: () => {
         dispatch({ type: TYPES.CLEAR_TIMESHEET_DATA });
+      },
+      setJobLists: (data: jobListsType) => {
+        dispatch({ type: TYPES.SET_JOB_LISTS, payload: data });
       },
     };
   }, [

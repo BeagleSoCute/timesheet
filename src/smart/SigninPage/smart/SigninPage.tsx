@@ -1,14 +1,28 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "contexts/app.context";
 import SignInForm from "smart/SigninPage/components/SignInForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
 import { signinFormProps } from "interface";
+import { getJobLists } from "services/api.services";
+import { jobListsAPiReturnType } from "interface/index";
 
 const SigninPage = () => {
+  const [jobs, setJobs] = useState<any>();
+  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { setAuth } = useContext(AppContext);
+  const { setAuth, setJobLists } = useContext(AppContext);
+  useEffect(() => {
+    console.log("useEffect work");
+    const init = async () => {
+      const { success, payload }: jobListsAPiReturnType = await getJobLists();
+      setJobLists(payload);
+      setJobs(payload);
+      setLoading(false);
+    };
+    init();
+  }, []);
   const handleSubmit = (value: signinFormProps) => {
     const transformData = {
       pin: value.pin,
@@ -20,11 +34,12 @@ const SigninPage = () => {
     navigate("signout");
   };
   const propsSignInForm = {
+    jobLists: jobs,
     onFinish: handleSubmit,
   };
   return (
     <div className="signinPage">
-      <SignInForm {...propsSignInForm} />
+      {!loading && <SignInForm {...propsSignInForm} />}
     </div>
   );
 };

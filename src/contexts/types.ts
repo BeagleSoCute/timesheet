@@ -31,4 +31,5 @@ export interface ReducerType {
   timesheetData: timeSheetType;
   allocatedData: timesheetAllocationAfterCompleteDataType[];
   timesheetAllocationData: timesheetAllocationDataType;
+  jobLists: [];
 }

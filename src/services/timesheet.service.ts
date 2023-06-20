@@ -5,7 +5,6 @@ import {
   calRemainFromLabourHourReturnType,
   trasformSubmitAllocatedHoursPropsType,
 } from "interface";
-
 dayjs.extend(duration);
 
 interface calculateRemainingHoursReturnType {

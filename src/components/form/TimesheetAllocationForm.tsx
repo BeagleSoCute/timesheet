@@ -353,6 +353,15 @@ const TimesheetAllocation = ({
     labelCol: { span: 15 },
     wrapperCol: { span: 9 },
   };
+  // [
+  //   { id:"timesheet-allo",
+  //    validateStatus:validatePaidBreak()
+  //   },
+  //   {
+
+  //   },
+  //   {}
+  // ].map(({validateStatus})=>(<Form.Item  {...(validateStatus?{validateStatus}:{})}>children</Form.Item>))
   return (
     <StyledDiv className="timesheet-allocation-form">
       <Form

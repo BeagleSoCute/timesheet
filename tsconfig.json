@@ -1,11 +1,16 @@
 {
-    "compilerOptions": {
-      "esModuleInterop": true,
-      "strictNullChecks": true,
-      "noImplicitAny": true,
-      "jsx": "react",
-      "baseUrl": "src"
-    },
-    "include": ["src/**/*.tsx", "tests/**/*.ts"],
-
-  }
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "jsx": "react",
+    "baseUrl": "src",
+    "moduleResolution": "node",
+    "paths": {
+      "@/*": [
+        "*"
+      ]
+    }
+  },
+  "include": ["src/**/*.tsx", "tests/**/*.ts"]
+}

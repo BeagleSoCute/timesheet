@@ -69,3 +69,15 @@ export interface trasformSubmitAllocatedHoursPropsType
   extends timesheetAllocationAfterCompleteDataType {
   asset?: string;
 }
+export interface jobType {
+  jobCode: string;
+  jobName: string;
+}
+export interface jobListsType {
+  jobLists: jobType[];
+}
+
+export interface jobListsAPiReturnType {
+  success: boolean;
+  payload: jobListsType;
+}

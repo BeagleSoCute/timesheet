@@ -9,18 +9,20 @@ import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
-import { signinFormProps } from "interface";
+import { signinFormProps, jobListsType } from "interface";
 import { FormInstance } from "antd/lib/form";
 import {
   formWithFullWidth,
   similarFormPropsForAllApp,
 } from "helpers/form.helper";
+import SelectJobOptions from "components/common/SelectJobOptions";
 
-interface SignInFormProps {
+interface SignInFormPropsType {
+  jobLists: [];
   onFinish: (data: signinFormProps) => void;
 }
 
-const SignInForm = ({ onFinish }: SignInFormProps) => {
+const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
   const [form] = Form.useForm() as [FormInstance<signinFormProps>];
   const [isForget, setIsForget] = useState(false);
   const handleOnFinish = (value: signinFormProps) => {
@@ -124,7 +126,8 @@ const SignInForm = ({ onFinish }: SignInFormProps) => {
           name="job"
           rules={[{ required: true, message: "Please input your Job!" }]}
         >
-          <Select mode="multiple" options={jobOptions} />
+          {/* //<Select mode="multiple" options={jobOptions} /> */}
+          <SelectJobOptions jobLists={jobLists} />
         </Form.Item>
 
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">

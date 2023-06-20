@@ -15,6 +15,7 @@ enum EnumTYPES {
   SET_REMAINING_HOURS = "SET_REMAINING_HOURS",
   SET_TIMESHEET_DATA = "SET_TIMESHEET_DATA",
   SET_TIMESHEET_ALLOCATION_DATA = "SET_TIMESHEET_ALLOCATION_DATA",
+  SET_JOB_LISTS = "SET_JOB_LISTS",
 }
 
 interface ActionType {
@@ -29,6 +30,7 @@ const defaultValue: ReducerType = {
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,
+  jobLists: [],
 };
 
 const reducer = (state: ReducerType, action: ActionType) => {
@@ -48,6 +50,8 @@ const reducer = (state: ReducerType, action: ActionType) => {
       return { ...state, allocatedData: payload };
     case EnumTYPES.CLEAR_TIMESHEET_DATA:
       return { ...state, timesheetData: {} };
+    case EnumTYPES.SET_JOB_LISTS:
+      return { ...state, jobLists: payload };
     default:
       break;
   }
