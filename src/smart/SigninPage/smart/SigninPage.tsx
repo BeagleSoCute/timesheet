@@ -7,7 +7,6 @@ import { signinFormProps } from "interface";
 import { signin } from "services/timesheetAPI.service";
 import { notification } from "helpers/notification.helper";
 const SigninPage = () => {
-  const [jobs, setJobs] = useState<any>();
   const navigate = useNavigate();
   const { clockIn } = useContext(AppContext);
 
@@ -69,17 +68,18 @@ const SigninPage = () => {
       latitude,
       longitude,
     };
-    console.log("transformData", transformData);
-    const { success, payload } = await signin(transformData);
-    // console.log("--value", value);
-
-    // console.log("transformData", transformData);
-    // clockIn(transformData);
-    // notification({ type: "success", message: "Sign in Success!" });
-    // navigate("/signout");
+    const { success } = await signin(transformData);
+    if (!success) {
+      notification({
+        type: "error",
+        message: "Can not signin to the system, Please contact the admin",
+      });
+    }
+    clockIn(transformData);
+    notification({ type: "success", message: "Sign in Success!" });
+    navigate("/signout");
   };
   const propsSignInForm = {
-    jobLists: jobs,
     onFinish: handleSubmit,
   };
   return (

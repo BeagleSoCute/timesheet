@@ -1,29 +1,24 @@
 import React, { useState } from "react";
 import { dateFormat, timeFormat } from "constants/format";
 import styled from "styled-components";
-import { DatePicker, Form, InputNumber, TimePicker, Select } from "antd";
+import { DatePicker, Form, TimePicker } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventSelectExcessTime } from "helpers/dateTime.helper";
-import { signinFormProps, jobListsType, jobType } from "interface";
+import { signinFormProps } from "interface";
 import { FormInstance } from "antd/lib/form";
-import {
-  formWithFullWidth,
-  similarFormPropsForAllApp,
-} from "helpers/form.helper";
-import { jobOptions, handleFilter } from "helpers/select.helper";
+import { similarFormPropsForAllApp } from "helpers/form.helper";
+
 interface SignInFormPropsType {
-  jobLists: [];
   onFinish: (data: signinFormProps) => void;
 }
 
-const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
+const SignInForm = ({ onFinish }: SignInFormPropsType) => {
   const [form] = Form.useForm() as [FormInstance<signinFormProps>];
   const [isForget, setIsForget] = useState(false);
-
   const handleOnFinish = (value: signinFormProps) => {
     const startTime: Dayjs = isForget
       ? form.getFieldValue("actualStartTime")
@@ -56,16 +51,6 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
         onFinish={handleOnFinish}
         autoComplete="off"
       >
-        {/* <Form.Item
-          {...formItemProps}
-          {...formWithFullWidth}
-          className="full-content mb-0"
-          label="Enter Pin *"
-          name="pin"
-          rules={[{ required: true, message: "Please input your pin!" }]}
-        >
-          <InputNumber className="w-full" controls={false} />
-        </Form.Item> */}
         <Message instructionMessage="This is the Sign In screen enter your start time below" />
         <Form.Item {...formItemProps} label="Start Date" name="startDate">
           <DatePicker
@@ -121,21 +106,6 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
             />
           </Form.Item>
         )}
-        {/* <Form.Item
-          {...formItemProps}
-          {...formWithFullWidth}
-          className="full-content"
-          label="Select Job *"
-          name="job"
-          rules={[{ required: true, message: "Please input your Job!" }]}
-        >
-          <Select
-            mode="multiple"
-            filterOption={handleFilter}
-            options={jobOptions(jobLists)}
-          />
-        </Form.Item> */}
-
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           <Button label="Sign In" type="primary" htmlType="submit" />
         </Form.Item>

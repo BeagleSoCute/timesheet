@@ -1,43 +1,23 @@
 import React, { useState } from "react";
 import { dateFormat, timeFormat, dateTimeFormat } from "constants/format";
 import styled from "styled-components";
-import {
-  DatePicker,
-  Form,
-  InputNumber,
-  TimePicker,
-  Select,
-  Row,
-  Modal,
-} from "antd";
+import { DatePicker, Form, TimePicker, Row, Modal } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import Button from "components/common/Button";
 import Message from "components/common/Message";
 import CustomRadioButton from "components/common/CustomRadioButton";
 import { renderFieldTitle } from "helpers/form.helper";
 import { preventActualTime } from "helpers/dateTime.helper";
-import { signoutFormProps, jobType } from "interface";
+import { signoutFormProps } from "interface";
 import { FormInstance } from "antd/lib/form";
-import {
-  formWithFullWidth,
-  similarFormPropsForAllApp,
-} from "helpers/form.helper";
-import { jobOptions, handleFilter } from "helpers/select.helper";
+import { similarFormPropsForAllApp } from "helpers/form.helper";
 
 interface ComponentProps {
   startDateTime: Dayjs;
-  pin: number;
   onFinish: (data: signoutFormProps) => void;
   job: string[];
-  jobLists: jobType[];
 }
-const SignoutForm: React.FC<ComponentProps> = ({
-  startDateTime,
-  pin,
-  jobLists,
-  onFinish,
-  job,
-}) => {
+const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, onFinish }) => {
   const [form] = Form.useForm() as [FormInstance<signoutFormProps>];
   const [isClockout, setIsClockout] = useState<boolean>(false);
   const [isForget, setIsForget] = useState<boolean>(false);
@@ -65,9 +45,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
     });
   };
   const initialValues = {
-    pin,
     startDateTime,
-    job,
     isForgetSingout: false,
   };
   const handleClockout = (): void => {
@@ -88,16 +66,6 @@ const SignoutForm: React.FC<ComponentProps> = ({
         autoComplete="off"
         onFinish={handleOnFinish}
       >
-        <Form.Item
-          {...formItemProps}
-          className="full-content mb-0"
-          label="Enter Pin *"
-          {...formWithFullWidth}
-          name="pin"
-          rules={[{ required: true, message: "Please input your pin!" }]}
-        >
-          <InputNumber className="w-full" controls={false} />
-        </Form.Item>
         <Message instructionMessage="This is the Sign out screen enter your start time below" />
         <Form.Item
           {...formItemProps}
@@ -171,16 +139,7 @@ const SignoutForm: React.FC<ComponentProps> = ({
             )}
           </>
         )}
-        <Form.Item
-          {...formItemProps}
-          {...formWithFullWidth}
-          className="full-content"
-          label="Select Job *"
-          name="job"
-          rules={[{ required: true, message: "Please input your Job!" }]}
-        >
-          <Select mode="multiple" options={jobOptions(jobLists)} />
-        </Form.Item>
+
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           {isClockout ? (
             <Row>
