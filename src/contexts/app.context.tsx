@@ -19,22 +19,19 @@ import {
   defaultClockinData,
   defaultAfterCompleteAllocatedData,
 } from "defaultValue";
-import { Dayjs } from "dayjs";
 import { timeSheetType } from "contexts/types";
+import { LoginResponsePayload } from "interface/api.interface";
+import { clockInPropsType } from "interface/index";
 
-interface AuthPropsType {
-  pin: number;
-  startDateTime: Dayjs;
-  job: string[];
-}
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
-  setAuth: (data: AuthPropsType) => void;
+  setAuth: (data: LoginResponsePayload) => void;
   setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => void;
   clearTimesheetData: () => void;
   setTimesheetData: (data: timeSheetType) => void;
   setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
   setJobLists: (data: jobListsType) => void;
+  clockIn: (data: clockInPropsType) => void;
 }
 
 interface AppProviderProps {
@@ -57,7 +54,9 @@ export const AppContext = createContext<AppContextType>({
   setTimesheetData: () => {},
   setTimesheetAllocationData: () => {},
   setJobLists: () => {},
+  clockIn: () => {},
 });
+
 export const { reducer, defaultValue, TYPES } = appReducer;
 export const AppProvider = ({ children }: AppProviderProps) => {
   const navigate = useNavigate();
@@ -75,6 +74,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   } = reducerStates as ReducerType;
   useEffect(() => {
     const init = async () => {
+      console.log("init auth", isAuth);
       if (!isAuth && isSupervisorpath?.pathnameBase !== "/supervisor") {
         navigate("/");
         notification({ type: "warning", message: "Please sign in first!" });
@@ -82,7 +82,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     };
     init();
     // eslint-disable-next-line
-  }, [navigate, isAuth]);
+  }, [isAuth]);
 
   const appContextValue = useMemo<AppContextType>(() => {
     return {
@@ -97,10 +97,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
-      setAuth: (data: AuthPropsType) => {
+      setAuth: (data: LoginResponsePayload) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
-      clockIn: (data: AuthPropsType) => {
+      clockIn: (data: clockInPropsType) => {
         dispatch({ type: TYPES.CLOCK_IN, payload: data });
       },
       setTimesheetData: (data: timeSheetType) => {

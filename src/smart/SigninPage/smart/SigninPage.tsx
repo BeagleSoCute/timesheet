@@ -12,7 +12,7 @@ const SigninPage = () => {
   const [jobs, setJobs] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { setAuth, setJobLists } = useContext(AppContext);
+  const { clockIn, setJobLists } = useContext(AppContext);
   useEffect(() => {
     const init = async () => {
       const { success, payload }: jobListsAPiReturnType = await getJobLists();
@@ -28,7 +28,7 @@ const SigninPage = () => {
       startDateTime: mergeDateAndTime(value.startDate, value.startTime),
       job: value.job,
     };
-    setAuth(transformData);
+    clockIn(transformData);
     notification({ type: "success", message: "Sign in Success!" });
     navigate("signout");
   };

@@ -82,3 +82,9 @@ export interface jobListsAPiReturnType {
   success: boolean;
   payload: jobListsType;
 }
+
+export interface clockInPropsType {
+  pin: number;
+  startDateTime: Dayjs;
+  job: string[];
+}

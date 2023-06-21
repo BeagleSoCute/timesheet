@@ -8,13 +8,20 @@ interface TransformedAxiosResponseType {
 }
 
 export const transformAxiosResponse = (
-  response: AxiosResponse
+  response: any
 ): TransformedAxiosResponseType => {
   const authorizationHeader = response.headers.authorization;
   const token = authorizationHeader ? authorizationHeader.split(" ")[1] : null;
   if (token) {
     localStorage.setItem("token", token);
   }
+  if (response.data.code !== 200) {
+    return {
+      success: false,
+      payload: undefined,
+    };
+  }
+
   return {
     payload: response.data.data,
     success: true,

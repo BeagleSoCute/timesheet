@@ -5,6 +5,15 @@ interface propsType {
   onFinish: (data: any) => Promise<void>;
 }
 
+const iniyialValues = {
+  userName: localStorage.getItem("userName")
+    ? localStorage.getItem("userName")
+    : "",
+  password: localStorage.getItem("password")
+    ? localStorage.getItem("password")
+    : "",
+};
+
 const LoginForm = ({ onFinish }: propsType) => {
   return (
     <div>
@@ -12,13 +21,13 @@ const LoginForm = ({ onFinish }: propsType) => {
       <Form
         name="basic"
         labelCol={{ span: 24 }}
-        //  initialValues={{ remember: true }}
+        initialValues={iniyialValues}
         onFinish={onFinish}
-        autoComplete="on"
+        autoComplete="off"
       >
         <Form.Item
-          label="Email"
-          name="email"
+          label="User Name"
+          name="userName"
           rules={[{ required: true, message: "Please input your username!" }]}
         >
           <Input />
@@ -31,10 +40,9 @@ const LoginForm = ({ onFinish }: propsType) => {
         >
           <Input.Password />
         </Form.Item>
-        <Form.Item name="remember" valuePropName="checked">
+        {/* <Form.Item name="remember" valuePropName="checked">
           <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
+        </Form.Item> */}
         <Form.Item className="button-submit-layout">
           <Button className="button-submit" type="primary" htmlType="submit">
             Submit
