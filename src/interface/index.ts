@@ -43,10 +43,11 @@ export interface signoutFormProps extends timeSheetType {
 export interface signinFormProps {
   actualStartTime: Dayjs;
   isForgetSignin: boolean;
-  job: string[];
-  pin: number;
+  // job: string[];
+  // pin: number;
   startDate: Dayjs;
   startTime: Dayjs;
+  signinTime: Dayjs;
 }
 
 export interface timesheetPageFormType {
@@ -56,7 +57,7 @@ export interface timesheetPageFormType {
   finishTime: Dayjs;
   finishDateTime: Dayjs;
   isTakenBreak: boolean;
-  pin: number;
+  // pin: number;
 }
 
 export interface disableDateTimeType {
@@ -84,7 +85,10 @@ export interface jobListsAPiReturnType {
 }
 
 export interface clockInPropsType {
-  pin: number;
+  // pin: number;
   startDateTime: Dayjs;
-  job: string[];
+  signinTime: Dayjs;
+  isForgetSignin: boolean;
+
+  // job: string[];
 }

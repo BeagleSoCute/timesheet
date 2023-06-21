@@ -1,19 +1,16 @@
 import React from "react";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Button, Form, Input } from "antd";
+import { getObjectFromLocalStorage } from "helpers/localstorage.helper";
 
 interface propsType {
   onFinish: (data: any) => Promise<void>;
 }
-
+const userName = getObjectFromLocalStorage("defaultLogin")?.userName;
+const password = getObjectFromLocalStorage("defaultLogin")?.password;
 const iniyialValues = {
-  userName: localStorage.getItem("userName")
-    ? localStorage.getItem("userName")
-    : "",
-  password: localStorage.getItem("password")
-    ? localStorage.getItem("password")
-    : "",
+  userName: userName ? userName : "",
+  password: password ? password : "",
 };
-
 const LoginForm = ({ onFinish }: propsType) => {
   return (
     <div>

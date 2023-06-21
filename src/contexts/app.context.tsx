@@ -75,7 +75,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
   useEffect(() => {
     const init = async () => {
       console.log("init auth", isAuth);
-      if (!isAuth && isSupervisorpath?.pathnameBase !== "/supervisor") {
+      if (
+        !localStorage.getItem("token") &&
+        isSupervisorpath?.pathnameBase !== "/supervisor"
+      ) {
         navigate("/");
         notification({ type: "warning", message: "Please sign in first!" });
       }

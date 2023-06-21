@@ -27,7 +27,11 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
     const startTime: Dayjs = isForget
       ? form.getFieldValue("actualStartTime")
       : form.getFieldValue("startTime");
-    onFinish({ ...value, startTime });
+    onFinish({
+      ...value,
+      startTime,
+      signinTime: form.getFieldValue("startTime"),
+    });
   };
   const handleChangeIsForget = (value: boolean) => {
     setIsForget(value);
@@ -51,7 +55,7 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
         onFinish={handleOnFinish}
         autoComplete="off"
       >
-        <Form.Item
+        {/* <Form.Item
           {...formItemProps}
           {...formWithFullWidth}
           className="full-content mb-0"
@@ -60,7 +64,7 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
           rules={[{ required: true, message: "Please input your pin!" }]}
         >
           <InputNumber className="w-full" controls={false} />
-        </Form.Item>
+        </Form.Item> */}
         <Message instructionMessage="This is the Sign In screen enter your start time below" />
         <Form.Item {...formItemProps} label="Start Date" name="startDate">
           <DatePicker
@@ -116,7 +120,7 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
             />
           </Form.Item>
         )}
-        <Form.Item
+        {/* <Form.Item
           {...formItemProps}
           {...formWithFullWidth}
           className="full-content"
@@ -129,7 +133,7 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
             filterOption={handleFilter}
             options={jobOptions(jobLists)}
           />
-        </Form.Item>
+        </Form.Item> */}
 
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           <Button label="Sign In" type="primary" htmlType="submit" />

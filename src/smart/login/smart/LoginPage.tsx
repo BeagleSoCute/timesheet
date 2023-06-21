@@ -9,6 +9,14 @@ import { LoginRequest } from "interface/api.interface";
 const Login = () => {
   const navigate = useNavigate();
   const { setLoading, setAuth } = useContext(AppContext);
+  useEffect(() => {
+    const init = () => {
+      if (localStorage.getItem("token")) {
+        navigate("clockin-page");
+      }
+    };
+    init();
+  }, []);
   const handleOnFinish = async (values: LoginRequest) => {
     setLoading(true);
     const { success, payload } = await login(values);
@@ -17,7 +25,7 @@ const Login = () => {
       return;
     }
     await setAuth(payload);
-    navigate("clockin-page");
+    navigate("/clockin-page");
     return;
   };
 

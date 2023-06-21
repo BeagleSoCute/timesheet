@@ -7,6 +7,7 @@ import { mergeDateAndTime } from "helpers/dateTime.helper";
 import { signinFormProps } from "interface";
 import { getJobLists } from "services/api.services";
 import { jobListsAPiReturnType } from "interface/index";
+import { signin } from "services/timesheetAPI.service";
 
 const SigninPage = () => {
   const [jobs, setJobs] = useState<any>();
@@ -14,23 +15,25 @@ const SigninPage = () => {
   const navigate = useNavigate();
   const { clockIn, setJobLists } = useContext(AppContext);
   useEffect(() => {
+    setLoading(true);
     const init = async () => {
       const { success, payload }: jobListsAPiReturnType = await getJobLists();
       setJobLists(payload);
       setJobs(payload);
     };
-    // init();
+    init();
     setLoading(false);
   }, []);
-  const handleSubmit = (value: signinFormProps) => {
+  const handleSubmit = async (value: signinFormProps) => {
+    const { success, payload } = await signin();
+
     const transformData = {
-      pin: value.pin,
+      ...value,
       startDateTime: mergeDateAndTime(value.startDate, value.startTime),
-      job: value.job,
     };
-    clockIn(transformData);
-    notification({ type: "success", message: "Sign in Success!" });
-    navigate("signout");
+    // clockIn(transformData);
+    // notification({ type: "success", message: "Sign in Success!" });
+    // navigate("/signout");
   };
   const propsSignInForm = {
     jobLists: jobs,
