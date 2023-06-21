@@ -23,6 +23,7 @@ interface SignInFormPropsType {
 const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
   const [form] = Form.useForm() as [FormInstance<signinFormProps>];
   const [isForget, setIsForget] = useState(false);
+
   const handleOnFinish = (value: signinFormProps) => {
     const startTime: Dayjs = isForget
       ? form.getFieldValue("actualStartTime")
@@ -40,7 +41,7 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
   const initialValues = {
     startDate: dayjs(),
     startTime: dayjs(),
-    isForgetSingin: false,
+    isForgetSignin: false,
   };
   const formItemProps = {
     ...similarFormPropsForAllApp,
@@ -89,7 +90,7 @@ const SignInForm = ({ jobLists, onFinish }: SignInFormPropsType) => {
             "Do you forget to sign in?",
             "If you forget to sign in, please select the acutal start time "
           )}
-          name="isForgetSingin"
+          name="isForgetSignin"
         >
           <CustomRadioButton
             defaultValue={false}

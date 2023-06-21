@@ -21,11 +21,13 @@ const SigninPage = () => {
   // }, []);
   const handleSubmit = async (value: signinFormProps) => {
     const { success, payload } = await signin();
-
+    console.log("--value", value);
     const transformData = {
-      ...value,
+      isForgetSignin: value.isForgetSignin,
+      signinTime: value.signinTime,
       startDateTime: mergeDateAndTime(value.startDate, value.startTime),
     };
+
     console.log("transformData", transformData);
     // clockIn(transformData);
     // notification({ type: "success", message: "Sign in Success!" });
