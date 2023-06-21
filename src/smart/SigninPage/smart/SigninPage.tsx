@@ -26,6 +26,7 @@ const SigninPage = () => {
       ...value,
       startDateTime: mergeDateAndTime(value.startDate, value.startTime),
     };
+    console.log("transformData", transformData);
     // clockIn(transformData);
     // notification({ type: "success", message: "Sign in Success!" });
     // navigate("/signout");

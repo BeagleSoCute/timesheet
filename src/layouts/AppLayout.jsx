@@ -19,18 +19,21 @@ const AppLayout = () => {
     <StyledLayout className="app-layout ">
       <Row className="flex menu px-2  bg-indigo-200">
         <Col span={8}>
-          <Row>
-            <div
-              onClick={() => handleLogout()}
-              className="text-black mr-6 cursor-pointer"
-            >
-              <p className="">Exit</p>
-            </div>
-            <Link to="supervisor/select-employee" className="text-black ">
-              <p className="">Supervisor</p>
-            </Link>
-          </Row>
+          {localStorage.getItem("token") && (
+            <Row>
+              <div
+                onClick={() => handleLogout()}
+                className="text-black mr-6 cursor-pointer"
+              >
+                <p className="">Exit</p>
+              </div>
+              <Link to="supervisor/select-employee" className="text-black ">
+                <p className="">Supervisor</p>
+              </Link>
+            </Row>
+          )}
         </Col>
+
         <Col className="my-auto" span={8}>
           <span className="h-100  text-lg timesheet font-bold fixeds  left-0 right-0 flex justify-center  ">
             Timesheet
