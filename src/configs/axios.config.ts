@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosRequestConfig } from "axios";
 import {
   transformAxiosResponse,
   transformErrorResponse,
@@ -14,7 +14,16 @@ const apiInstance = axios.create({
   },
 });
 
-const onRequestFulfilled = (configs = {}) => {
+const onRequestFulfilled = (
+  configs: AxiosRequestConfig = {}
+): AxiosRequestConfig => {
+  const token = localStorage.getItem("token");
+  if (token) {
+    configs.headers = {
+      ...configs.headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
   return configs;
 };
 

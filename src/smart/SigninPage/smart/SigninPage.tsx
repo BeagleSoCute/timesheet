@@ -1,29 +1,25 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { AppContext } from "contexts/app.context";
 import SignInForm from "smart/SigninPage/components/SignInForm";
-import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
 import { signinFormProps } from "interface";
-import { getJobLists } from "services/api.services";
-import { jobListsAPiReturnType } from "interface/index";
 import { signin } from "services/timesheetAPI.service";
-
 const SigninPage = () => {
   const [jobs, setJobs] = useState<any>();
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const { clockIn, setJobLists } = useContext(AppContext);
-  useEffect(() => {
-    setLoading(true);
-    const init = async () => {
-      const { success, payload }: jobListsAPiReturnType = await getJobLists();
-      setJobLists(payload);
-      setJobs(payload);
-    };
-    init();
-    setLoading(false);
-  }, []);
+  const { clockIn } = useContext(AppContext);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const init = async () => {
+  //     const { success, payload }: jobListsAPiReturnType = await getJobLists();
+  //     setJobLists(payload);
+  //     setJobs(payload);
+  //   };
+  //   init();
+  //   setLoading(false);
+  // }, []);
   const handleSubmit = async (value: signinFormProps) => {
     const { success, payload } = await signin();
 
