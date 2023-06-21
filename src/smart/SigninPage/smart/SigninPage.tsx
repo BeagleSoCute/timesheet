@@ -7,7 +7,6 @@ import { signinFormProps } from "interface";
 import { signin } from "services/timesheetAPI.service";
 const SigninPage = () => {
   const [jobs, setJobs] = useState<any>();
-  const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
   const { clockIn } = useContext(AppContext);
   // useEffect(() => {
@@ -37,7 +36,7 @@ const SigninPage = () => {
   };
   return (
     <div className="signinPage">
-      {!loading && <SignInForm {...propsSignInForm} />}
+      <SignInForm {...propsSignInForm} />
     </div>
   );
 };
