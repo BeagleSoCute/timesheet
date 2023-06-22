@@ -1,4 +1,4 @@
-import { signinAPI, signoutAPI } from "../apis/timesheet.api";
+import { signinAPI, signoutAPI, getTimesheetDaya } from "../apis/timesheet.api";
 import { SigninRequest } from "../interface/api.interface";
 import { getObjectFromLocalStorage } from "../helpers/localstorage.helper";
 import dayjs, { Dayjs } from "dayjs";
@@ -60,7 +60,7 @@ export const signout = async (data: signoutPropsType) => {
     return { success: false, payload: {} };
   }
   const transformData = {
-    id: 0,
+    id: 1,
     user_code: getObjectFromLocalStorage("userData").user_code,
     work_date: signinData.work_date,
     start_time: signinData.start_time,
@@ -86,4 +86,15 @@ export const signout = async (data: signoutPropsType) => {
   console.log("transformData", transformData);
   const { success, payload } = await signoutAPI(transformData);
   return { success, payload: transformData };
+};
+export const getTimesheetData = async (): Promise<void> => {
+  const userData: string | null = getObjectFromLocalStorage("userData");
+  if (userData) {
+    const { user_code }: { user_code: any } = JSON.parse(userData);
+    const res = await getTimesheetDaya({
+      user_code: user_code,
+      work_date: dayjs().format(),
+    });
+    console.log("res", res);
+  }
 };

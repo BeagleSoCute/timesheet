@@ -23,6 +23,7 @@ import {
 import { timeSheetType } from "contexts/types";
 import { LoginResponsePayload } from "interface/api.interface";
 import { clockInPropsType } from "interface/index";
+import dayjs from "dayjs";
 
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
@@ -42,7 +43,7 @@ interface AppProviderProps {
 export const AppContext = createContext<AppContextType>({
   loading: false,
   isAuth: false,
-  clockinData: defaultClockinData,
+  clockinData: dayjs(),
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,

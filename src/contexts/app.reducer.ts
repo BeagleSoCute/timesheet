@@ -1,4 +1,5 @@
 import { ReducerType } from "contexts/types";
+import dayjs from "dayjs";
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
@@ -29,7 +30,7 @@ const defaultValue: ReducerType = {
   isAuth: false,
   userData: {},
   actionAPIData: null,
-  clockinData: defaultClockinData,
+  clockinData: dayjs(),
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,

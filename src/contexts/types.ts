@@ -26,7 +26,7 @@ export interface ReducerType {
   loading: boolean;
   isAuth: boolean;
   actionAPIData: SigninRequest | null;
-  clockinData: signinDataType;
+  clockinData: Dayjs;
   timesheetData: timeSheetType;
   allocatedData: timesheetAllocationAfterCompleteDataType[];
   timesheetAllocationData: timesheetAllocationDataType;

@@ -21,11 +21,12 @@ const SignoutPage = () => {
       finishTime: value.finishTime,
       finishDate: value.finishDate,
     };
+    setLoading(true);
     const { success } = await signout(sigoutData);
     if (!success) {
       notification({
         type: "error",
-        message: "Can not signin to the system, Please contact the admin",
+        message: "Can not signout from the system, Please contact the admin",
       });
       setLoading(false);
       return;
@@ -36,10 +37,10 @@ const SignoutPage = () => {
     navigate("/timesheet-page");
   };
   const propsSignOutForm = {
-    startDateTime: clockinData.startDateTime,
+    startDateTime: clockinData,
     onFinish: handleSubmit,
   };
-  console.log("clockinData.startDateTime", clockinData.startDateTime);
+  console.log("clockinData", clockinData);
   return (
     <div className="signoutPage">
       <SignoutForm {...propsSignOutForm} />
