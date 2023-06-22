@@ -6,53 +6,19 @@ import { mergeDateAndTime } from "helpers/dateTime.helper";
 import { signinFormProps } from "interface";
 import { signin } from "services/timesheetAPI.service";
 import { notification } from "helpers/notification.helper";
+import { handleRetriveLocationData } from "helpers/location.helper";
 const SigninPage = () => {
   const navigate = useNavigate();
-  const { clockIn } = useContext(AppContext);
+  const { setClockIn, setLoading } = useContext(AppContext);
 
   useEffect(() => {
     //popup perrmission
     navigator.geolocation.getCurrentPosition(() => {});
   }, []);
 
-  interface handleRetriveLocationDataReturnType {
-    latitude: number;
-    longitude: number;
-    isSuccessRetrivedLocation: boolean;
-  }
-  const handleRetriveLocationData =
-    async (): Promise<handleRetriveLocationDataReturnType> => {
-      return new Promise<handleRetriveLocationDataReturnType>((resolve) => {
-        let result = {
-          isSuccessRetrivedLocation: false,
-          latitude: 0,
-          longitude: 0,
-        };
-        navigator.geolocation.getCurrentPosition(
-          (position) => {
-            const res: any = position.coords;
-            console.log("ressss", res);
-            result = {
-              isSuccessRetrivedLocation: true,
-              latitude: res.latitude,
-              longitude: res.longitude,
-            };
-            console.log("return final result", result);
-            resolve(result); // Resolve the promise with the result
-          },
-          (error) => {
-            console.log("error", error);
-            console.log("return final result", result);
-            resolve(result); // Resolve the promise with the result
-          }
-        );
-      });
-    };
-
   const handleSubmit = async (value: signinFormProps) => {
     const { isSuccessRetrivedLocation, latitude, longitude } =
       await handleRetriveLocationData();
-    console.log("isSuccessRetrivedLocation", isSuccessRetrivedLocation);
     if (!isSuccessRetrivedLocation) {
       notification({
         type: "error",
@@ -61,6 +27,8 @@ const SigninPage = () => {
       });
       return;
     }
+    setLoading(true);
+
     const transformData = {
       isForgetSignin: value.isForgetSignin,
       signinTime: value.signinTime,
@@ -68,15 +36,23 @@ const SigninPage = () => {
       latitude,
       longitude,
     };
-    const { success } = await signin(transformData);
+    const { success, payload } = await signin(transformData);
     if (!success) {
       notification({
         type: "error",
         message: "Can not signin to the system, Please contact the admin",
       });
+      setLoading(false);
+      return;
     }
-    clockIn(transformData);
+    const saveData = {
+      startDateTime: mergeDateAndTime(value.startDate, value.startTime),
+      signinData: payload,
+    };
+    console.log("saveData-----------", saveData);
+    await setClockIn(saveData);
     notification({ type: "success", message: "Sign in Success!" });
+    setLoading(false);
     navigate("/signout");
   };
   const propsSignInForm = {

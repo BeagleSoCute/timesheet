@@ -16,7 +16,7 @@ const Login = () => {
       }
     };
     init();
-  }, []);
+  }, [navigate]);
   const handleOnFinish = async (values: LoginRequest) => {
     setLoading(true);
     const { success, payload } = await login(values);

@@ -15,7 +15,6 @@ import { similarFormPropsForAllApp } from "helpers/form.helper";
 interface ComponentProps {
   startDateTime: Dayjs;
   onFinish: (data: signoutFormProps) => void;
-  job: string[];
 }
 const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, onFinish }) => {
   const [form] = Form.useForm() as [FormInstance<signoutFormProps>];
@@ -56,6 +55,7 @@ const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, onFinish }) => {
   const formItemProps = {
     ...similarFormPropsForAllApp,
   };
+  console.log("startDateTime", startDateTime);
   return (
     <StyledDiv className="sigout-form">
       <Form

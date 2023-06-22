@@ -2,18 +2,16 @@ import {
   timesheetAllocationAfterCompleteDataType,
   defaultPaidBreaekType,
 } from "interface";
+import { SigninRequest } from "interface/api.interface";
 import { Dayjs } from "dayjs";
 
 export interface signinDataType {
-  pin: number;
   startDateTime: Dayjs;
-  job: string[];
+  signinData: any;
 }
 
 export interface timeSheetType {
-  pin: number;
   startDateTime: Dayjs;
-  job: string[];
   finishDate: Dayjs;
   finishTime: Dayjs;
 }
@@ -27,6 +25,7 @@ export interface timesheetAllocationDataType extends defaultPaidBreaekType {
 export interface ReducerType {
   loading: boolean;
   isAuth: boolean;
+  actionAPIData: SigninRequest | null;
   clockinData: signinDataType;
   timesheetData: timeSheetType;
   allocatedData: timesheetAllocationAfterCompleteDataType[];

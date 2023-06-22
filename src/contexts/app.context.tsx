@@ -12,6 +12,7 @@ import { ReducerType, timesheetAllocationDataType } from "contexts/types";
 import {
   timesheetAllocationAfterCompleteDataType,
   jobListsType,
+  signoutPropsType,
 } from "interface";
 import {
   defaultTimesheetData,
@@ -31,7 +32,7 @@ interface AppContextType extends ReducerType {
   setTimesheetData: (data: timeSheetType) => void;
   setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
   setJobLists: (data: jobListsType) => void;
-  clockIn: (data: clockInPropsType) => void;
+  setClockIn: (data: clockInPropsType) => void;
 }
 
 interface AppProviderProps {
@@ -45,6 +46,7 @@ export const AppContext = createContext<AppContextType>({
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,
+  actionAPIData: null,
   jobLists: [],
   userData: {},
   setLoading: () => {},
@@ -54,7 +56,7 @@ export const AppContext = createContext<AppContextType>({
   setTimesheetData: () => {},
   setTimesheetAllocationData: () => {},
   setJobLists: () => {},
-  clockIn: () => {},
+  setClockIn: () => {},
 });
 
 export const { reducer, defaultValue, TYPES } = appReducer;
@@ -71,6 +73,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     allocatedData,
     jobLists,
     userData,
+    actionAPIData,
   } = reducerStates as ReducerType;
   useEffect(() => {
     const init = async () => {
@@ -97,14 +100,16 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       allocatedData,
       jobLists,
       userData,
+      actionAPIData,
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
       setAuth: (data: LoginResponsePayload) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
-      clockIn: (data: clockInPropsType) => {
-        dispatch({ type: TYPES.CLOCK_IN, payload: data });
+      setClockIn: (data: clockInPropsType) => {
+        console.log("data-==-=-=-=-=-=", data);
+        dispatch({ type: TYPES.SET_CLOCK_IN, payload: data });
       },
       setTimesheetData: (data: timeSheetType) => {
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
@@ -129,6 +134,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     timesheetData,
     timesheetAllocationData,
     allocatedData,
+    userData,
     dispatch,
   ]);
   return (

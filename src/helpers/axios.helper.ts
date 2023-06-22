@@ -15,7 +15,9 @@ export const transformAxiosResponse = (
   if (token) {
     localStorage.setItem("token", token);
   }
+  console.log("res", response);
   if (response.data.code !== 200) {
+    console.log("API error", response.data.msg);
     return {
       success: false,
       payload: undefined,

@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 import { timeSheetType } from "contexts/types";
+import { SigninRequest } from "interface/api.interface";
 
 export interface calculateRemainingHoursPropsType {
   startDateTime: Dayjs;
@@ -85,10 +86,16 @@ export interface jobListsAPiReturnType {
 }
 
 export interface clockInPropsType {
-  // pin: number;
   startDateTime: Dayjs;
-  signinTime: Dayjs;
-  isForgetSignin: boolean;
+  signinData: SigninRequest | null;
+}
 
-  // job: string[];
+export interface signoutPropsType {
+  startDateTime: Dayjs;
+  finishTime: Dayjs;
+  finishDate: Dayjs;
+  longitude: number;
+  latitude: number;
+  isForgetSingout: boolean;
+  signinData: SigninRequest;
 }

@@ -16,7 +16,7 @@ enum EnumTYPES {
   SET_TIMESHEET_DATA = "SET_TIMESHEET_DATA",
   SET_TIMESHEET_ALLOCATION_DATA = "SET_TIMESHEET_ALLOCATION_DATA",
   SET_JOB_LISTS = "SET_JOB_LISTS",
-  CLOCK_IN = "CLOCK_IN",
+  SET_CLOCK_IN = "SET_CLOCK_IN",
 }
 
 interface ActionType {
@@ -28,6 +28,7 @@ const defaultValue: ReducerType = {
   loading: false,
   isAuth: false,
   userData: {},
+  actionAPIData: null,
   clockinData: defaultClockinData,
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
@@ -42,8 +43,12 @@ const reducer = (state: ReducerType, action: ActionType) => {
       return { ...state, loading: payload };
     case EnumTYPES.SET_AUTH:
       return { ...state, isAuth: true, userData: payload };
-    case EnumTYPES.CLOCK_IN:
-      return { ...state, clockinData: payload };
+    case EnumTYPES.SET_CLOCK_IN:
+      return {
+        ...state,
+        clockinData: payload.startDateTime,
+        actionAPIData: payload.signinData,
+      };
     case EnumTYPES.SET_TIMESHEET_DATA:
       return { ...state, timesheetData: payload };
     case EnumTYPES.SET_TIMESHEET_ALLOCATION_DATA:

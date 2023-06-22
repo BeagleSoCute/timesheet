@@ -9,9 +9,8 @@ export const defaultTimesheetData = {
 };
 
 export const defaultClockinData = {
-  pin: 0,
   startDateTime: dayjs(),
-  job: [""],
+  signinData: {},
 };
 
 export const defaultTimesheetAllocationData = {
