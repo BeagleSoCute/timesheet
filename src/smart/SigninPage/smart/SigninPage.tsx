@@ -49,7 +49,6 @@ const SigninPage = () => {
       startDateTime: mergeDateAndTime(value.startDate, value.startTime),
       signinData: payload,
     };
-    console.log("saveData-----------", saveData);
     await setClockIn(saveData);
     notification({ type: "success", message: "Sign in Success!" });
     setLoading(false);

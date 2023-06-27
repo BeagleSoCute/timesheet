@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dateFormat, timeFormat, dateTimeFormat } from "constants/format";
 import styled from "styled-components";
 import { DatePicker, Form, TimePicker, Row, Modal } from "antd";
@@ -20,6 +20,14 @@ const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, onFinish }) => {
   const [form] = Form.useForm() as [FormInstance<signoutFormProps>];
   const [isClockout, setIsClockout] = useState<boolean>(false);
   const [isForget, setIsForget] = useState<boolean>(false);
+  const initialValues = {
+    startDateTime,
+    isForgetSingout: false,
+  };
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [initialValues]);
+
   const handleChangeIsForget = (value: boolean): void => {
     setIsForget(value);
   };
@@ -43,10 +51,7 @@ const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, onFinish }) => {
       onOk: () => onFinish(transformData),
     });
   };
-  const initialValues = {
-    startDateTime,
-    isForgetSingout: false,
-  };
+
   const handleClockout = (): void => {
     setIsClockout(true);
     form.setFieldsValue({ finishDate: dayjs(), finishTime: dayjs() });
@@ -55,14 +60,12 @@ const SignoutForm: React.FC<ComponentProps> = ({ startDateTime, onFinish }) => {
   const formItemProps = {
     ...similarFormPropsForAllApp,
   };
-  console.log("startDateTime", startDateTime);
   return (
     <StyledDiv className="sigout-form">
       <Form
         form={form}
         name="basic"
         requiredMark={false}
-        initialValues={initialValues}
         autoComplete="off"
         onFinish={handleOnFinish}
       >

@@ -34,6 +34,7 @@ interface AppContextType extends ReducerType {
   setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
   setJobLists: (data: jobListsType) => void;
   setClockIn: (data: clockInPropsType) => void;
+  logout: () => void;
 }
 
 interface AppProviderProps {
@@ -58,6 +59,7 @@ export const AppContext = createContext<AppContextType>({
   setTimesheetAllocationData: () => {},
   setJobLists: () => {},
   setClockIn: () => {},
+  logout: () => {},
 });
 
 export const { reducer, defaultValue, TYPES } = appReducer;
@@ -77,14 +79,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     actionAPIData,
   } = reducerStates as ReducerType;
   useEffect(() => {
+    const isToken = localStorage.getItem("token");
+    const isNotSupervisorPath =
+      isSupervisorpath?.pathnameBase !== "/supervisor";
     const init = async () => {
       console.log("init auth", isAuth);
-      if (
-        !localStorage.getItem("token") &&
-        isSupervisorpath?.pathnameBase !== "/supervisor"
-      ) {
+      if (!isToken) {
         navigate("/");
-        notification({ type: "warning", message: "Please sign in first!" });
+        notification({ type: "warning", message: "Please log in first!" });
       }
     };
     init();
@@ -109,7 +111,6 @@ export const AppProvider = ({ children }: AppProviderProps) => {
         dispatch({ type: TYPES.SET_AUTH, payload: data });
       },
       setClockIn: (data: clockInPropsType) => {
-        console.log("data-==-=-=-=-=-=", data);
         dispatch({ type: TYPES.SET_CLOCK_IN, payload: data });
       },
       setTimesheetData: (data: timeSheetType) => {
@@ -126,6 +127,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       },
       setJobLists: (data: jobListsType) => {
         dispatch({ type: TYPES.SET_JOB_LISTS, payload: data });
+      },
+      logout: () => {
+        dispatch({ type: TYPES.CLEAR_STORE });
       },
     };
   }, [

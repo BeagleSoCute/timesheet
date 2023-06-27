@@ -2,11 +2,7 @@ import { signinAPI, signoutAPI, getTimesheetDaya } from "../apis/timesheet.api";
 import { SigninRequest } from "../interface/api.interface";
 import { getObjectFromLocalStorage } from "../helpers/localstorage.helper";
 import dayjs, { Dayjs } from "dayjs";
-import {
-  dateFormat,
-  backendTimeFormat,
-  backendDateFormat,
-} from "../constants/format";
+import { backendTimeFormat, backendDateFormat } from "../constants/format";
 
 interface signinPropsType {
   isForgetSignin: boolean;
@@ -49,8 +45,7 @@ export const signin = async (data: signinPropsType) => {
     frontend_id: "",
     record_revision: 0,
   };
-  console.log("transformData", transformData);
-  const { success, payload } = await signinAPI(transformData);
+  const { success } = await signinAPI(transformData);
   return { success, payload: transformData };
 };
 
@@ -83,17 +78,18 @@ export const signout = async (data: signoutPropsType) => {
     frontend_id: "",
     record_revision: 0,
   };
-  console.log("transformData", transformData);
   const { success, payload } = await signoutAPI(transformData);
   return { success, payload: transformData };
 };
 export const getTimesheetData = async (): Promise<void> => {
-  const userData: string | null = getObjectFromLocalStorage("userData");
-  if (userData) {
-    const { user_code }: { user_code: any } = JSON.parse(userData);
+  console.log("getTimesheetData");
+  const userCode: string | null =
+    getObjectFromLocalStorage("userData").user_code;
+  if (userCode) {
+    console.log("user_code", userCode);
     const res = await getTimesheetDaya({
-      user_code: user_code,
-      work_date: dayjs().format(),
+      user_code: userCode,
+      work_date: dayjs().format(backendDateFormat),
     });
     console.log("res", res);
   }

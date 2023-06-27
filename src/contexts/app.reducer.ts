@@ -18,6 +18,7 @@ enum EnumTYPES {
   SET_TIMESHEET_ALLOCATION_DATA = "SET_TIMESHEET_ALLOCATION_DATA",
   SET_JOB_LISTS = "SET_JOB_LISTS",
   SET_CLOCK_IN = "SET_CLOCK_IN",
+  CLEAR_STORE = "CLEAR_STORE",
 }
 
 interface ActionType {
@@ -62,6 +63,18 @@ const reducer = (state: ReducerType, action: ActionType) => {
       return { ...state, timesheetData: {} };
     case EnumTYPES.SET_JOB_LISTS:
       return { ...state, jobLists: payload };
+    case EnumTYPES.CLEAR_STORE:
+      return {
+        loading: false,
+        isAuth: false,
+        userData: {},
+        actionAPIData: null,
+        clockinData: dayjs(),
+        timesheetData: defaultTimesheetData,
+        timesheetAllocationData: defaultTimesheetAllocationData,
+        allocatedData: defaultAfterCompleteAllocatedData,
+        jobLists: [],
+      };
     default:
       break;
   }

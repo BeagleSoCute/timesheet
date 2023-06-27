@@ -6,7 +6,7 @@ export const loginAPI = async ({
   password,
 }: LoginRequest): Promise<LoginResolveResponse> => {
   const res: LoginResolveResponse = await apiInstance.post(
-    "http://192.168.69.21:8080/api/v1/login",
+    "https://clements-timesheet-be.azurewebsites.net/api/v1/login",
     {
       user_code: userName,
       password: password,

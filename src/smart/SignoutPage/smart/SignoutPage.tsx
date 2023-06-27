@@ -1,15 +1,23 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "contexts/app.context";
 import SignoutForm from "smart/SignoutPage/components/SignoutForm";
 import { notification } from "helpers/notification.helper";
 import { useNavigate } from "react-router-dom";
 import { signoutFormProps } from "interface";
-import { signout } from "services/timesheetAPI.service";
+import { signout, getTimesheetData } from "services/timesheetAPI.service";
 
 const SignoutPage = () => {
   const navigate = useNavigate();
   const { clockinData, actionAPIData, setLoading, setTimesheetData } =
     useContext(AppContext);
+
+  useEffect(() => {
+    const init = async () => {
+      await getTimesheetData();
+    };
+    init();
+  }, []);
+
   const handleSubmit = async (value: signoutFormProps) => {
     const sigoutData = {
       finishTime: value.finishTime,
@@ -40,7 +48,6 @@ const SignoutPage = () => {
     startDateTime: clockinData,
     onFinish: handleSubmit,
   };
-  console.log("clockinData", clockinData);
   return (
     <div className="signoutPage">
       <SignoutForm {...propsSignOutForm} />

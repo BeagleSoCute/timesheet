@@ -8,8 +8,7 @@ export const login = async ({ userName, password }: LoginRequest) => {
     userName,
     password,
   });
-  console.log("success", success);
-  console.log("payload", payload);
+
   if (success) {
     notification({ type: "success", message: "Login Success" });
     setObjectToLocalStorage("defaultLogin", { userName, password });
@@ -18,9 +17,4 @@ export const login = async ({ userName, password }: LoginRequest) => {
     notification({ type: "error", message: "Login Fail, Please try again!" });
   }
   return { success, payload };
-};
-
-export const logout = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("userData");
 };

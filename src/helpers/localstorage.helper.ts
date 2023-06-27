@@ -10,3 +10,8 @@ export const getObjectFromLocalStorage = (key: string): any => {
   }
   return null;
 };
+
+export const removeLocalStorage = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("userData");
+};

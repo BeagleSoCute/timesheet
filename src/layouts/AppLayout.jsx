@@ -5,14 +5,15 @@ import { Link } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import { Outlet } from "react-router-dom";
 import companyLogo from "assets/images/company_logo.png";
-import { logout } from "services/auth.services";
+import { removeLocalStorage } from "../helpers/localstorage.helper";
 import { useNavigate } from "react-router-dom";
 
 const AppLayout = () => {
   const navigate = useNavigate();
-  const { loading } = useContext(AppContext);
+  const { loading, logout } = useContext(AppContext);
   const handleLogout = () => {
     logout();
+    removeLocalStorage();
     navigate("/");
   };
   return (
