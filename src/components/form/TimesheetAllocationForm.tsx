@@ -2,7 +2,11 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormInstance } from "antd/lib/form";
 import { Form, TimePicker, Select, Input, InputNumber } from "antd";
-import { supervisorOptions, labOptions, reasonCodeOptions } from "data/options";
+import {
+  supervisorOptions,
+  jobTypeOptions,
+  reasonCodeOptions,
+} from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs, { Dayjs } from "dayjs";
@@ -538,7 +542,7 @@ const TimesheetAllocation = ({
                             },
                           ]}
                         >
-                          <Select options={labOptions} />
+                          <Select options={jobTypeOptions} />
                         </Form.Item>
 
                         <Form.Item

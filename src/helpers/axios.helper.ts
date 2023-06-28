@@ -1,5 +1,4 @@
 import { notification } from "./notification.helper";
-import { AxiosResponse } from "axios"; // Import AxiosResponse from your Axios library
 import { ErrorResponse } from "../interface/api.interface";
 import { removeLocalStorage } from "../helpers/localstorage.helper";
 
