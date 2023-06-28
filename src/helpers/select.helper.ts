@@ -1,4 +1,5 @@
 import { jobType } from "../interface/index";
+import { assetListType } from "../interface/api.interface";
 
 interface optionReturnType {
   value: string;
@@ -20,4 +21,16 @@ export const handleFilter = (
   option: { value: string; label: string }
 ) => {
   return option.label.toLowerCase().includes(input.toLowerCase());
+};
+
+export const assetOptions = (jobLists: assetListType[]): optionReturnType[] => {
+  if (!jobLists) {
+    return [];
+  }
+  return jobLists.map((item: assetListType) => {
+    return {
+      value: item.assetCode,
+      label: item.assetName,
+    };
+  });
 };

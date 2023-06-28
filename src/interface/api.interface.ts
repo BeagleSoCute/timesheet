@@ -62,3 +62,23 @@ export interface SigninRequest {
   frontend_id: string;
   record_revision: number;
 }
+
+export interface assetListResponseType {
+  id: number;
+  asset_code: string;
+  asset_name: string;
+  asset_group_code: string;
+  category1: string;
+  category2: string;
+  inactive: boolean;
+}
+
+export interface returnAxiosResponseType {
+  payload: any;
+  success: boolean;
+}
+
+export interface assetListType {
+  assetCode: string;
+  assetName: string;
+}

@@ -29,7 +29,8 @@ import {
   timesheetAllocationAfterCompleteDataType,
   calRemainFromLabourHourReturnType,
 } from "interface/index";
-import { jobOptions, handleFilter } from "helpers/select.helper";
+import { jobOptions, handleFilter, assetOptions } from "helpers/select.helper";
+import { assetListType } from "interface/api.interface";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -43,6 +44,7 @@ interface PropsType {
   unpaidBreak: number;
   isLegalBreak: boolean;
   jobLists: any;
+  assetLists: assetListType[];
   defaultBreak: defaultPaidBreaekType;
   onSetRemaingHour: (data: string) => void;
   onSubmit: (data: timesheetAllocationFormType) => void;
@@ -55,17 +57,25 @@ const TimesheetAllocation = ({
   unpaidBreak,
   isLegalBreak,
   jobLists,
+  assetLists,
   onSetRemaingHour,
   defaultBreak,
   onSubmit,
 }: PropsType) => {
   const navigate = useNavigate();
   const [form] = Form.useForm() as [FormInstance<timesheetAllocationFormType>];
+  const [jobType, setJobType] = useState<string>("");
   const [reasonCode, setReasonCode] = useState<string>("");
   const [previousUnpaidBrekingTime, setPreviousUnpaidBrekingTime] =
     useState<number>(unpaidBreak);
   const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
     useState(paidBreak);
+
+  const handleSetJobType = (value: string) => {
+    console.log("value is ", value);
+    setJobType(value);
+  };
+
   const handleOnFinish = (value: timesheetAllocationFormType) => {
     onSubmit(value);
   };
@@ -501,6 +511,23 @@ const TimesheetAllocation = ({
                         </Form.Item>
                         <Form.Item
                           {...formItemProps}
+                          className="full-content  mb-0 "
+                          label="Op/Lab *"
+                          name={[index, "jobType"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select your Op/Lab!",
+                            },
+                          ]}
+                        >
+                          <Select
+                            options={jobTypeOptions}
+                            onChange={handleSetJobType}
+                          />
+                        </Form.Item>
+                        <Form.Item
+                          {...formItemProps}
                           className="full-content mb-0 "
                           label="Job *"
                           name={[index, "job"]}
@@ -512,7 +539,30 @@ const TimesheetAllocation = ({
                           ]}
                         >
                           <Select
+                            disabled={
+                              jobType === "" || jobType === "Labour"
+                                ? true
+                                : false
+                            }
                             options={jobOptions(jobLists)}
+                            filterOption={handleFilter}
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...formItemProps}
+                          className="full-content mb-0 "
+                          label="Asset *"
+                          name={[index, "asset"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please select your job!",
+                            },
+                          ]}
+                        >
+                          <Select
+                            options={assetOptions(assetLists)}
                             filterOption={handleFilter}
                           />
                         </Form.Item>
@@ -529,20 +579,6 @@ const TimesheetAllocation = ({
                           ]}
                         >
                           <Select mode="multiple" options={supervisorOptions} />
-                        </Form.Item>
-                        <Form.Item
-                          {...formItemProps}
-                          className="full-content  mb-0 "
-                          label="Op/Lab *"
-                          name={[index, "lab"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select your Op/Lab!",
-                            },
-                          ]}
-                        >
-                          <Select options={jobTypeOptions} />
                         </Form.Item>
 
                         <Form.Item

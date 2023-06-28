@@ -15,7 +15,7 @@ export const supervisorOptions: optionReturnType[] = [
 export const jobTypeOptions: optionReturnType[] = [
   { label: "Operator", value: "Operator" },
   { label: "R&M", value: "R&M" },
-  { label: "Labour", value: "Laour" },
+  { label: "Labour", value: "Labour" },
 ];
 
 export const reasonCodeOptions: optionReturnType[] = [

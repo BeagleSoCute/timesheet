@@ -5,16 +5,24 @@ import { notification } from "helpers/notification.helper";
 import { AppContext } from "contexts/app.context";
 import { Modal } from "antd";
 import { timesheetAllocationFormType } from "interface";
-import { getJobLists } from "services/getAPI.services";
+import {
+  getJobLists,
+  getAssetLists,
+  getOptions,
+} from "services/getAPI.services";
 
 const TimesheetAllocation = () => {
   const [jobLists, setJobLists] = useState<any>();
+  const [assetLists, setAssetLists] = useState<any>();
   const navigate = useNavigate();
   useEffect(() => {
     const init = async () => {
-      const { success, payload } = await getJobLists();
-      console.log("payload", payload);
-      setJobLists(payload);
+      const { success, jobLists, assetLists } = await getOptions();
+      if (!success) {
+        return;
+      }
+      setJobLists(jobLists);
+      setAssetLists(assetLists);
     };
     init();
   }, []);
@@ -76,6 +84,7 @@ const TimesheetAllocation = () => {
     isLegalBreak: timesheetAllocationData.isLegalBreak,
     defaultBreak: timesheetAllocationData.defaultBreak,
     jobLists,
+    assetLists,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: handleSetRemaingHour,
   };
