@@ -11,9 +11,28 @@ export interface signinDataType {
 }
 
 export interface timeSheetType {
-  startDateTime: Dayjs;
-  finishDate: Dayjs;
-  finishTime: Dayjs;
+  id: number;
+  user_code: string;
+  work_date: string;
+  start_time: string;
+  sign_in_time: string;
+  sign_in_latitude: number;
+  sign_in_longitude: number;
+  is_forgot_sign_in: boolean;
+  end_time: string;
+  sign_out_time: string;
+  sign_out_latitude: number;
+  sign_out_longitude: number;
+  is_forgot_sign_out: boolean;
+  standard_unpaid_break_time: number;
+  unpaid_break_time: number;
+  updated_ubt_reason: string;
+  standard_paid_break_time: number;
+  paid_break_time: number;
+  updated_pbt_reason: string;
+  job_allocations: any;
+  status: number;
+  frontend_id: string;
 }
 export interface timesheetAllocationDataType extends defaultPaidBreaekType {
   actualTime: string;

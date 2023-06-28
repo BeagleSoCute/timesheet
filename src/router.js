@@ -8,6 +8,7 @@ import SignoutPage from "smart/SignoutPage/smart/SignoutPage";
 import SupervisorPage from "smart/SupervisorPage/smarts/SupervisorPage";
 import SelectEmployeePage from "smart/SupervisorPage/smarts/SelectEmployeePage";
 import LoginPage from "smart/login/smart/LoginPage";
+import LandingPage from "./smart/LandingPage";
 import "index.css";
 export const router = createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <LoginPage />,
+      },
+      {
+        path: "/landing-page",
+        element: <LandingPage />,
       },
       {
         path: "/clockin-page",

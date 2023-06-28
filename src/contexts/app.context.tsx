@@ -24,6 +24,7 @@ import { timeSheetType } from "contexts/types";
 import { LoginResponsePayload } from "interface/api.interface";
 import { clockInPropsType } from "interface/index";
 import dayjs from "dayjs";
+import { getTimesheetData } from "services/timesheetAPI.service";
 
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
@@ -87,6 +88,8 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       if (!isToken) {
         navigate("/");
         notification({ type: "warning", message: "Please log in first!" });
+      } else {
+        navigate("/landing-page");
       }
     };
     init();

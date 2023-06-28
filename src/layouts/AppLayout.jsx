@@ -11,10 +11,10 @@ import { useNavigate } from "react-router-dom";
 const AppLayout = () => {
   const navigate = useNavigate();
   const { loading, logout } = useContext(AppContext);
-  const handleLogout = () => {
-    logout();
-    removeLocalStorage();
-    navigate("/");
+  const handleLogout = async () => {
+    await removeLocalStorage();
+    await logout();
+    // navigate("/");
   };
   return (
     <StyledLayout className="app-layout ">

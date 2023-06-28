@@ -1,17 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dateFormat, timeFormat } from "constants/format";
 import { Radio } from "antd";
 import { DatePicker, Form, TimePicker, InputNumber } from "antd";
 import Message from "components/common/Message";
 import styled from "styled-components";
 import Button from "components/common/Button";
+import { preventActualTime } from "helpers/dateTime.helper";
 import {
   formWithFullWidth,
   renderFieldTitle,
   similarFormPropsForAllApp,
 } from "helpers/form.helper";
 import { mergeDateAndTime } from "helpers/dateTime.helper";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import {
   calculateRemainingHoursPropsType,
   timesheetPageFormType,
@@ -25,27 +26,30 @@ const formItemLayout = {
 
 interface propsType {
   form: FormInstance<timesheetPageFormType>;
-  pin: number;
   startDateTime: Dayjs;
-  finishDate: Dayjs;
-  finishTime: Dayjs;
   onSubmit: (data: calculateRemainingHoursPropsType) => void;
 }
 
-const TimesheetForm = ({
-  form,
-  pin,
-  startDateTime,
-  finishDate,
-  finishTime,
-  onSubmit,
-}: propsType) => {
+const TimesheetForm = ({ form, startDateTime, onSubmit }: propsType) => {
   const [isBreak, setIsBreak] = useState(true);
   const handleChangeIsBreak = (value: boolean) => {
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
   };
+
+  const initialValues = {
+    startDateTime,
+    finishDate: dayjs(),
+    isTakenBreak: true,
+  };
+
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [initialValues]);
+
   const handleOnFinish = (value: timesheetPageFormType) => {
+    const finishDate = form.getFieldValue("finishDate");
+    const finishTime = form.getFieldValue("finishTime");
     const result = {
       startDateTime: value.startDateTime,
       finishDateTime: mergeDateAndTime(finishDate, finishTime),
@@ -53,14 +57,7 @@ const TimesheetForm = ({
     };
     onSubmit(result);
   };
-  const initialValues = {
-    pin,
-    startDateTime,
-    finishDate,
-    finishTime,
-    timeFormat,
-    isTakenBreak: true,
-  };
+
   const formItemProps = {
     ...similarFormPropsForAllApp,
   };
@@ -74,18 +71,7 @@ const TimesheetForm = ({
         initialValues={initialValues}
         onFinish={handleOnFinish}
       >
-        <Form.Item
-          {...formItemProps}
-          {...formWithFullWidth}
-          className="full-content mb-0"
-          label="Enter Pin *"
-          name="pin"
-          rules={[{ required: true, message: "Please input your pin!" }]}
-        >
-          <InputNumber className="w-full" controls={false} />
-        </Form.Item>
         <Message instructionMessage="This is your SIGN OUT screen, enter finish time below" />
-
         <Form.Item
           {...formItemProps}
           label={renderFieldTitle(
@@ -129,11 +115,17 @@ const TimesheetForm = ({
           rules={[{ required: true, message: "Please input finish time!" }]}
         >
           <TimePicker
-            disabled={true}
             allowClear={false}
             showNow={false}
             inputReadOnly
             format={timeFormat}
+            disabledTime={() =>
+              preventActualTime(
+                form.getFieldValue("finishDate"),
+                form.getFieldValue("finishTime"),
+                form.getFieldValue("startDateTime")
+              )
+            }
           />
         </Form.Item>
         <Form.Item

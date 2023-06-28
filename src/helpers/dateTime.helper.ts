@@ -125,15 +125,20 @@ export const preventActualTime = (
   }
 };
 
-export const mergeDateAndTime = (
-  finishDate: Dayjs,
-  finishTime: Dayjs
-): Dayjs => {
+export const mergeDateAndTime = (thisDate: Dayjs, thisTime: Dayjs): Dayjs => {
   // Extract the date component from 'finishDate'
-  const date = finishDate.format("YYYY-MM-DD");
+  const date = thisDate.format("YYYY-MM-DD");
   // Extract the time component from 'finishTime'
-  const time = finishTime.format("HH:mm:ss");
+  const time = thisTime.format("HH:mm:ss");
   // Merge the date and time components into a new Day.js object
+  const finishDateTime = dayjs(date + " " + time, "YYYY-MM-DD HH:mm:ss");
+  return finishDateTime;
+};
+
+export const mergeEndDateAndTime = (
+  date: string | undefined,
+  time: string | undefined
+): Dayjs => {
   const finishDateTime = dayjs(date + " " + time, "YYYY-MM-DD HH:mm:ss");
   return finishDateTime;
 };

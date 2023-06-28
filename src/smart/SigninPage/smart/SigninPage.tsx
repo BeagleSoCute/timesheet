@@ -45,11 +45,11 @@ const SigninPage = () => {
     //   setLoading(false);
     //   return;
     // }
-    const saveData = {
-      startDateTime: mergeDateAndTime(value.startDate, value.startTime),
-      signinData: payload,
-    };
-    await setClockIn(saveData);
+    // const saveData = {
+    //   startDateTime: mergeDateAndTime(value.startDate, value.startTime),
+    //   signinData: payload,
+    // };
+    // await setClockIn(saveData);
     notification({ type: "success", message: "Sign in Success!" });
     setLoading(false);
     navigate("/signout");

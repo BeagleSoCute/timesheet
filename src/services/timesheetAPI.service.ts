@@ -78,19 +78,29 @@ export const signout = async (data: signoutPropsType) => {
     frontend_id: "",
     record_revision: 0,
   };
-  const { success, payload } = await signoutAPI(transformData);
+  const { success } = await signoutAPI(transformData);
   return { success, payload: transformData };
 };
-export const getTimesheetData = async (): Promise<void> => {
+export const getTimesheetData = async (): Promise<{
+  payload: any;
+  success: boolean;
+}> => {
   console.log("getTimesheetData");
   const userCode: string | null =
     getObjectFromLocalStorage("userData").user_code;
   if (userCode) {
-    console.log("user_code", userCode);
     const res = await getTimesheetDaya({
       user_code: userCode,
       work_date: dayjs().format(backendDateFormat),
     });
-    console.log("res", res);
+    console.log("getTimesheet ", res);
+    const { success, payload } = res;
+    if (payload.sign_in_latitude === 0 && payload.sign_in_longitude === 0) {
+      return { success: false, payload: undefined };
+    } else {
+      return { payload, success };
+    }
+  } else {
+    return { success: false, payload: undefined };
   }
 };

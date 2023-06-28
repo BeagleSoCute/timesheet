@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import TimesheetForm from "smart/TimesheetPage/components/TimesheetForm";
 import AllocationData from "components/common/AllocationData";
+import { mergeEndDateAndTime } from "helpers/dateTime.helper";
 import { FormInstance } from "antd/lib/form";
 import {
   calculateRemainingHours,
@@ -63,10 +64,10 @@ const TimesheetPage = () => {
   };
   const propsTimesheetForm = {
     form,
-    pin: timesheetData.pin,
-    startDateTime: timesheetData.startDateTime,
-    finishDate: timesheetData.finishDate,
-    finishTime: timesheetData.finishTime,
+    startDateTime: mergeEndDateAndTime(
+      timesheetData.work_date,
+      timesheetData.start_time
+    ),
     onSubmit: handleSubmit,
   };
   return (
