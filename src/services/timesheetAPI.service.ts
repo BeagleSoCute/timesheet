@@ -95,8 +95,13 @@ export const getTimesheetData = async (): Promise<{
     });
     console.log("getTimesheet ", res);
     const { success, payload } = res;
-    if (payload.sign_in_latitude === 0 && payload.sign_in_longitude === 0) {
-      return { success: false, payload: undefined };
+    if (!success) {
+      return { success, payload: undefined };
+    } else if (
+      payload.sign_in_latitude === 0 &&
+      payload.sign_in_longitude === 0
+    ) {
+      return { success: false, payload };
     } else {
       return { payload, success };
     }

@@ -15,6 +15,9 @@ export const transformAxiosResponse = (
   if (token) {
     localStorage.setItem("token", token);
   }
+  if (response.data.code === 401) {
+    window.location.href = "/";
+  }
   if (response.data.code !== 200) {
     console.log("API error", response.data.msg);
     return {

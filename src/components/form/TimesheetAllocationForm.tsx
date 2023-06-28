@@ -2,12 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormInstance } from "antd/lib/form";
 import { Form, TimePicker, Select, Input, InputNumber } from "antd";
-import {
-  jobOptions,
-  supervisorOptions,
-  labOptions,
-  reasonCodeOptions,
-} from "data/options";
+import { supervisorOptions, labOptions, reasonCodeOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs, { Dayjs } from "dayjs";
@@ -30,6 +25,7 @@ import {
   timesheetAllocationAfterCompleteDataType,
   calRemainFromLabourHourReturnType,
 } from "interface/index";
+import { jobOptions, handleFilter } from "helpers/select.helper";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -42,6 +38,7 @@ interface PropsType {
   paidBreak: number;
   unpaidBreak: number;
   isLegalBreak: boolean;
+  jobLists: any;
   defaultBreak: defaultPaidBreaekType;
   onSetRemaingHour: (data: string) => void;
   onSubmit: (data: timesheetAllocationFormType) => void;
@@ -53,6 +50,7 @@ const TimesheetAllocation = ({
   paidBreak,
   unpaidBreak,
   isLegalBreak,
+  jobLists,
   onSetRemaingHour,
   defaultBreak,
   onSubmit,
@@ -509,7 +507,10 @@ const TimesheetAllocation = ({
                             },
                           ]}
                         >
-                          <Select options={jobOptions} />
+                          <Select
+                            options={jobOptions(jobLists)}
+                            filterOption={handleFilter}
+                          />
                         </Form.Item>
                         <Form.Item
                           {...formItemProps}

@@ -74,7 +74,6 @@ const TimesheetForm = ({
 
   const handleOnFinish = (value: timesheetPageFormType) => {
     const finishDate = form.getFieldValue("finishDate");
-    const finishTime = form.getFieldValue("finishDate");
     const actualFinishTime = isForget
       ? form.getFieldValue("actualFinishTime")
       : form.getFieldValue("finishTime");

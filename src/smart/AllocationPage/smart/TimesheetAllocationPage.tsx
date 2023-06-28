@@ -1,13 +1,23 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import TimesheetAllocationForm from "components/form/TimesheetAllocationForm";
 import { notification } from "helpers/notification.helper";
 import { AppContext } from "contexts/app.context";
 import { Modal } from "antd";
 import { timesheetAllocationFormType } from "interface";
+import { getJobLists } from "services/getAPI.services";
 
 const TimesheetAllocation = () => {
+  const [jobLists, setJobLists] = useState<any>();
   const navigate = useNavigate();
+  useEffect(() => {
+    const init = async () => {
+      const { success, payload } = await getJobLists();
+      console.log("payload", payload);
+      setJobLists(payload);
+    };
+    init();
+  }, []);
   const { timesheetAllocationData, setAllocatedHours, setLoading } =
     useContext(AppContext);
   const [remainingHours, setRemainingHours] = useState<string>(
@@ -65,6 +75,7 @@ const TimesheetAllocation = () => {
     unpaidBreak: timesheetAllocationData.unpaidBreak,
     isLegalBreak: timesheetAllocationData.isLegalBreak,
     defaultBreak: timesheetAllocationData.defaultBreak,
+    jobLists,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: handleSetRemaingHour,
   };

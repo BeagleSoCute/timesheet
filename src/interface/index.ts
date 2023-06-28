@@ -73,6 +73,7 @@ export interface trasformSubmitAllocatedHoursPropsType
   asset?: string;
 }
 export interface jobType {
+  jobType: string;
   jobCode: string;
   jobName: string;
   customerName: string;

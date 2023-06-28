@@ -52,7 +52,7 @@ const SigninPage = () => {
     // await setClockIn(saveData);
     notification({ type: "success", message: "Sign in Success!" });
     setLoading(false);
-    navigate("/signout");
+    navigate("/landing-page");
   };
   const propsSignInForm = {
     onFinish: handleSubmit,

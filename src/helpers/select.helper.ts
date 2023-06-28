@@ -1,8 +1,10 @@
 import { jobType } from "../interface/index";
 
-export const jobOptions = (
-  jobLists: jobType[]
-): { value: string; label: string }[] => {
+interface jobReturnType {
+  value: string;
+  label: string;
+}
+export const jobOptions = (jobLists: jobType[]): any[] => {
   if (!jobLists) {
     return [];
   }
