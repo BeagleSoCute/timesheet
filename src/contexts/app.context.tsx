@@ -12,19 +12,17 @@ import { ReducerType, timesheetAllocationDataType } from "contexts/types";
 import {
   timesheetAllocationAfterCompleteDataType,
   jobListsType,
-  signoutPropsType,
+  signoutDataType,
 } from "interface";
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
-  defaultClockinData,
   defaultAfterCompleteAllocatedData,
 } from "defaultValue";
 import { timeSheetType } from "contexts/types";
 import { LoginResponsePayload } from "interface/api.interface";
 import { clockInPropsType } from "interface/index";
-import dayjs from "dayjs";
-import { getTimesheetData } from "services/timesheetAPI.service";
+import dayjs, { Dayjs } from "dayjs";
 
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
@@ -36,6 +34,8 @@ interface AppContextType extends ReducerType {
   setJobLists: (data: jobListsType) => void;
   setClockIn: (data: clockInPropsType) => void;
   logout: () => void;
+  setSignoutData: (data: signoutDataType) => void;
+  setSignoutTime: (data: Dayjs) => void;
 }
 
 interface AppProviderProps {
@@ -46,10 +46,12 @@ export const AppContext = createContext<AppContextType>({
   loading: false,
   isAuth: false,
   clockinData: dayjs(),
+  signoutData: null,
   timesheetData: defaultTimesheetData,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,
   actionAPIData: null,
+  signoutTime: null,
   jobLists: [],
   userData: {},
   setLoading: () => {},
@@ -60,7 +62,9 @@ export const AppContext = createContext<AppContextType>({
   setTimesheetAllocationData: () => {},
   setJobLists: () => {},
   setClockIn: () => {},
+  setSignoutData: () => {},
   logout: () => {},
+  setSignoutTime: () => {},
 });
 
 export const { reducer, defaultValue, TYPES } = appReducer;
@@ -72,11 +76,13 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     loading,
     isAuth,
     clockinData,
+    signoutData,
     timesheetData,
     timesheetAllocationData,
     allocatedData,
     jobLists,
     userData,
+    signoutTime,
     actionAPIData,
   } = reducerStates as ReducerType;
   useEffect(() => {
@@ -101,12 +107,14 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       loading,
       isAuth,
       clockinData,
+      signoutData,
       timesheetData,
       timesheetAllocationData,
       allocatedData,
       jobLists,
       userData,
       actionAPIData,
+      signoutTime,
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
@@ -115,6 +123,9 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       },
       setClockIn: (data: clockInPropsType) => {
         dispatch({ type: TYPES.SET_CLOCK_IN, payload: data });
+      },
+      setSignoutData: (data: signoutDataType) => {
+        dispatch({ type: TYPES.SET_SIGNOUT_DATA, payload: data });
       },
       setTimesheetData: (data: timeSheetType) => {
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
@@ -134,11 +145,16 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       logout: () => {
         dispatch({ type: TYPES.CLEAR_STORE });
       },
+      setSignoutTime: (data: Dayjs) => {
+        dispatch({ type: TYPES.SET_SIGNOUT_TIME, payload: data });
+      },
     };
   }, [
     loading,
     isAuth,
     clockinData,
+    signoutTime,
+    signoutData,
     timesheetData,
     timesheetAllocationData,
     allocatedData,

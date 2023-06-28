@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "contexts/app.context";
 import TimesheetForm from "smart/TimesheetPage/components/TimesheetForm";
@@ -12,22 +12,38 @@ import {
 import { notification } from "helpers/notification.helper";
 import Button from "components/common/Button";
 import { Form } from "antd";
-import {
-  calculateRemainingHoursPropsType,
-  timesheetPageFormType,
-} from "interface";
+import { signoutDataType, timesheetPageFormType } from "interface";
+import dayjs from "dayjs";
 
 const TimesheetPage = () => {
   const [form] = Form.useForm() as [FormInstance<timesheetPageFormType>];
+
   const navigate = useNavigate();
   const {
     timesheetData,
     allocatedData,
+    signoutData,
+    signoutTime,
+    setSignoutData,
     clearTimesheetData,
+    setSignoutTime,
     setTimesheetAllocationData,
   } = useContext(AppContext);
-  const handleSubmit = async (value: calculateRemainingHoursPropsType) => {
-    const { isSuccess, res } = await calculateRemainingHours(value);
+
+  useEffect(() => {
+    if (!signoutTime) {
+      setSignoutTime(dayjs());
+    }
+  }, []);
+
+  const handleSubmit = async (value: signoutDataType) => {
+    console.log("valueeeeee", value);
+    const calculateProps = {
+      startDateTime: value.startDateTime,
+      breaksTime: value.breaksTime,
+      finishDateTime: value.finishDateTime,
+    };
+    const { isSuccess, res } = await calculateRemainingHours(calculateProps);
     if (!isSuccess) {
       notification({
         type: "error",
@@ -46,6 +62,7 @@ const TimesheetPage = () => {
         actualTime: res.actualTime,
         defaultBreak: res.defaultBreak,
       });
+      setSignoutData(value);
       navigate("/timesheet-allocation");
     } else {
       notification({
@@ -64,10 +81,12 @@ const TimesheetPage = () => {
   };
   const propsTimesheetForm = {
     form,
+    signoutData,
     startDateTime: mergeEndDateAndTime(
       timesheetData.work_date,
       timesheetData.start_time
     ),
+    signoutTime,
     onSubmit: handleSubmit,
   };
   return (

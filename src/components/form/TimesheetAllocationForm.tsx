@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FormInstance } from "antd/lib/form";
 import { Form, TimePicker, Select, Input, InputNumber } from "antd";
 import {
@@ -56,6 +57,7 @@ const TimesheetAllocation = ({
   defaultBreak,
   onSubmit,
 }: PropsType) => {
+  const navigate = useNavigate();
   const [form] = Form.useForm() as [FormInstance<timesheetAllocationFormType>];
   const [reasonCode, setReasonCode] = useState<string>("");
   const [previousUnpaidBrekingTime, setPreviousUnpaidBrekingTime] =
@@ -609,6 +611,11 @@ const TimesheetAllocation = ({
             className="p-2"
             label="Finish"
             htmlType="submit"
+          />
+          <DefaultButton
+            className="p-2"
+            label="Cancel"
+            onClick={() => navigate("/timesheet-page")}
           />
         </div>
       </Form>

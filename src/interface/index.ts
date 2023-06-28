@@ -58,6 +58,7 @@ export interface timesheetPageFormType {
   finishTime: Dayjs;
   finishDateTime: Dayjs;
   isTakenBreak: boolean;
+  isForgetSingout: boolean;
   // pin: number;
 }
 
@@ -98,4 +99,12 @@ export interface signoutPropsType {
   latitude: number;
   isForgetSingout: boolean;
   signinData: SigninRequest;
+}
+export interface signoutDataType {
+  startDateTime: Dayjs;
+  finishDateTime: Dayjs;
+  breaksTime: number;
+  signoutTime: Dayjs;
+  isForgetSingout: boolean;
+  isTakenBreak: boolean;
 }

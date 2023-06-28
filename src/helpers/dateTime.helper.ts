@@ -139,6 +139,9 @@ export const mergeEndDateAndTime = (
   date: string | undefined,
   time: string | undefined
 ): Dayjs => {
+  console.log("date", date);
+  console.log("time", time);
+
   const finishDateTime = dayjs(date + " " + time, "YYYY-MM-DD HH:mm:ss");
   return finishDateTime;
 };

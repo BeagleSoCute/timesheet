@@ -16,8 +16,10 @@ import dayjs, { Dayjs } from "dayjs";
 import {
   calculateRemainingHoursPropsType,
   timesheetPageFormType,
+  signoutDataType,
 } from "interface";
 import { FormInstance } from "antd/lib/form";
+import CustomRadioButton from "components/common/CustomRadioButton";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -26,34 +28,64 @@ const formItemLayout = {
 
 interface propsType {
   form: FormInstance<timesheetPageFormType>;
+  signoutData: signoutDataType | null;
   startDateTime: Dayjs;
   onSubmit: (data: calculateRemainingHoursPropsType) => void;
+  signoutTime: Dayjs | null;
 }
 
-const TimesheetForm = ({ form, startDateTime, onSubmit }: propsType) => {
-  const [isBreak, setIsBreak] = useState(true);
+const TimesheetForm = ({
+  form,
+  signoutTime,
+  startDateTime,
+  signoutData,
+  onSubmit,
+}: propsType) => {
+  const [isBreak, setIsBreak] = useState(
+    signoutData ? signoutData.isTakenBreak : true
+  );
+  const [isForget, setIsForget] = useState<boolean>(
+    signoutData ? signoutData.isForgetSingout : false
+  );
+
+  const handleChangeIsForget = (value: boolean): void => {
+    setIsForget(value);
+  };
+
   const handleChangeIsBreak = (value: boolean) => {
+    console.log("valueee", value);
     setIsBreak(value);
     form.resetFields(["breaksTime"]);
   };
 
   const initialValues = {
-    startDateTime,
-    finishDate: dayjs(),
-    isTakenBreak: true,
+    startDateTime: startDateTime,
+    finishDate: signoutData ? signoutData.finishDateTime : dayjs(),
+    finishTime: signoutTime ? signoutTime : dayjs(),
+    actualFinishTime: signoutData ? signoutData.finishDateTime : undefined,
+    isTakenBreak: signoutData ? signoutData.isTakenBreak : true,
+    isForgetSingout: signoutData ? signoutData.isForgetSingout : false,
+    breaksTime: signoutData ? signoutData.breaksTime : 0,
   };
 
   useEffect(() => {
     form.setFieldsValue(initialValues);
-  }, [initialValues]);
+  }, [initialValues.startDateTime]);
 
   const handleOnFinish = (value: timesheetPageFormType) => {
     const finishDate = form.getFieldValue("finishDate");
-    const finishTime = form.getFieldValue("finishTime");
+    const finishTime = form.getFieldValue("finishDate");
+    const actualFinishTime = isForget
+      ? form.getFieldValue("actualFinishTime")
+      : form.getFieldValue("finishTime");
+
     const result = {
       startDateTime: value.startDateTime,
-      finishDateTime: mergeDateAndTime(finishDate, finishTime),
+      finishDateTime: mergeDateAndTime(finishDate, actualFinishTime),
       breaksTime: isBreak ? value.breaksTime : 0,
+      signoutTime,
+      isForgetSingout: value.isForgetSingout,
+      isTakenBreak: value.isTakenBreak,
     };
     onSubmit(result);
   };
@@ -68,7 +100,7 @@ const TimesheetForm = ({ form, startDateTime, onSubmit }: propsType) => {
         form={form}
         name="basic"
         requiredMark={false}
-        initialValues={initialValues}
+        // initialValues={initialValues}
         onFinish={handleOnFinish}
       >
         <Message instructionMessage="This is your SIGN OUT screen, enter finish time below" />
@@ -115,6 +147,7 @@ const TimesheetForm = ({ form, startDateTime, onSubmit }: propsType) => {
           rules={[{ required: true, message: "Please input finish time!" }]}
         >
           <TimePicker
+            disabled={true}
             allowClear={false}
             showNow={false}
             inputReadOnly
@@ -128,6 +161,44 @@ const TimesheetForm = ({ form, startDateTime, onSubmit }: propsType) => {
             }
           />
         </Form.Item>
+        <Form.Item
+          {...formItemProps}
+          label={renderFieldTitle(
+            "Do you forget to sign out?",
+            "If you forget to sign out, please select the acutal end time "
+          )}
+          name="isForgetSingout"
+        >
+          <CustomRadioButton
+            defaultValue={false}
+            color="yellow"
+            onChange={handleChangeIsForget}
+          />
+        </Form.Item>
+        {isForget && (
+          <Form.Item
+            {...formItemProps}
+            className="select-actual-finish-time"
+            label="Actual Finish time"
+            name="actualFinishTime"
+            rules={[{ required: true, message: "Please select finish time!" }]}
+          >
+            <TimePicker
+              showNow={false}
+              inputReadOnly
+              format={timeFormat}
+              allowClear={false}
+              disabledTime={() =>
+                preventActualTime(
+                  form.getFieldValue("finishDate"),
+                  form.getFieldValue("finishTime"),
+                  form.getFieldValue("startDateTime")
+                )
+              }
+            />
+          </Form.Item>
+        )}
+
         <Form.Item
           {...formItemProps}
           label="Have you taken a break?"

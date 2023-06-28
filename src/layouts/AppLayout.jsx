@@ -12,9 +12,9 @@ const AppLayout = () => {
   const navigate = useNavigate();
   const { loading, logout } = useContext(AppContext);
   const handleLogout = async () => {
-    await removeLocalStorage();
     await logout();
-    // navigate("/");
+    await removeLocalStorage();
+    navigate("/");
   };
   return (
     <StyledLayout className="app-layout ">
