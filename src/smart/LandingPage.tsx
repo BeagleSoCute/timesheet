@@ -17,12 +17,8 @@ const LandingPage = () => {
       if (success) {
         setTimesheetData(payload);
         navigate("/timesheet-page");
-      } else if (!success && payload !== undefined) {
-        navigate("/clockin-page");
       } else {
-        removeLocalStorage();
-        logout();
-        navigate("/");
+        navigate("/clockin-page");
       }
     };
     init();

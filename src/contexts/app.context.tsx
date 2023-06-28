@@ -86,6 +86,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     actionAPIData,
   } = reducerStates as ReducerType;
   useEffect(() => {
+    console.log("useEffect in the context...", isAuth);
     const isToken = localStorage.getItem("token");
     const isNotSupervisorPath =
       isSupervisorpath?.pathnameBase !== "/supervisor";

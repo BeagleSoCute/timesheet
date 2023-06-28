@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import styled from "styled-components";
 import { Layout, Spin, Row, Col } from "antd";
 import { Link } from "react-router-dom";
@@ -11,9 +11,10 @@ import { useNavigate } from "react-router-dom";
 const AppLayout = () => {
   const navigate = useNavigate();
   const { loading, logout } = useContext(AppContext);
+
   const handleLogout = async () => {
-    await logout();
     await removeLocalStorage();
+    await logout();
     navigate("/");
   };
   return (

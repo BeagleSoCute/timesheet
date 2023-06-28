@@ -1,6 +1,7 @@
 import { notification } from "./notification.helper";
 import { AxiosResponse } from "axios"; // Import AxiosResponse from your Axios library
 import { ErrorResponse } from "../interface/api.interface";
+import { removeLocalStorage } from "../helpers/localstorage.helper";
 
 interface TransformedAxiosResponseType {
   payload: any;
@@ -16,10 +17,17 @@ export const transformAxiosResponse = (
     localStorage.setItem("token", token);
   }
   if (response.data.code === 401) {
+    removeLocalStorage();
     window.location.href = "/";
+    return {
+      success: false,
+      payload: undefined,
+    };
   }
   if (response.data.code !== 200) {
     console.log("API error", response.data.msg);
+    console.log("API response.data.code", response.data.code);
+
     return {
       success: false,
       payload: undefined,
