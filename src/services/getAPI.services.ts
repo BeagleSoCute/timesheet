@@ -14,6 +14,7 @@ export const getJobLists = async (): Promise<returnAxiosResponseType> => {
       jobCode: item.job_code,
       jobName: item.job_name,
       customerName: item.customer_name,
+      costCenterRequire: item.cost_centre_required,
     };
   });
   return { success: res.success, payload: transformData };

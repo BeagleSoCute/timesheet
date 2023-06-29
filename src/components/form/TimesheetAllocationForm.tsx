@@ -99,6 +99,20 @@ PropsType) => {
     form.setFieldsValue({ items: allItems });
   };
 
+  const handleSetCostCenter = (jobCode: string, index: number) => {
+    const result = jobLists.find((item: any) => item.jobCode === jobCode);
+    let allItems = form.getFieldsValue(true)["items"];
+    let thisform = form.getFieldsValue(true)["items"][index];
+    console.log("resultttt", result);
+    if (result.costCenterRequire === true) {
+      thisform.isDisableCostCenter = true;
+    } else {
+      //isDisableCostCenter
+      thisform.isDisableCostCenter = false;
+    }
+    allItems.splice(index, 1, thisform);
+    form.setFieldsValue({ items: allItems });
+  };
   const handleOnFinish = (value: timesheetAllocationFormType) => {
     onSubmit(value);
   };
@@ -565,6 +579,9 @@ PropsType) => {
                         >
                           {/* ANCHOR */}
                           <Select
+                            onChange={(value) =>
+                              handleSetCostCenter(value, index)
+                            }
                             value={
                               form.getFieldsValue(true)["items"][index]?.job
                             }
@@ -572,14 +589,29 @@ PropsType) => {
                               form.getFieldsValue(true)["items"][index]
                                 ?.isDisableJob
                             }
-                            // defaultValue={
-                            //   workType === "R&M" ? "ASSET" : "ASSET"
-                            // }
-                            // disabled={
-                            //   workType === "" || workType === "Labour"
-                            //     ? true
-                            //     : false
-                            // }
+                            options={jobOptions(jobLists)}
+                            filterOption={handleFilter}
+                          />
+                        </Form.Item>
+
+                        <Form.Item
+                          {...formItemProps}
+                          className="full-content mb-0 "
+                          label="Cost Center *"
+                          name={[index, "costCenter"]}
+                          rules={[
+                            {
+                              required: true,
+                              message: "",
+                            },
+                          ]}
+                        >
+                          {/* ANCHOR  cost center field */}
+                          <Select
+                            disabled={
+                              form.getFieldsValue(true)["items"][index]
+                                ?.isDisableCostCenter
+                            }
                             options={jobOptions(jobLists)}
                             filterOption={handleFilter}
                           />

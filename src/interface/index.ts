@@ -77,6 +77,7 @@ export interface jobType {
   jobCode: string;
   jobName: string;
   customerName: string;
+  costCenterRequire: boolean;
 }
 export interface jobListsType {
   jobLists: jobType[];
