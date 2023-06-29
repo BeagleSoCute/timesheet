@@ -23,14 +23,23 @@ export const handleFilter = (
   return option.label.toLowerCase().includes(input.toLowerCase());
 };
 
-export const assetOptions = (jobLists: assetListType[]): optionReturnType[] => {
-  if (!jobLists) {
+export const assetOptions = (
+  assetLists: assetListType[]
+): optionReturnType[] => {
+  if (!assetLists) {
     return [];
   }
-  return jobLists.map((item: assetListType) => {
+  return assetLists.map((item: assetListType) => {
     return {
       value: item.assetCode,
       label: item.assetName,
     };
   });
+};
+
+export const handleRMJoblist = (jobLists: any): jobType[] => {
+  console.log("jobLists", jobLists);
+  const res = jobLists.find((item: any) => item.jobCode === "ASSET");
+  console.log("res", res);
+  return [res];
 };

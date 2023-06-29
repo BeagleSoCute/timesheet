@@ -48,6 +48,7 @@ interface PropsType {
   defaultBreak: defaultPaidBreaekType;
   onSetRemaingHour: (data: string) => void;
   onSubmit: (data: timesheetAllocationFormType) => void;
+  // handleChangeAsset: (assetName: string) => void;
 }
 
 const TimesheetAllocation = ({
@@ -58,22 +59,44 @@ const TimesheetAllocation = ({
   isLegalBreak,
   jobLists,
   assetLists,
-  onSetRemaingHour,
   defaultBreak,
+  onSetRemaingHour,
   onSubmit,
-}: PropsType) => {
+}: // handleChangeAsset,
+PropsType) => {
   const navigate = useNavigate();
   const [form] = Form.useForm() as [FormInstance<timesheetAllocationFormType>];
-  const [jobType, setJobType] = useState<string>("");
+  const [workType, setWorkType] = useState<string>("");
   const [reasonCode, setReasonCode] = useState<string>("");
   const [previousUnpaidBrekingTime, setPreviousUnpaidBrekingTime] =
     useState<number>(unpaidBreak);
   const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
     useState(paidBreak);
 
-  const handleSetJobType = (value: string) => {
-    console.log("value is ", value);
-    setJobType(value);
+  const handleSetWorkType = (value: string, index: number, field: any) => {
+    //ANCHOR -handleSetWorktype
+    console.log("index", index);
+    console.log("field", field);
+    //handleChangeAsset(value);
+    let allItems = form.getFieldsValue(true)["items"];
+    let thisform = form.getFieldsValue(true)["items"][index];
+    console.log("this form----", form.getFieldsValue(true)["items"]);
+    form.setFieldsValue({ [field.name]: { disabled: true } });
+
+    if (value === "R&M") {
+      thisform.job = "ASSET";
+      thisform.isDisableJob = true;
+      thisform.isDisableAsset = false;
+    } else if (value === "Labour") {
+      thisform.asset = "";
+      thisform.isDisableAsset = true;
+      thisform.isDisableJob = false;
+    } else {
+      thisform.isDisableAsset = false;
+      thisform.isDisableJob = false;
+    }
+    allItems.splice(index, 1, thisform);
+    form.setFieldsValue({ items: allItems });
   };
 
   const handleOnFinish = (value: timesheetAllocationFormType) => {
@@ -512,18 +535,20 @@ const TimesheetAllocation = ({
                         <Form.Item
                           {...formItemProps}
                           className="full-content  mb-0 "
-                          label="Op/Lab *"
-                          name={[index, "jobType"]}
+                          label="Work Type *"
+                          name={[index, "workType"]}
                           rules={[
                             {
                               required: true,
-                              message: "Please select your Op/Lab!",
+                              message: "Please select your work type!",
                             },
                           ]}
                         >
                           <Select
                             options={jobTypeOptions}
-                            onChange={handleSetJobType}
+                            onChange={(value) =>
+                              handleSetWorkType(value, index, field)
+                            }
                           />
                         </Form.Item>
                         <Form.Item
@@ -538,12 +563,23 @@ const TimesheetAllocation = ({
                             },
                           ]}
                         >
+                          {/* ANCHOR */}
                           <Select
-                            disabled={
-                              jobType === "" || jobType === "Labour"
-                                ? true
-                                : false
+                            value={
+                              form.getFieldsValue(true)["items"][index]?.job
                             }
+                            disabled={
+                              form.getFieldsValue(true)["items"][index]
+                                ?.isDisableJob
+                            }
+                            // defaultValue={
+                            //   workType === "R&M" ? "ASSET" : "ASSET"
+                            // }
+                            // disabled={
+                            //   workType === "" || workType === "Labour"
+                            //     ? true
+                            //     : false
+                            // }
                             options={jobOptions(jobLists)}
                             filterOption={handleFilter}
                           />
@@ -562,8 +598,17 @@ const TimesheetAllocation = ({
                           ]}
                         >
                           <Select
+                            // disabled={
+                            //   workType === "" || workType === "Labour"
+                            //     ? true
+                            //     : false
+                            // }
                             options={assetOptions(assetLists)}
                             filterOption={handleFilter}
+                            disabled={
+                              form.getFieldsValue(true)["items"][index]
+                                ?.isDisableAsset
+                            }
                           />
                         </Form.Item>
                         <Form.Item
