@@ -29,8 +29,15 @@ import {
   timesheetAllocationAfterCompleteDataType,
   calRemainFromLabourHourReturnType,
 } from "interface/index";
-import { jobOptions, handleFilter, assetOptions } from "helpers/select.helper";
+import {
+  jobOptions,
+  handleFilter,
+  assetOptions,
+  costCenterOptions,
+  optionReturnType,
+} from "helpers/select.helper";
 import { assetListType } from "interface/api.interface";
+import { getOneJobByCode } from "services/getAPI.services";
 
 const formItemLayout = {
   labelCol: { span: 12 },
@@ -62,27 +69,19 @@ const TimesheetAllocation = ({
   defaultBreak,
   onSetRemaingHour,
   onSubmit,
-}: // handleChangeAsset,
-PropsType) => {
+}: PropsType) => {
   const navigate = useNavigate();
   const [form] = Form.useForm() as [FormInstance<timesheetAllocationFormType>];
-  const [workType, setWorkType] = useState<string>("");
+  const [costOptions, setConstCenterOptions] = useState<optionReturnType[]>();
   const [reasonCode, setReasonCode] = useState<string>("");
   const [previousUnpaidBrekingTime, setPreviousUnpaidBrekingTime] =
     useState<number>(unpaidBreak);
   const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
     useState(paidBreak);
-
   const handleSetWorkType = (value: string, index: number, field: any) => {
-    //ANCHOR -handleSetWorktype
-    console.log("index", index);
-    console.log("field", field);
-    //handleChangeAsset(value);
     let allItems = form.getFieldsValue(true)["items"];
     let thisform = form.getFieldsValue(true)["items"][index];
-    console.log("this form----", form.getFieldsValue(true)["items"]);
     form.setFieldsValue({ [field.name]: { disabled: true } });
-
     if (value === "R&M") {
       thisform.job = "ASSET";
       thisform.isDisableJob = true;
@@ -99,16 +98,22 @@ PropsType) => {
     form.setFieldsValue({ items: allItems });
   };
 
-  const handleSetCostCenter = (jobCode: string, index: number) => {
+  const handleSetCostCenter = async (jobCode: string, index: number) => {
+    //ANCHOR handleSetCostCenter
     const result = jobLists.find((item: any) => item.jobCode === jobCode);
+    console.log("jobLists", jobLists);
     let allItems = form.getFieldsValue(true)["items"];
     let thisform = form.getFieldsValue(true)["items"][index];
-    console.log("resultttt", result);
-    if (result.costCenterRequire === true) {
+    console.log("result is", result);
+    thisform.costCenter = "";
+    if (!result.costCenterRequire) {
       thisform.isDisableCostCenter = true;
     } else {
       //isDisableCostCenter
       thisform.isDisableCostCenter = false;
+      const { payload } = await getOneJobByCode(jobCode);
+      const transformOptions = costCenterOptions(payload);
+      setConstCenterOptions(transformOptions);
     }
     allItems.splice(index, 1, thisform);
     form.setFieldsValue({ items: allItems });
@@ -577,8 +582,8 @@ PropsType) => {
                             },
                           ]}
                         >
-                          {/* ANCHOR */}
                           <Select
+                            showSearch
                             onChange={(value) =>
                               handleSetCostCenter(value, index)
                             }
@@ -587,13 +592,14 @@ PropsType) => {
                             }
                             disabled={
                               form.getFieldsValue(true)["items"][index]
-                                ?.isDisableJob
+                                ?.isDisableJob ||
+                              form.getFieldsValue(true)["items"][index]
+                                .workType === undefined
                             }
                             options={jobOptions(jobLists)}
                             filterOption={handleFilter}
                           />
                         </Form.Item>
-
                         <Form.Item
                           {...formItemProps}
                           className="full-content mb-0 "
@@ -606,13 +612,15 @@ PropsType) => {
                             },
                           ]}
                         >
-                          {/* ANCHOR  cost center field */}
                           <Select
+                            showSearch
                             disabled={
                               form.getFieldsValue(true)["items"][index]
-                                ?.isDisableCostCenter
+                                ?.isDisableCostCenter ||
+                              form.getFieldsValue(true)["items"][index]
+                                .workType === undefined
                             }
-                            options={jobOptions(jobLists)}
+                            options={costOptions}
                             filterOption={handleFilter}
                           />
                         </Form.Item>
@@ -630,16 +638,14 @@ PropsType) => {
                           ]}
                         >
                           <Select
-                            // disabled={
-                            //   workType === "" || workType === "Labour"
-                            //     ? true
-                            //     : false
-                            // }
+                            showSearch
                             options={assetOptions(assetLists)}
                             filterOption={handleFilter}
                             disabled={
                               form.getFieldsValue(true)["items"][index]
-                                ?.isDisableAsset
+                                ?.isDisableAsset ||
+                              form.getFieldsValue(true)["items"][index]
+                                .workType === undefined
                             }
                           />
                         </Form.Item>

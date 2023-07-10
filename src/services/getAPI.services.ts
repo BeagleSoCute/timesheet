@@ -1,4 +1,8 @@
-import { getJobListsAPI, getAssetListsAPI } from "../apis/getDataAPI";
+import {
+  getJobListsAPI,
+  getAssetListsAPI,
+  getOneJobAPI,
+} from "../apis/getDataAPI";
 import { jobType } from "../interface/index";
 import {
   returnAxiosResponseType,
@@ -44,5 +48,15 @@ export const getOptions = async (): Promise<any> => {
     success: true,
     jobLists: jobLists.payload,
     assetLists: assetLists.payload,
+  };
+};
+
+export const getOneJobByCode = async (
+  code: string
+): Promise<returnAxiosResponseType> => {
+  const { success, payload }: any = await getOneJobAPI(code);
+  return {
+    success,
+    payload,
   };
 };

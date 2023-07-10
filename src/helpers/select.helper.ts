@@ -1,7 +1,7 @@
 import { jobType } from "../interface/index";
 import { assetListType } from "../interface/api.interface";
 
-interface optionReturnType {
+export interface optionReturnType {
   value: string;
   label: string;
 }
@@ -38,8 +38,15 @@ export const assetOptions = (
 };
 
 export const handleRMJoblist = (jobLists: any): jobType[] => {
-  console.log("jobLists", jobLists);
   const res = jobLists.find((item: any) => item.jobCode === "ASSET");
-  console.log("res", res);
   return [res];
+};
+
+export const costCenterOptions = (codeList: any): optionReturnType[] => {
+  return codeList.cost_centre_list.map((item: any) => {
+    return {
+      value: item.cost_centre_code,
+      label: item.cost_centre_name,
+    };
+  });
 };

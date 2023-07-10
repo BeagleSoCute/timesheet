@@ -3,14 +3,14 @@ export const getJobListsAPI = () =>
   apiInstance.get(
     "https://clements-timesheet-be.azurewebsites.net/api/v1/job/list"
   );
-export const getOneJobAPI = (jobCode: number) =>
+export const getOneJobAPI = (jobCode: string) =>
   apiInstance.get(
     `https://clements-timesheet-be.azurewebsites.net/api/v1/job`,
     {
       params: { job_code: jobCode },
     }
   );
-export const getOneAssetAPI = (assetCode: number) =>
+export const getOneAssetAPI = (assetCode: string) =>
   apiInstance.get(
     `https://clements-timesheet-be.azurewebsites.net/api/v1/asset`,
     {
@@ -22,7 +22,7 @@ export const getAssetListsAPI = () =>
     `https://clements-timesheet-be.azurewebsites.net/api/v1/asset/list`
   );
 
-export const getOneJobComponentAPI = (analysisCode: number) =>
+export const getOneJobComponentAPI = (analysisCode: string) =>
   apiInstance.get(
     `https://clements-timesheet-be.azurewebsites.net/api/v1/jobcomponent`,
     {

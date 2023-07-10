@@ -28,7 +28,6 @@ const SigninPage = () => {
       return;
     }
     setLoading(true);
-
     const transformData = {
       isForgetSignin: value.isForgetSignin,
       signinTime: value.signinTime,
@@ -36,15 +35,15 @@ const SigninPage = () => {
       latitude,
       longitude,
     };
-    const { success, payload } = await signin(transformData);
-    // if (!success) {
-    //   notification({
-    //     type: "error",
-    //     message: "Can not signin to the system, Please contact the admin",
-    //   });
-    //   setLoading(false);
-    //   return;
-    // }
+    const { success } = await signin(transformData);
+    if (!success) {
+      notification({
+        type: "error",
+        message: "Can not signin to the system, Please contact the admin",
+      });
+      setLoading(false);
+      return;
+    }
     // const saveData = {
     //   startDateTime: mergeDateAndTime(value.startDate, value.startTime),
     //   signinData: payload,

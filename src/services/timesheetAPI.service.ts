@@ -85,7 +85,6 @@ export const getTimesheetData = async (): Promise<{
   payload: any;
   success: boolean;
 }> => {
-  console.log("getTimesheetData");
   const userCode: string | null =
     getObjectFromLocalStorage("userData").user_code;
   if (userCode) {
@@ -93,7 +92,6 @@ export const getTimesheetData = async (): Promise<{
       user_code: userCode,
       work_date: dayjs().format(backendDateFormat),
     });
-    console.log("getTimesheet ", res);
     const { success, payload } = res;
     if (!success) {
       return { success, payload: undefined };
