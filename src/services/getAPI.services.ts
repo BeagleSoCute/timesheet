@@ -2,6 +2,7 @@ import {
   getJobListsAPI,
   getAssetListsAPI,
   getOneJobAPI,
+  getJobComponentListsAPI,
 } from "../apis/getDataAPI";
 import { jobType } from "../interface/index";
 import {
@@ -36,18 +37,36 @@ export const getAssetLists = async (): Promise<returnAxiosResponseType> => {
   return { success: res.success, payload: transformData };
 };
 
+export const getSupervisors = async (): Promise<returnAxiosResponseType> => {
+  const { success, payload }: any = await getJobComponentListsAPI();
+  const onlySupervisor = payload.list.filter(
+    (item: any) => item.supervisor === true
+  );
+  return {
+    success,
+    payload: onlySupervisor,
+  };
+};
+
 export const getOptions = async (): Promise<any> => {
-  const [jobLists, assetLists] = await Promise.all([
+  const [jobLists, assetLists, supervisorLists] = await Promise.all([
     getJobLists(),
     getAssetLists(),
+    getSupervisors(),
   ]);
-  if (jobLists.success === false) {
-    return { success: false, jobLists: [], assetLists: [] };
+  if (!jobLists.success || !assetLists.success || !supervisorLists.success) {
+    return {
+      success: false,
+      jobLists: [],
+      assetLists: [],
+      supervisorLists: [],
+    };
   }
   return {
     success: true,
     jobLists: jobLists.payload,
     assetLists: assetLists.payload,
+    supervisorLists: supervisorLists.payload,
   };
 };
 

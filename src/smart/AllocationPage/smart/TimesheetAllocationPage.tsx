@@ -10,15 +10,18 @@ import { getOptions } from "services/getAPI.services";
 const TimesheetAllocation = () => {
   const [jobLists, setJobLists] = useState<any>();
   const [assetLists, setAssetLists] = useState<any>();
+  const [supervisorLists, setSupervisorLists] = useState<any>();
   const navigate = useNavigate();
   useEffect(() => {
     const init = async () => {
-      const { success, jobLists, assetLists } = await getOptions();
+      const { success, jobLists, assetLists, supervisorLists } =
+        await getOptions();
       if (!success) {
         return;
       }
       setJobLists(jobLists);
       setAssetLists(assetLists);
+      setSupervisorLists(supervisorLists);
     };
     init();
   }, []);
@@ -82,6 +85,7 @@ const TimesheetAllocation = () => {
     defaultBreak: timesheetAllocationData.defaultBreak,
     jobLists,
     assetLists,
+    supervisorLists,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: handleSetRemaingHour,
   };

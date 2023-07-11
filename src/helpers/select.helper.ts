@@ -65,3 +65,15 @@ export const excludeJobOptions = (jobLists: jobType[]): any => {
     );
   });
 };
+
+export const supervisorOptions = (supervisors: any): optionReturnType[] => {
+  if (!supervisors) {
+    return [];
+  }
+  return supervisors.map((item: any) => {
+    return {
+      value: item.analysis_code,
+      label: item.analysis_name,
+    };
+  });
+};

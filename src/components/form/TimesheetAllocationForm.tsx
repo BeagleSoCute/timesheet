@@ -2,11 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FormInstance } from "antd/lib/form";
 import { Form, TimePicker, Select, Input, InputNumber } from "antd";
-import {
-  supervisorOptions,
-  jobTypeOptions,
-  reasonCodeOptions,
-} from "data/options";
+import { jobTypeOptions, reasonCodeOptions } from "data/options";
 import { convertToOrdinalNumber } from "helpers/common.helper";
 import { timeFormat } from "constants/format";
 import dayjs, { Dayjs } from "dayjs";
@@ -36,6 +32,7 @@ import {
   costCenterOptions,
   optionReturnType,
   excludeJobOptions,
+  supervisorOptions,
 } from "helpers/select.helper";
 import { assetListType } from "interface/api.interface";
 import { getOneJobByCode } from "services/getAPI.services";
@@ -53,6 +50,7 @@ interface PropsType {
   isLegalBreak: boolean;
   jobLists: any;
   assetLists: assetListType[];
+  supervisorLists: any;
   defaultBreak: defaultPaidBreaekType;
   onSetRemaingHour: (data: string) => void;
   onSubmit: (data: timesheetAllocationFormType) => void;
@@ -66,6 +64,7 @@ const TimesheetAllocation = ({
   isLegalBreak,
   jobLists,
   assetLists,
+  supervisorLists,
   defaultBreak,
   onSetRemaingHour,
   onSubmit,
@@ -682,7 +681,10 @@ const TimesheetAllocation = ({
                             },
                           ]}
                         >
-                          <Select mode="multiple" options={supervisorOptions} />
+                          <Select
+                            mode="multiple"
+                            options={supervisorOptions(supervisorLists)}
+                          />
                         </Form.Item>
 
                         <Form.Item
