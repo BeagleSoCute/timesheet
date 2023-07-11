@@ -6,7 +6,6 @@ import { AppContext } from "contexts/app.context";
 import { Modal } from "antd";
 import { timesheetAllocationFormType } from "interface";
 import { getOptions } from "services/getAPI.services";
-import { handleRMJoblist } from "helpers/select.helper";
 
 const TimesheetAllocation = () => {
   const [jobLists, setJobLists] = useState<any>();
@@ -30,12 +29,6 @@ const TimesheetAllocation = () => {
       ? timesheetAllocationData.remainingHours
       : "00:00"
   );
-  const handleChangeAsset = (assetName: string): void => {
-    if (assetName === "R&M") {
-      const result = handleRMJoblist(jobLists);
-      setJobLists(result);
-    }
-  };
 
   const handleSubmitAllocation = async (value: timesheetAllocationFormType) => {
     if (remainingHours !== "00:00") {
@@ -91,7 +84,6 @@ const TimesheetAllocation = () => {
     assetLists,
     onSubmit: handleSubmitAllocation,
     onSetRemaingHour: handleSetRemaingHour,
-    // handleChangeAsset,
   };
   return (
     <div>

@@ -35,6 +35,7 @@ import {
   assetOptions,
   costCenterOptions,
   optionReturnType,
+  excludeJobOptions,
 } from "helpers/select.helper";
 import { assetListType } from "interface/api.interface";
 import { getOneJobByCode } from "services/getAPI.services";
@@ -55,7 +56,6 @@ interface PropsType {
   defaultBreak: defaultPaidBreaekType;
   onSetRemaingHour: (data: string) => void;
   onSubmit: (data: timesheetAllocationFormType) => void;
-  // handleChangeAsset: (assetName: string) => void;
 }
 
 const TimesheetAllocation = ({
@@ -78,38 +78,54 @@ const TimesheetAllocation = ({
     useState<number>(unpaidBreak);
   const [previousPaidBrekingTime, setPreviousPaidBrekingTime] =
     useState(paidBreak);
-  const handleSetWorkType = (value: string, index: number, field: any) => {
+  const handleSetWorkType = async (
+    value: string,
+    index: number,
+    field: any
+  ) => {
     let allItems = form.getFieldsValue(true)["items"];
     let thisform = form.getFieldsValue(true)["items"][index];
     form.setFieldsValue({ [field.name]: { disabled: true } });
+    thisform.costCenter = "";
     if (value === "R&M") {
+      thisform.jobOptions = jobLists;
       thisform.job = "ASSET";
       thisform.isDisableJob = true;
       thisform.isDisableAsset = false;
+      const workTypeAsset = jobLists.find(
+        (item: any) => item.jobCode === "ASSET"
+      );
+      if (workTypeAsset.costCenterRequire) {
+        thisform.isDisableCostCenter = false;
+      } else {
+        thisform.isDisableCostCenter = true;
+      }
     } else if (value === "Labour") {
       thisform.asset = "";
+      thisform.job = "";
+      thisform.isDisableCostCenter = true;
       thisform.isDisableAsset = true;
       thisform.isDisableJob = false;
+      thisform.jobOptions = jobLists;
     } else {
+      thisform.job = "";
+      thisform.isDisableCostCenter = true;
       thisform.isDisableAsset = false;
       thisform.isDisableJob = false;
+      thisform.jobOptions = excludeJobOptions(jobLists);
     }
     allItems.splice(index, 1, thisform);
     form.setFieldsValue({ items: allItems });
   };
 
   const handleSetCostCenter = async (jobCode: string, index: number) => {
-    //ANCHOR handleSetCostCenter
     const result = jobLists.find((item: any) => item.jobCode === jobCode);
-    console.log("jobLists", jobLists);
     let allItems = form.getFieldsValue(true)["items"];
     let thisform = form.getFieldsValue(true)["items"][index];
-    console.log("result is", result);
     thisform.costCenter = "";
     if (!result.costCenterRequire) {
       thisform.isDisableCostCenter = true;
     } else {
-      //isDisableCostCenter
       thisform.isDisableCostCenter = false;
       const { payload } = await getOneJobByCode(jobCode);
       const transformOptions = costCenterOptions(payload);
@@ -594,9 +610,12 @@ const TimesheetAllocation = ({
                               form.getFieldsValue(true)["items"][index]
                                 ?.isDisableJob ||
                               form.getFieldsValue(true)["items"][index]
-                                .workType === undefined
+                                ?.workType === undefined
                             }
-                            options={jobOptions(jobLists)}
+                            options={jobOptions(
+                              form.getFieldsValue(true)["items"][index]
+                                ?.jobOptions
+                            )}
                             filterOption={handleFilter}
                           />
                         </Form.Item>
@@ -618,7 +637,9 @@ const TimesheetAllocation = ({
                               form.getFieldsValue(true)["items"][index]
                                 ?.isDisableCostCenter ||
                               form.getFieldsValue(true)["items"][index]
-                                .workType === undefined
+                                ?.workType === undefined ||
+                              form.getFieldsValue(true)["items"][index]?.job ===
+                                ""
                             }
                             options={costOptions}
                             filterOption={handleFilter}
@@ -645,7 +666,7 @@ const TimesheetAllocation = ({
                               form.getFieldsValue(true)["items"][index]
                                 ?.isDisableAsset ||
                               form.getFieldsValue(true)["items"][index]
-                                .workType === undefined
+                                ?.workType === undefined
                             }
                           />
                         </Form.Item>

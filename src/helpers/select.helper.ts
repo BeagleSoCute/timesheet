@@ -50,3 +50,18 @@ export const costCenterOptions = (codeList: any): optionReturnType[] => {
     };
   });
 };
+
+export const excludeJobOptions = (jobLists: jobType[]): any => {
+  return jobLists.filter((job: any) => {
+    const code = job.jobCode;
+    return (
+      code !== "ASSET" &&
+      code !== "WMP" &&
+      code !== "WHP" &&
+      code !== "LRP" &&
+      code !== "BP" &&
+      code !== "KP" &&
+      code !== "3010"
+    );
+  });
+};
