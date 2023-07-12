@@ -32,6 +32,7 @@ interface propsType {
   startDateTime: Dayjs;
   onSubmit: (data: calculateRemainingHoursPropsType) => void;
   signoutTime: Dayjs | null;
+  isHasJobAllocation: Boolean;
 }
 
 const TimesheetForm = ({
@@ -39,6 +40,7 @@ const TimesheetForm = ({
   signoutTime,
   startDateTime,
   signoutData,
+  isHasJobAllocation,
   onSubmit,
 }: propsType) => {
   const [isBreak, setIsBreak] = useState(
@@ -243,6 +245,7 @@ const TimesheetForm = ({
         </Form.Item>
         <Form.Item {...formItemProps} className="flex justify-center mt-8 ">
           <Button
+            disabled={isHasJobAllocation ? true : false}
             className="mb-10 bg-blue-800 text-white font-bold "
             label="Allocate..."
             htmlType="submit"

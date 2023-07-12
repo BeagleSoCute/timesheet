@@ -59,7 +59,6 @@ export interface timesheetPageFormType {
   finishDateTime: Dayjs;
   isTakenBreak: boolean;
   isForgetSingout: boolean;
-  // pin: number;
 }
 
 export interface disableDateTimeType {

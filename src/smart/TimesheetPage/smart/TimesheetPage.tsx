@@ -104,6 +104,7 @@ const TimesheetPage = () => {
       sign_in_longitude,
       is_forgot_sign_in,
       frontend_id,
+      job_allocations,
     } = timesheetData;
     const signinData = {
       id,
@@ -159,6 +160,7 @@ const TimesheetPage = () => {
       timesheetData.start_time
     ),
     signoutTime,
+    isHasJobAllocation: timesheetData.job_allocations.length > 0 ? true : false,
     onSubmit: handleSubmit,
   };
   return (
