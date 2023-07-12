@@ -139,9 +139,16 @@ export const mergeEndDateAndTime = (
   date: string | undefined,
   time: string | undefined
 ): Dayjs => {
-  console.log("date", date);
-  console.log("time", time);
-
   const finishDateTime = dayjs(date + " " + time, "YYYY-MM-DD HH:mm:ss");
   return finishDateTime;
+};
+
+export const convertTimeToNum = (timeString: string) => {
+  const timeParts = timeString.split(":");
+  const hours: number = parseInt(timeParts[0]);
+  const minutes: number = parseFloat(timeParts[1]) / 60;
+  console.warn("hours", typeof hours, hours);
+  console.warn("minutes", typeof minutes, minutes);
+  const totalTime = hours + minutes;
+  return totalTime;
 };

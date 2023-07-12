@@ -623,12 +623,12 @@ const TimesheetAllocation = ({
                           className="full-content mb-0 "
                           label="Cost Center *"
                           name={[index, "costCenter"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "",
-                            },
-                          ]}
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "",
+                          //   },
+                          // ]}
                         >
                           <Select
                             showSearch
@@ -650,12 +650,12 @@ const TimesheetAllocation = ({
                           className="full-content mb-0 "
                           label="Asset *"
                           name={[index, "asset"]}
-                          rules={[
-                            {
-                              required: true,
-                              message: "Please select your job!",
-                            },
-                          ]}
+                          // rules={[
+                          //   {
+                          //     required: true,
+                          //     message: "Please select your job!",
+                          //   },
+                          // ]}
                         >
                           <Select
                             showSearch
@@ -682,7 +682,8 @@ const TimesheetAllocation = ({
                           ]}
                         >
                           <Select
-                            mode="multiple"
+                            showSearch
+                            // mode="multiple"
                             options={supervisorOptions(supervisorLists)}
                           />
                         </Form.Item>

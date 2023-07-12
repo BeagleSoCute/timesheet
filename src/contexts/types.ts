@@ -2,6 +2,7 @@ import {
   timesheetAllocationAfterCompleteDataType,
   defaultPaidBreaekType,
   signoutDataType,
+  breakingDataType,
 } from "interface";
 import { SigninRequest } from "interface/api.interface";
 import { Dayjs } from "dayjs";
@@ -54,4 +55,5 @@ export interface ReducerType {
   userData: {};
   signoutData: signoutDataType | null;
   signoutTime: Dayjs | null;
+  breakingData: breakingDataType;
 }

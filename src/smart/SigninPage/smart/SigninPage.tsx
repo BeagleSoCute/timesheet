@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "contexts/app.context";
 import SignInForm from "smart/SigninPage/components/SignInForm";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,7 @@ import { notification } from "helpers/notification.helper";
 import { handleRetriveLocationData } from "helpers/location.helper";
 const SigninPage = () => {
   const navigate = useNavigate();
-  const { setClockIn, setLoading } = useContext(AppContext);
+  const { setLoading } = useContext(AppContext);
 
   useEffect(() => {
     //popup perrmission

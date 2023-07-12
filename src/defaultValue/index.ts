@@ -39,3 +39,10 @@ export const defaultTimesheetAllocationData = {
   defaultBreak: { paidBreak: 0, unpaidBreak: 0 },
 };
 export const defaultAfterCompleteAllocatedData = [];
+
+export const defaultBrakingData = {
+  paidBreak: 0,
+  reason: "",
+  reasonCode: "",
+  unpaidBreak: 0,
+};

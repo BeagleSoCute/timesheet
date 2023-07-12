@@ -27,7 +27,7 @@ export const calculateRemainingHours = (
   const { startDateTime, breaksTime, finishDateTime } = value;
   const timeDiffInMs = finishDateTime.diff(startDateTime);
   const hours = Math.floor(timeDiffInMs / (60 * 60 * 1000));
-  const minutes = Math.round((timeDiffInMs % (60 * 60 * 1000)) / (60 * 1000));
+  const minutes = Math.floor((timeDiffInMs % (60 * 60 * 1000)) / (60 * 1000));
   const { paidBreak, unpaidBreak, isLegalBreak, defaultBreak } =
     transformBreakingTime(breaksTime, hours);
   const breakTimeInMs = (unpaidBreak + paidBreak) * 60 * 1000;
@@ -37,7 +37,7 @@ export const calculateRemainingHours = (
   }
   const finalRemainingTimeInMs = remainingTimeInMs > 0 ? remainingTimeInMs : 0;
   const remainingHours = Math.floor(finalRemainingTimeInMs / (60 * 60 * 1000));
-  const remainingMinutes = Math.round(
+  const remainingMinutes = Math.floor(
     (finalRemainingTimeInMs % (60 * 60 * 1000)) / (60 * 1000)
   );
   const remainingTime = `${padTime(remainingHours.toString())}:${padTime(
@@ -176,7 +176,8 @@ export const trasformSubmitAllocatedHours = (
         lab: item.lab,
         asset: item.asset ? item.asset : "",
         labourHours: formattedHours,
-        supervisors: arrayToString(item.supervisors),
+        // supervisors: arrayToString(item.supervisors),
+        supervisors: item.supervisors,
       };
     }
   );

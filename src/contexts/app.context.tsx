@@ -13,11 +13,13 @@ import {
   timesheetAllocationAfterCompleteDataType,
   jobListsType,
   signoutDataType,
+  breakingDataType,
 } from "interface";
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
   defaultAfterCompleteAllocatedData,
+  defaultBrakingData,
 } from "defaultValue";
 import { timeSheetType } from "contexts/types";
 import { LoginResponsePayload } from "interface/api.interface";
@@ -27,7 +29,10 @@ import dayjs, { Dayjs } from "dayjs";
 interface AppContextType extends ReducerType {
   setLoading: (data: boolean) => void;
   setAuth: (data: LoginResponsePayload) => void;
-  setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => void;
+  setAllocatedHours: (data: {
+    items: timesheetAllocationAfterCompleteDataType[];
+    breakingData: breakingDataType;
+  }) => void;
   clearTimesheetData: () => void;
   setTimesheetData: (data: timeSheetType) => void;
   setTimesheetAllocationData: (data: timesheetAllocationDataType) => void;
@@ -54,6 +59,7 @@ export const AppContext = createContext<AppContextType>({
   signoutTime: null,
   jobLists: [],
   userData: {},
+  breakingData: defaultBrakingData,
   setLoading: () => {},
   setAuth: () => {},
   setAllocatedHours: () => {},
@@ -84,6 +90,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
     userData,
     signoutTime,
     actionAPIData,
+    breakingData,
   } = reducerStates as ReducerType;
   useEffect(() => {
     console.log("useEffect in the context...", isAuth);
@@ -116,6 +123,7 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       userData,
       actionAPIData,
       signoutTime,
+      breakingData,
       setLoading: (data: boolean) => {
         dispatch({ type: TYPES.SET_LOADING, payload: data });
       },
@@ -131,7 +139,10 @@ export const AppProvider = ({ children }: AppProviderProps) => {
       setTimesheetData: (data: timeSheetType) => {
         dispatch({ type: TYPES.SET_TIMESHEET_DATA, payload: data });
       },
-      setAllocatedHours: (data: timesheetAllocationAfterCompleteDataType[]) => {
+      setAllocatedHours: (data: {
+        items: timesheetAllocationAfterCompleteDataType[];
+        breakingData: breakingDataType;
+      }) => {
         dispatch({ type: TYPES.SET_ALLOCATED_HOURS, payload: data });
       },
       setTimesheetAllocationData: (data: timesheetAllocationDataType) => {

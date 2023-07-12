@@ -1,7 +1,10 @@
 import { apiInstance } from "../configs/axios.config";
 export const getJobListsAPI = () =>
   apiInstance.get(
-    "https://clements-timesheet-be.azurewebsites.net/api/v1/job/list"
+    "https://clements-timesheet-be.azurewebsites.net/api/v1/job/list",
+    {
+      params: { job_category2: "3PROGRES" },
+    }
   );
 export const getOneJobAPI = (jobCode: string) =>
   apiInstance.get(

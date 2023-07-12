@@ -3,8 +3,8 @@ import dayjs from "dayjs";
 import {
   defaultTimesheetData,
   defaultTimesheetAllocationData,
-  defaultClockinData,
   defaultAfterCompleteAllocatedData,
+  defaultBrakingData,
 } from "defaultValue";
 
 enum EnumTYPES {
@@ -39,6 +39,7 @@ const defaultValue: ReducerType = {
   signoutData: null,
   timesheetAllocationData: defaultTimesheetAllocationData,
   allocatedData: defaultAfterCompleteAllocatedData,
+  breakingData: defaultBrakingData,
   jobLists: [],
 };
 
@@ -62,7 +63,11 @@ const reducer = (state: ReducerType, action: ActionType) => {
     case EnumTYPES.SET_NOTIFICATION:
       return { ...state, notificationData: payload };
     case EnumTYPES.SET_ALLOCATED_HOURS:
-      return { ...state, allocatedData: payload };
+      return {
+        ...state,
+        allocatedData: payload.items,
+        breakingData: payload.breakingData,
+      };
     case EnumTYPES.CLEAR_TIMESHEET_DATA:
       return { ...state, timesheetData: {} };
     case EnumTYPES.SET_JOB_LISTS:

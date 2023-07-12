@@ -16,6 +16,7 @@ interface signoutPropsType {
   finishTime: Dayjs;
   isForgetSingout: boolean;
   signinData: SigninRequest | null;
+  jobAllocations: any;
 }
 
 export const signin = async (data: signinPropsType) => {
@@ -49,37 +50,61 @@ export const signin = async (data: signinPropsType) => {
   return { success, payload: transformData };
 };
 
-export const signout = async (data: signoutPropsType) => {
-  const { finishTime, isForgetSingout, signinData } = data;
+export const signout = async (data: any) => {
+  const {
+    signinData,
+    signoutData,
+    signoutLatitude,
+    singoutLongitude,
+    defaultBreak,
+    breakingData,
+    jobAllocationLists,
+  } = data;
+  const {
+    id,
+    work_date,
+    start_time,
+    sign_in_time,
+    sign_in_latitude,
+    sign_in_longitude,
+    is_forgot_sign_in,
+    frontend_id,
+  } = signinData;
+  const { finishDateTime, signoutTime, isForgetSingout } = signoutData;
+  const { paidBreak, reason, unpaidBreak } = breakingData;
+
   if (!signinData) {
     return { success: false, payload: {} };
   }
   const transformData = {
-    id: 1,
+    id,
     user_code: getObjectFromLocalStorage("userData").user_code,
-    work_date: signinData.work_date,
-    start_time: signinData.start_time,
-    sign_in_time: signinData.sign_in_time,
-    updated_start_time: signinData.updated_start_time,
-    sign_in_latitude: signinData.sign_in_latitude,
-    sign_in_longitude: signinData.sign_in_longitude,
-    is_forget_sing_in: signinData.is_forget_sing_in,
-    end_time: dayjs(finishTime).format(backendTimeFormat),
-    sign_out_time: dayjs().format(backendTimeFormat),
-    udpated_end_time: dayjs(finishTime).format(backendTimeFormat),
+    work_date,
+    start_time,
+    sign_in_time,
+    sign_in_latitude,
+    sign_in_longitude,
+    is_forget_sing_in: is_forgot_sign_in,
+
+    end_time: dayjs(finishDateTime).format(backendTimeFormat),
+    sign_out_time: dayjs(signoutTime).format(backendTimeFormat),
+    sign_out_latitude: signoutLatitude,
+    sign_out_longitude: singoutLongitude,
     is_forget_sign_out: isForgetSingout,
-    unpaid_break_time: 0,
-    updated_unpaid_break_time: 0,
-    updated_unpaid_reason: "",
-    paid_break_time: 0,
-    updated_paid_break_time: 0,
-    updated_paid_reason: "",
-    status: 2,
-    frontend_id: "",
-    record_revision: 0,
+
+    unpaid_break_time: unpaidBreak,
+    paid_break_time: paidBreak,
+    update_ubt_reason: reason,
+    update_pbt_reason: reason,
+    standard_unpaid_break_time: defaultBreak.unpaidBreak,
+    standard_paid_break_time: defaultBreak.paidBreak,
+
+    job_Allocations: jobAllocationLists,
+    status: 3,
+    frontend_id,
   };
   const { success } = await signoutAPI(transformData);
-  return { success, payload: transformData };
+  return { success };
 };
 export const getTimesheetData = async (): Promise<{
   payload: any;

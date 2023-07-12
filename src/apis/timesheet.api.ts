@@ -7,7 +7,7 @@ export const signinAPI = (data: SigninRequest): Promise<any> =>
     data
   );
 
-export const signoutAPI = (data: SigninRequest): Promise<any> =>
+export const signoutAPI = (data: any): Promise<any> =>
   apiInstance.post(
     "https://clements-timesheet-be.azurewebsites.net/api/v1/timesheet/entry/submit",
     data

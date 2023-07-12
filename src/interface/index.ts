@@ -23,7 +23,7 @@ export interface timesheetAllocationAfterCompleteDataType {
   labourHours: Dayjs;
   previousLabourHour: Dayjs;
   remainingHours: string;
-  supervisors: string[];
+  supervisors: string;
 }
 
 export interface timesheetAllocationFormType extends defaultPaidBreaekType {
@@ -109,4 +109,10 @@ export interface signoutDataType {
   signoutTime: Dayjs;
   isForgetSingout: boolean;
   isTakenBreak: boolean;
+}
+export interface breakingDataType {
+  paidBreak: number;
+  reason: string;
+  reasonCode: string;
+  unpaidBreak: number;
 }
